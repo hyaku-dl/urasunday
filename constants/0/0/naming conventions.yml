@@ -1,0 +1,14 @@
+general:
+  CFLOPS:
+    abbr: Configuration File Lookup Order of Precedence
+  idx:
+    abbr: index
+  urel:
+    abbr: relative URL
+  usi:
+    abbr: url_slug_idx
+    expd: URL slug index
+  XCH:
+    abbr: XDG_CONFIG_HOME
+  XDG:
+    abbr: X Development Group

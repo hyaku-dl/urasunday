@@ -1,0 +1,9 @@
+{
+    "python.analysis.diagnosticSeverityOverrides": {
+        "reportMatchNotExhaustive": "none",
+        "reportUnboundVariable": "none",
+        "reportSelfClsParameterName": "none",
+        "reportMissingParameterType": "none",
+        "reportMissingParameterDoc": "error",
+    }
+}

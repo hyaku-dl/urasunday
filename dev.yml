@@ -1,0 +1,56 @@
+docs:
+  input: raw_docs
+  op: docs
+
+pdoc:
+  project: hyaku
+  op: docs
+
+md_vars:
+  global:
+    project_name: Hyaku
+    repo_name: Hyaku
+    site: hyaku.whinyaan.xyz
+    user: Hyaku-Manga
+    cholder: whinee
+    codacy_id: 502ba440287b41b2bd8875ec340b7c51
+
+  local:
+    README:
+      title: Hyaku
+      desc: |-
+        100 times powerful than the alternative.
+
+rules:
+  del:
+  repl:
+    'src="https://${site}/assets':
+      - 'src="./assets'
+    "src='https://${site}/assets":
+      - "src='./assets"
+    "](https://${site}/assets":
+      - "](./assets"
+
+requirements:
+  dev: dev_req.txt
+  prod: requirements.txt
+
+env:
+  dev:
+    req:
+      - prod
+      - dev
+
+license:
+  type: MIT
+  cholder:
+    whinee:
+      hyaku-dl/hyaku:
+        year: 2022
+        platform: Github
+      MangDL/MangDL:
+        year: 2021-2022
+        platform: Github
+      Pirate-Kings/YAMHL:
+        year: 2022
+        platform: Github

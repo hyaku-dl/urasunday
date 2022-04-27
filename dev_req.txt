@@ -1,0 +1,7 @@
+isort
+mako
+mkdocs
+mkdocs-material
+mkdocs-minify-plugin
+mkdocs-redirects
+pdoc3

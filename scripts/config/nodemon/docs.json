@@ -1,0 +1,15 @@
+{
+    "restartable": "rs",
+    "ignore": [
+        ".git/",
+        "node_modules/**/node_modules",
+        "venv/",
+        "__pycache__/"
+    ],
+    "verbose": true,
+    "watch": [
+        "test/fixtures/",
+        "test/samples/"
+    ],
+    "ext": "mako,md"
+}

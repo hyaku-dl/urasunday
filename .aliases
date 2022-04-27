@@ -1,0 +1,2 @@
+alias c="clear && onefetch --no-bots --true-color always -T programming"
+alias dev="python dev.py"

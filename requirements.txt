@@ -1,0 +1,17 @@
+rich
+
+aiofiles
+arrow
+bs4
+click
+httpx
+inquirer
+lxml
+msgpack
+patool
+pyyaml
+tabulate
+toml
+tqdm
+yachalk
+yarl
