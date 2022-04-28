@@ -6,7 +6,6 @@ from typing import Any, Dict, List
 
 import pdoc
 
-from . import schema
 from .settings import stg, wr_stg
 from .utils import ddir, stg
 

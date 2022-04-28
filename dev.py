@@ -50,13 +50,16 @@ def push(v: list[int]=None):
     if msg != "":
         msg = f"{msg},"
     if v:
-        run(f"git commit -am '{msg}https://hyk.fr.to/changelog#v{'-'.join(v)}'")
+        run(f"git commit -am '{msg}https://hyk.fr.to/changelog#v{'-'.join([str(i) for i in v])}'")
     else:
         run(f"git commit -am '{msg or 'push'}'")
     run("git push")
 
-def reset(idx: int):
-    _vls = list(VLS)
+def reset(idx: int, vls=None):
+    if vls is None:
+        _vls = list(VLS)
+    else:
+        _vls = vls
     for i in range(idx + 1, len(VLS)):
         _vls[i] = 0
     return _vls
@@ -90,12 +93,12 @@ def bump():
     while True:
         choices = []
         for k, v in VERSIONS_NAME.items():
-            choices.append([f'{k.ljust(23)}(bump to {rv(_bump(k, VLS))})', k])
+            choices.append([f'{k.ljust(23)}(bump to {rv(_bump(k))})', k])
         v = inquirer.list_input(
             message=f"What version do you want to bump? (Current version: {rv(VLS)})",
             choices=choices,
         )
-        _vls = _bump(v, VLS)
+        _vls = _bump(v)
         print(
             f"    This will bump the version from {rv(VLS)} to {rv(_vls)} ({VERSIONS_NAME[v]} bump). "
         )
@@ -113,9 +116,8 @@ def bump():
                 with open("ura/__init__.py", "r") as f:
                     init = f.read()
                 with open("ura/__init__.py", "w") as f:
-                    init = re.sub(r"__version__.+", f"__version__ = {v}", init)
                     init = re.sub(r"vls.+", f"vls = {_vls}", init)
-                    f.write(re.sub(r"__version__.+", f"__version__ = {v}", init))
+                    f.write(re.sub(r"__version__.+", f"__version__ = {rv(_vls)}", init))
                 push(_vls)
                 return
             case "n":

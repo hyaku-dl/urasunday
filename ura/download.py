@@ -1,32 +1,19 @@
-import ast
 import asyncio
 import json
 import os
 import os.path
 import re
 import shutil
-import sys
 import time
-import urllib
-from dataclasses import dataclass, field
-from functools import partial
-from multiprocessing.pool import ThreadPool
-from typing import Any, Callable, Dict, List, Type, Union
+from typing import Any, Callable, Dict, List
 
 import aiofiles
-import click
-import httpx
-import patoolib
-from bs4 import BeautifulSoup
 from tqdm.asyncio import tqdm_asyncio
-from yarl import URL
 
-from ura.globals import CFLOP
 from ura.settings import cfg
 from ura.utils import sanitize_text
 
 from .base import class_usi, req, soup
-from .style import S, pp
 
 USI = class_usi({
     "ch_id": 2,
