@@ -3,23 +3,27 @@ docs:
   op: docs
 
 pdoc:
-  project: hyaku
+  project: ura
   op: docs
 
 md_vars:
   global:
-    project_name: Hyaku
-    repo_name: Hyaku
-    site: hyaku.whinyaan.xyz
-    user: Hyaku-Manga
-    cholder: whinee
-    codacy_id: 502ba440287b41b2bd8875ec340b7c51
+    project_name: ura
+    repo_name: urasunday
+    site: ura.hyaku.download
+    organization: hyaku-dl
+    user: whinee
+    codacy_id: 385ceb2d55424256a93f9ad6f8007f91
+    dc_acc: whi_ne | whinyaan.xyz#5135
+    dc_link: https://discord.com/users/867696753434951732
+    dc_inv: JbAtUxGcJZ
+    mail_acc: whinyaan@pm.me
+    mail_link: mailto:whinyaan@pm.me
 
   local:
     README:
-      title: Hyaku
-      desc: |-
-        100 times powerful than the alternative.
+      title: ura
+      desc: ""
 
 rules:
   del:
@@ -42,15 +46,19 @@ env:
       - dev
 
 license:
+  year: 2022
   type: MIT
   cholder:
     whinee:
-      hyaku-dl/hyaku:
-        year: 2022
-        platform: Github
-      MangDL/MangDL:
-        year: 2021-2022
-        platform: Github
-      Pirate-Kings/YAMHL:
-        year: 2022
-        platform: Github
+      hyaku-dl:
+        hyaku:
+          year: 2022
+          platform: Github
+      MangDL:
+        MangDL:
+          year: 2021-2022
+          platform: Github
+      Pirate-Kings:
+        YAMHL:
+          year: 2022
+          platform: Github

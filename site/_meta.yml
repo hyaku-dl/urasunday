@@ -1,0 +1,26 @@
+generated:
+  docs:
+    files:
+    - docs/README.md
+    - docs/0/0/setup.md
+    - docs/notes.md
+    - docs/0/0/structure.md
+    - docs/license.md
+    - docs/0/0/config.md
+    - docs/changelogs.md
+    - docs/notes to self.md
+    folders: []
+  pdoc:
+    files:
+    - docs/docs/download.md
+    - docs/docs/utils.md
+    - docs/docs/index.md
+    - docs/docs/main.md
+    - docs/docs/style.md
+    - docs/docs/settings.md
+    - docs/docs/globals.md
+    - docs/docs/base.md
+    - docs/docs/cli.md
+    - docs/docs/init.md
+    folders:
+    - docs/docs

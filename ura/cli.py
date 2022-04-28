@@ -13,7 +13,6 @@ from .download import Downloader
 from .settings import stg
 from .style import S, pp
 from .utils import dd, de, dnrp
-from . import init
 
 LVLS = [
     "CRITICAL",

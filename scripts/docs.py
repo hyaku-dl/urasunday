@@ -5,11 +5,10 @@ from pathlib import Path
 from typing import Any, Dict, List
 
 import pdoc
-from hyaku import vls
 
 from . import schema
 from .settings import stg, wr_stg
-from .utils import ddir, run, stg
+from .utils import ddir, stg
 
 YML = stg(None, "dev.yml")
 
@@ -155,8 +154,6 @@ def main(rmv: Dict[Any, Any]={}):
 
         with open(inmd(out, "docs"), "w") as f:
             f.write(md)
-
-    schema.main()
 
     for module_name, html in yield_text(PROJECT):
         _dd = docs_dir(module_name)

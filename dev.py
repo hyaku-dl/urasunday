@@ -44,7 +44,7 @@ def run(s: str):
     call(shlex.split(s))
 
 def push(v: list[int]=None):
-    msg = inquirer.text(message="Enter your username", default="")
+    msg = inquirer.text(message="Enter commit message", default="")
     format()
     run("git add .")
     if msg != "":
@@ -171,6 +171,7 @@ def main():
             cp()
             from scripts import md_vars
             md_vars.main()
+            run("mkdocs build")
             if inquirer.confirm(
                 "Do you want to push this to github?",
                 default=False
