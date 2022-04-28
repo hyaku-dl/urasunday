@@ -1,26 +1,26 @@
 generated:
   docs:
     files:
-    - docs/0/0/structure.md
-    - docs/README.md
-    - docs/notes.md
-    - docs/0/0/setup.md
-    - docs/changelogs.md
     - docs/0/0/config.md
+    - docs/0/0/setup.md
+    - docs/README.md
     - docs/notes to self.md
+    - docs/0/0/structure.md
+    - docs/changelogs.md
+    - docs/notes.md
     - docs/license.md
     folders: []
   pdoc:
     files:
-    - docs/docs/base.md
-    - docs/docs/settings.md
-    - docs/docs/utils.md
-    - docs/docs/init.md
     - docs/docs/style.md
     - docs/docs/main.md
     - docs/docs/cli.md
-    - docs/docs/index.md
-    - docs/docs/globals.md
     - docs/docs/download.md
+    - docs/docs/init.md
+    - docs/docs/utils.md
+    - docs/docs/index.md
+    - docs/docs/settings.md
+    - docs/docs/base.md
+    - docs/docs/globals.md
     folders:
     - docs/docs

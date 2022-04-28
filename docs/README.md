@@ -48,7 +48,7 @@ Your basic <a target="_blank" href="https://urasunday.com">urasunday</a> scraper
 
 ---
 
-Github: [github.com/whinee/urasunday](https://github.com/whinee/urasunday)
+Github: [github.com/hyaku-dl/urasunday](https://github.com/hyaku-dl/urasunday)
 
 Website: [ura.hyaku.download](https://ura.hyaku.download)
 

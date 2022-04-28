@@ -1,3 +1,3 @@
-__version__ = 0.0.0.0-alpha.1
-vls = [0, 0, 0, 0, 1, 1]
+__version__ = '0.0.0.0-alpha.2'
+vls = [0, 0, 0, 0, 1, 2]
 appimage = 0

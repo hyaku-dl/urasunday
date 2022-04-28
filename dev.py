@@ -117,7 +117,7 @@ def bump():
                     init = f.read()
                 with open("ura/__init__.py", "w") as f:
                     init = re.sub(r"vls.+", f"vls = {_vls}", init)
-                    f.write(re.sub(r"__version__.+", f"__version__ = {rv(_vls)}", init))
+                    f.write(re.sub(r"__version__.+", f"__version__ = '{rv(_vls)}'", init))
                 push(_vls)
                 return
             case "n":

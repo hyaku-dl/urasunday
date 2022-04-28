@@ -48,7 +48,7 @@ Your basic <a target="_blank" href="https://urasunday.com">urasunday</a> scraper
 
 ---
 
-Github: [github.com/${user}/${repo_name}](https://github.com/${user}/${repo_name})
+Github: [github.com/${organization}/${repo_name}](https://github.com/${organization}/${repo_name})
 
 Website: [${site}](https://${site})
 
