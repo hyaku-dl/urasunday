@@ -21,8 +21,6 @@ PN = GLOBAL("project_name")
 ORG = GLOBAL("organization")
 USER = GLOBAL("user")
 
-print(USER)
-
 if (copyright := []) == []:
     c = LICENSE("cholder")
     for u, op in c.items():
@@ -54,5 +52,5 @@ RULES_MDV = {
     }
 }
 
-def main():
-    docs.main(RULES_MDV)
+def main(hr=False):
+    docs.main(RULES_MDV, hr)

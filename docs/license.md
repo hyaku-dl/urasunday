@@ -1,7 +1,6 @@
----
-title: MIT LICENSE
-link: https://choosealicense.com/licenses/mit/
----
+<h1 align="center" style="font-weight: bold">
+    <a target="_blank" href="https://choosealicense.com/licenses/mit/">MIT LICENSE</a>
+</h1>
 
 Copyright for portions of project [ura](https://github.com/hyaku-dl/ura) are held by [Github Account [whinee](https://github.com/whinee) Owner, 2022] as part of project [hyaku](https://github.com/hyaku-dl/2022), by [Github Account [whinee](https://github.com/whinee) Owner, 2021-2022] as part of project [MangDL](https://github.com/MangDL/2021-2022), and by [Github Account [whinee](https://github.com/whinee) Owner, 2022] as part of project [YAMHL](https://github.com/Pirate-Kings/2022).
 

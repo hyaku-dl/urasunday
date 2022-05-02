@@ -1,0 +1,114 @@
+raw_vars:
+  keywords:
+    - python
+    - windows
+    - macos
+    - linux
+    - cli
+    - scraper
+    - downloader
+    - manga
+    - python3
+    - urasunday
+
+variables:
+  global:
+    python_ver: "3.10"
+
+matrix:
+  global:
+    bits:
+      - 86
+      - 64
+
+scripts:
+  linux_install:
+    path: docs/scripts/li
+    contents: |-
+      #! /bin/sh
+      curl -L -o {project_name}.AppImage https://github.com/{organization}/{repo_name}/releases/download/{ver}/{project_name}-linux-x86_64.AppImage
+      chmod +x ./{project_name}.AppImage
+      ./{project_name}.AppImage --appimage-extract
+      rm -rf ./{project_name}.AppImage
+      rm -rf /usr/share/{project_name}
+      mv squashfs-root /usr/share/{project_name}
+      echo '#! /bin/sh
+      "exec" "/usr/share/{project_name}/usr/bin/python{python_ver}" "$0" "$@"
+      # -*- coding: utf-8 -*-
+      import re
+      import sys
+      from {project_name}.cli import cli
+      if __name__ == "__main__":
+        sys.argv[0] = re.sub("r(-script\.pyw|\.exe)?$", "", sys.argv[0])
+        sys.exit(cli())' > /usr/bin/{project_name}
+      chmod +x /usr/bin/{project_name}
+    rm -rf linux-install.sh
+
+  linux_dl:
+    path: docs/scripts/ld
+    contents: |-
+      #! /bin/sh
+      curl -L -o {project_name}.AppImage https://github.com/{organization}/{repo_name}/releases/download/{ver}/{project_name}-linux-x86_64.AppImage
+      chmod +x ./{project_name}.AppImage
+
+  win_install:
+    path: docs/scripts/wi{matrix.bits}
+    contents: |-
+      Invoke-Expression ((New-Object System.Net.WebClient).DownloadString('https://community.chocolatey.org/install.ps1'))
+      choco install -y curl 7zip.install
+      curl 'https://github.com/MangDL/MangDL/releases/download/{ver}/mangdl-winx{bits}.zip' -o mangdl.zip
+      $FolderName = 'C:\{project_name}\'
+      if (Test-Path $FolderName) {{
+          Remove-Item -Force -Recurse $FolderName
+          "Set-Alias -Name {project_name} -Value C:\{project_name}\{project_name}.bat" >> $PROFILE.CurrentUserAllHosts
+          . $PROFILE.CurrentUserAllHosts
+      }}
+      tar -xf {project_name}.zip -C C:\
+      Remove-Item -Force {project_name}.zip
+
+  win_portable:
+    path: docs/scripts/wp{matrix.bits}
+    contents: |-
+      Invoke-Expression ((New-Object System.Net.WebClient).DownloadString('https://community.chocolatey.org/install.ps1'))
+      choco install -y curl 7zip.install
+      curl 'https://github.com/{organization}/{repo_name}/releases/download/{ver}/{project_name}-winx{bits}.zip' -o mangdl.zip
+      $FolderName = 'C:\{project_name}\'
+      if (Test-Path $FolderName) {{
+          Remove-Item -Force -Recurse $FolderName
+      }}
+      tar -xf {project_name}.zip
+      Remove-Item -Force {project_name}.zip
+
+  setup_py:
+    path: setup.py
+    contents: |-
+      from setuptools import find_packages, setup
+      setup(
+          name="{repo_name}",
+          author="whinee",
+          author_email="{mail_acc}",
+          version='{ver}',
+          description='{desc}',
+          long_description='''{long_desc}''',
+          long_description_content_type="text/markdown",
+          url="https://github.com/{organization}/{repo_name}",
+          project_urls={{
+              'Documentation': 'https://{site}',
+              'Source': 'https://github.com/{organization}/{repo_name}',
+              'Tracker': 'https://github.com/{organization}/{repo_name}/issues',
+          }},
+          license="MIT",
+          keywords={keywords},
+          classifiers=[
+              "Programming Language :: Python :: 3",
+              "License :: OSI Approved :: MIT License",
+              "Operating System :: OS Independent",
+          ],
+          packages=find_packages(),
+          include_package_data=True,
+          python_requires=">=3.10",
+          install_requires={req},
+          entry_points = {{
+              'console_scripts': ['{ep_con_script}'],
+          }},
+      )

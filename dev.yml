@@ -6,6 +6,13 @@ pdoc:
   project: ura
   op: docs
 
+mako:
+  gen:
+    path:
+      - changelog.mako
+    glob:
+      - docs/**/**/index.mako
+
 md_vars:
   global:
     project_name: ura

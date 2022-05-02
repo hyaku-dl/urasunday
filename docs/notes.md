@@ -1,6 +1,6 @@
----
-title: Notes
----
+<h1 align="center" style="font-weight: bold">
+    Notes
+</h1>
 
 There is a more personal version of this notes [here](notes to self.md).
 

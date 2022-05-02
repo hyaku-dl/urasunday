@@ -1,37 +1,44 @@
 import os
+import re
 import shutil
-from os import makedirs, path
+from os import listdir, makedirs, path
+from os.path import dirname as dn
 from pathlib import Path
 from typing import Any, Dict, List
 
+import frontmatter
+import msgpack
 import pdoc
+import yaml
+from mako.template import Template
 
 from .settings import stg, wr_stg
 from .utils import ddir, stg
 
+RE_MDND = r"(?<=# nav docs start\n).+(?=\n\s+# nav docs end)"
+
 YML = stg(None, "dev.yml")
 
 DOCS = ddir(YML, "docs")
-RULES = ddir(YML, "rules")
-IDF = Path(f'./{ddir(YML, "docs/input")}')
-MD_VARS_YML = ddir(YML, "md_vars")
-RMVC = ddir(MD_VARS_YML, "global")
-
 PDOC = ddir(YML, "pdoc")
+MAKO = ddir(YML, "mako")
+RULES = ddir(YML, "rules")
+MD_VARS_YML = ddir(YML, "md_vars")
+
+RMVC = ddir(MD_VARS_YML, "global")
+IDF = Path(f'./{ddir(YML, "docs/input")}')
 
 CONTEXT = pdoc.Context()
 PROJECT = pdoc.Module(PDOC["project"], context=CONTEXT)
 pdoc.link_inheritance(CONTEXT)
 
-DGD = []
-DGF = []
-
-PGD = []
-PGF = []
+with open("./version", "rb") as f:
+    VLS = msgpack.unpackb(f.read(), raw=False, use_list=False)
 
 GEN = {
-    "docs": [DGD, DGF],
-    "pdoc": [PGD, PGF],
+    "docs": [[], []],
+    "mako": [[], []],
+    "pdoc": [[], []],
 }
 
 class Constants:
@@ -67,15 +74,22 @@ def inmd(p: str, type: str):
         makedirs(pd)
     return p
 
-def docs_dir(mn: str, absolute: bool=True) -> str:
+def docs_dir(mn: str, absolute: bool=True, api=False) -> str:
     mls = mn.split(".")
     if (len(mls) == 1) and (PDOC["project"] == mls[0]):
         mls[0] = "index"
     elif (len(mls) >= 2) and (PDOC["project"] == mls[0]):
-        # mls[0] = "docs"
         del mls[0]
-    rel = path.join(*mls[:-1], f"{mls[-1]}.md")
-    abs = path.join(PDOC["op"], "docs", rel)
+    rel_ls = [
+        *[str(i) for i in VLS[0:2]],
+        *mls[:-1],
+        f"{mls[-1]}.md"
+    ]
+    if api:
+        rel_ls.insert(2, "api")
+        rel_ls.insert(0, "docs")
+    rel = path.join(*rel_ls)
+    abs = path.join(PDOC["op"], rel)
     GEN["pdoc"][1].append(abs)
     inmd(abs, "pdoc")
     if absolute:
@@ -87,7 +101,7 @@ def yield_text(mod):
     yield mod.name, mod.text()
     sm = {}
     for submod in mod.submodules():
-        sm[submod.name] = docs_dir(submod.name, False)
+        sm[submod.name] = docs_dir(submod.name, api=True)
         yield from yield_text(submod)
 
     if sm:
@@ -98,8 +112,9 @@ def yield_text(mod):
 
         smls = []
         for k, v in sm.items():
-            smls.append(f"- [{k}]({v})")
-        sm = "\n\n## Sub-modules\n{}".format("\n".join(smls))
+            v = "/".join(v.split("/")[5:])
+            smls.append(f'- [{k}]({v})')
+        sm = "\n\n## Sub-modules\n\n{}\n".format("\n".join(smls))
 
         idx = """# {}{}{}""".format(
             mod.name,
@@ -107,23 +122,30 @@ def yield_text(mod):
             sm,
         )
 
-        idx_path = docs_dir(mod.name)
+        idx_path = docs_dir(mod.name, api=True)
         with open(idx_path, "w") as f:
             f.write(idx)
 
-def main(rmv: Dict[Any, Any]={}):
+def del_gen():
+    try:
+        for _, v in stg("generated", "docs/_meta.yml").items():
+            for i in v["folders"]:
+                if path.isdir(i):
+                    shutil.rmtree(i)
+            for i in v["files"]:
+                if path.isfile(i):
+                    os.remove(i)
+    except TypeError:
+        shutil.copy("docs/_meta.yml.bak", "docs/_meta.yml")
+        del_gen()
+
+def main(rmv: Dict[Any, Any]={}, hr=False):
     docs_pdir = DOCS["op"]
     rmv_r = ddir(rmv, "rules")
     rmv_mv = ddir(rmv, "md_vars")
     MVC = dict(RMVC, **ddir(rmv_mv, "global"))
 
-    for _, v in stg("generated", "docs/_meta.yml").items():
-        for i in v["folders"]:
-            if path.isdir(i):
-                shutil.rmtree(i)
-        for i in v["files"]:
-            if path.isfile(i):
-                os.remove(i)
+    del_gen()
 
     for rip in list(IDF.rglob("*.ymd")):
         out = path.join(
@@ -131,11 +153,10 @@ def main(rmv: Dict[Any, Any]={}):
             *rip.parts[1:-1],
             f"{rip.stem}.md"
         )
-        print(out)
         GEN["docs"][1].append(out)
 
-        with open(rip, "r") as f:
-            md = repl(f.read(), dd(rules_fn(RULES), rules_fn(rmv_r)))
+        rf = frontmatter.load(rip)
+        md = repl(rf.content, dd(rules_fn(RULES), rules_fn(rmv_r)))
 
         d = dict(
             MVC,
@@ -151,15 +172,76 @@ def main(rmv: Dict[Any, Any]={}):
         for k, v in d.items():
             md = md.replace(f"${{{k}}}", v)
 
+        if title:=rf.get("title"):
+            if link:=rf.get("link"):
+                md = """<h1 align="center" style="font-weight: bold">
+    <a target="_blank" href="{}">{}</a>
+</h1>\n\n{}\n""".format(link, title, md)
+            else:
+                md = """<h1 align="center" style="font-weight: bold">
+    {}
+</h1>\n\n{}\n""".format(title, md)
+
         with open(inmd(out, "docs"), "w") as f:
             f.write(md)
 
-    for module_name, html in yield_text(PROJECT):
-        _dd = docs_dir(module_name)
+    for module_name, yt in yield_text(PROJECT):
+        _dd = docs_dir(module_name, api=True)
         with open(_dd, "w") as f:
-            f.write(html)
+            f.write(yt)
         GEN["pdoc"][1].append(_dd)
 
+    makos = []
+
+    for g in MAKO["gen"]["glob"]:
+        for i in list(Path(".").rglob(g)):
+            makos.append(str(i))
+
+    for i in MAKO["gen"]["path"]:
+        ip = path.join(DOCS["input"], i)
+        if path.isfile(ip):
+            makos.append(ip)
+        else:
+            print(f"{ip} not found")
+
+    for ip in makos:
+        pip = Path(ip)
+        op = path.join(
+            docs_pdir,
+            *pip.parts[1:-1],
+            f"{pip.stem}.md"
+        )
+        print([ip, op])
+        mytemplate = Template(filename=ip)
+        tpl_rd = mytemplate.render(
+            **{
+                "cwd": dn(ip),
+            }
+        )
+        with open(op, "w") as f:
+            f.write(tpl_rd)
+        GEN["mako"][1].append(op)
+
+    shutil.copy("docs/_meta.yml", "docs/_meta.yml.bak")
     for k, v in GEN.items():
         for key, i in zip(["folders", "files"], v):
             wr_stg(f"generated/{k}/{key}", list(set(i)), "docs/_meta.yml")
+
+    if not hr:
+        base = path.join("raw_docs", "docs")
+
+        ndd = {}
+        for u in listdir(base):
+            for d in listdir(path.join(base, u)):
+                ndd[f"{u}.{d}"] = f"docs/{u}/{d}/"
+
+        lk = list(ndd.keys())[-1]
+        ndd[f'{lk} (Current)'] = ndd.pop(lk)
+        nd = yaml.dump(ndd, default_flow_style=False)
+        nd = "\n".join([f'    - {i}' for i in nd.strip().split("\n")][::-1])
+
+        with open("mkdocs.yml", "r") as f:
+            mkdocs = f.read()
+        with open("mkdocs.yml", "w") as f:
+            f.write(re.sub(RE_MDND, nd, mkdocs, re.S))
+        shutil.copy("mkdocs.yml", "mkdocs.yml.bak")

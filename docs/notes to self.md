@@ -1,6 +1,6 @@
----
-title: Notes to Self
----
+<h1 align="center" style="font-weight: bold">
+    Notes to Self
+</h1>
 
 Look, whi_ne, I have written this for you.
 

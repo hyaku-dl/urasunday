@@ -35,7 +35,7 @@
 </p>
 <p align="center">
     <a target="_blank" href="https://discord.com/invite/${dc_inv}">
-        <img src="https://invidget.switchblade.xyz/${dc_inv}">
+        <img src="https://invidget.whinyaan.xyz/${dc_inv}?theme=transparent&color[serverName]=d64f50&color[header]=9383e2&color[presenceText]=684fe2">
     </a>
 </p>
 
@@ -54,9 +54,9 @@ Website: [${site}](https://${site})
 
 ---
 
-Commisioned by [@HappyPurple(Discord, Mistilteinn#4793)](https://discord.com/users/250456851890569217), owner of [Ultralight Manga Translation Group](https://blog.ultralight.group).
+Commisioned by <a target="_blank" href="https://discord.com/users/250456851890569217">@HappyPurple(Discord, Mistilteinn#4793)</a>, owner of <a target="_blank" href="https://blog.ultralight.group">Ultralight Manga Translation Group</a>.
 
-Interested in commisioning projects? Inquire at Discord(<a target="_blank" href="${dc_link}">${dc_acc}</a>) or through mail(<a target="_blank" href="${mail_link}">${mail_acc}</a>). Price starts at 15 USD.
+Interested in commisioning projects? Inquire through Discord(<a target="_blank" href="${dc_link}">${dc_acc}</a>) or through e-mail(<a target="_blank" href="${mail_link}">${mail_acc}</a>). Price starts at 15 USD.
 
 To be updated, be sure to watch this repository and join the [Discord Support Server](https://discord.com/invite/${dc_inv}).
 
