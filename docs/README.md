@@ -35,7 +35,7 @@
 </p>
 <p align="center">
     <a target="_blank" href="https://discord.com/invite/JbAtUxGcJZ">
-        <img src="https://invidget.whinyaan.xyz/JbAtUxGcJZ?theme=transparent&color[serverName]=d64f50&color[header]=9383e2&color[presenceText]=684fe2">
+        <img src="https://inviter.whinyaan.xyz/JbAtUxGcJZ?color[background]=00000000&color[serverName]=d64f50&color[header]=9383e2&color[presenceText]=684fe2">
     </a>
 </p>
 

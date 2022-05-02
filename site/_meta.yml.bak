@@ -1,29 +1,30 @@
 generated:
   docs:
     files:
-    - docs/notes.md
-    - docs/docs/0/0/config.md
     - docs/README.md
-    - docs/docs/0/0/setup.md
+    - docs/notes.md
     - docs/license.md
-    - docs/notes to self.md
+    - docs/docs/0/0/setup.md
+    - docs/docs/0/0/config.md
     - docs/docs/0/0/structure.md
+    - docs/notes to self.md
     folders: []
   mako:
     files:
     - docs/changelog.md
+    - docs/docs/0/0/index.md
     folders: []
   pdoc:
     files:
-    - docs/docs/0/0/api/download.md
-    - docs/docs/0/0/api/cli.md
-    - docs/docs/0/0/api/utils.md
-    - docs/docs/0/0/api/init.md
-    - docs/docs/0/0/api/main.md
     - docs/docs/0/0/api/settings.md
     - docs/docs/0/0/api/style.md
-    - docs/docs/0/0/api/index.md
+    - docs/docs/0/0/api/cli.md
     - docs/docs/0/0/api/globals.md
     - docs/docs/0/0/api/base.md
+    - docs/docs/0/0/api/main.md
+    - docs/docs/0/0/api/index.md
+    - docs/docs/0/0/api/download.md
+    - docs/docs/0/0/api/init.md
+    - docs/docs/0/0/api/utils.md
     folders:
     - docs/docs/0/0/api
