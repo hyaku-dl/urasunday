@@ -56,16 +56,18 @@ license:
   year: 2022
   type: MIT
   cholder:
-    whinee:
-      hyaku-dl:
-        hyaku:
-          year: 2022
-          platform: Github
-      MangDL:
+    whi_ne:
+      user: whinee
+      projects:
+        hyaku-dl:
+          hyaku:
+            year: 2022
+            platform: Github
         MangDL:
-          year: 2021-2022
-          platform: Github
-      Pirate-Kings:
-        YAMHL:
-          year: 2022
-          platform: Github
+          MangDL:
+            year: 2021-2022
+            platform: Github
+        Pirate-Kings:
+          YAMHL:
+            year: 2022
+            platform: Github

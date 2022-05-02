@@ -197,7 +197,7 @@ The TODO will be done, except for that, nothing else.
 
 ### <a target="_blank" href="https://choosealicense.com/licenses/mit/">MIT</a>
 
-Copyright for portions of project [ura](https://github.com/hyaku-dl/ura) are held by [Github Account [whinee](https://github.com/whinee) Owner, 2022] as part of project [hyaku](https://github.com/hyaku-dl/2022), by [Github Account [whinee](https://github.com/whinee) Owner, 2021-2022] as part of project [MangDL](https://github.com/MangDL/2021-2022), and by [Github Account [whinee](https://github.com/whinee) Owner, 2022] as part of project [YAMHL](https://github.com/Pirate-Kings/2022).
+Copyright for portions of project [ura](https://github.com/hyaku-dl/ura) are held by [whi_ne, Github account [whinee](https://github.com/whinee) owner, 2022] as part of project [hyaku](https://github.com/hyaku-dl/hyaku), by [whi_ne, Github account [whinee](https://github.com/whinee) owner, 2021-2022] as part of project [MangDL](https://github.com/MangDL/MangDL), and by [whi_ne, Github account [whinee](https://github.com/whinee) owner, 2022] as part of project [YAMHL](https://github.com/Pirate-Kings/YAMHL).
 
 All other copyright for project [ura](https://github.com/hyaku-dl/ura) are held by [Github Account [whinee](https://github.com/whinee) Owner, 2022].
 

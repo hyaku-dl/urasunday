@@ -22,12 +22,12 @@ ORG = GLOBAL("organization")
 USER = GLOBAL("user")
 
 if (copyright := []) == []:
-    c = LICENSE("cholder")
-    for u, op in c.items():
-        for org, projects in op.items():
-            for project, v in projects.items():
+    for c, mp in LICENSE("cholder").items():
+        user = mp['user']
+        for org, projects in mp["projects"].items():
+            for project, pm in projects.items():
                 copyright.append(
-                    f"by [Github Account [{u}](https://github.com/{u}) Owner, {v['year']}] as part of project [{project}](https://github.com/{org}/{v['year']})"
+                    f"by [{c}, Github account [{user}](https://github.com/{user}) owner, {pm['year']}] as part of project [{project}](https://github.com/{org}/{project})"
                 )
     if len(copyright) > 1:
         copyright[-2] += f", and {copyright[-1]}"
