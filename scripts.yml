@@ -191,7 +191,7 @@ scripts:
                 sudo apt install appstream
             - name: Build
               env:
-                python_ver:" ${python_ver}"
+                python_ver: "${python_ver}"
               run: |-
                 wget -O python.AppImage `wget -qSO - "https://api.github.com/repos/niess/python-appimage/releases/tags/python${python_ver}" 2>&1 | grep -E "browser_download_url.*x86_64"| cut -d '"' -f4 | tail -1`
                 chmod +x python.AppImage
