@@ -1,0 +1,11 @@
+Invoke-Expression ((New-Object System.Net.WebClient).DownloadString('https://community.chocolatey.org/install.ps1'))
+choco install -y curl 7zip.install
+curl 'https://github.com/hyaku-dl/urasunday/releases/download/0.0.0.0-alpha.3/ura-winx64.zip' -o ura.zip
+$FolderName = 'C:\ura\'
+if (Test-Path $FolderName) {{
+    Remove-Item -Force -Recurse $FolderName
+    "Set-Alias -Name ura -Value C:\ura\ura.bat" >> $PROFILE.CurrentUserAllHosts
+    . $PROFILE.CurrentUserAllHosts
+}}
+tar -xf ura.zip -C C:\
+Remove-Item -Force ura.zip

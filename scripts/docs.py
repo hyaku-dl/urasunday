@@ -1,7 +1,7 @@
 import os
 import re
 import shutil
-from os import listdir, makedirs, path
+from os import listdir, path
 from os.path import dirname as dn
 from pathlib import Path
 from typing import Any, Dict, List
@@ -13,7 +13,7 @@ import yaml
 from mako.template import Template
 
 from .settings import stg, wr_stg
-from .utils import ddir, stg
+from .utils import ddir, inmd, repl, stg
 
 RE_MDND = r"(?<=# nav docs start\n).+(?=\n\s+# nav docs end)"
 
@@ -53,27 +53,6 @@ def dd(od: Dict[str, List[str]], *dicts: List[Dict[str, List[str]]]) -> Dict[str
 def rules_fn(rules: Dict[Any, Any]) -> Dict[str, List[str]]:
     return dd({"": ddir(rules, "del", [])}, ddir(rules, "repl"))
 
-def repl(s: str, repl_dict: Dict[str, List[str]]) -> str:
-    op = s
-    for k, v in repl_dict.items():
-        for i in v:
-            op = op.replace(i, k)
-    return op
-
-def inmd(p: str, type: str):
-    """
-    "If Not `path.isdir`, Make Directories"
-
-    Args:
-        p (str): [description]
-    """
-
-    pd = path.dirname(p)
-    if not path.isdir(pd):
-        GEN[type][0].append(pd)
-        makedirs(pd)
-    return p
-
 def docs_dir(mn: str, absolute: bool=True, api=False) -> str:
     mls = mn.split(".")
     if (len(mls) == 1) and (PDOC["project"] == mls[0]):
@@ -91,7 +70,7 @@ def docs_dir(mn: str, absolute: bool=True, api=False) -> str:
     rel = path.join(*rel_ls)
     abs = path.join(PDOC["op"], rel)
     GEN["pdoc"][1].append(abs)
-    inmd(abs, "pdoc")
+    inmd(abs, GEN["pdoc"][0])
     if absolute:
         return abs
     else:
@@ -182,7 +161,7 @@ def main(rmv: Dict[Any, Any]={}, hr=False):
     {}
 </h1>\n\n{}\n""".format(title, md)
 
-        with open(inmd(out, "docs"), "w") as f:
+        with open(inmd(out, GEN["docs"][0]), "w") as f:
             f.write(md)
 
     for module_name, yt in yield_text(PROJECT):

@@ -76,7 +76,7 @@ plugins:
 nav:
   - Home: /
   - License agreement: /license
-  - Changelogs: /changelog
+  - Changelog: /changelog
   - Notes:
     - Notes: /notes
     - Notes to self: /notes to self

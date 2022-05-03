@@ -1,6 +1,4 @@
 general:
-  CFLOPS:
-    abbr: Configuration File Lookup Order of Precedence
   idx:
     abbr: index
   urel:

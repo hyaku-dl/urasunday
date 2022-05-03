@@ -1,8 +1,6 @@
 <!-- Repository Name. Preferrably 1-5 words long. -->
 <h1 align="center" style="font-weight: bold">
-    <span id="min-block-shrink">▀▄▀▄▀▄</span>
-    <span id="min-block">ura</span>
-    <span id="min-block-shrink">▀▄▀▄▀▄</span>
+    <span>ura</span>
 </h1>
 
 <p align="center">
@@ -43,7 +41,7 @@
 ---
 
 <h4 align="center">
-Your basic <a target="_blank" href="https://urasunday.com">urasunday</a> scraper
+A no-nonsense, simple and easy to use scraper for <a target="_blank" href="https://urasunday.com">urasunday</a>
 </h4>
 
 ---

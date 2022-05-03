@@ -50,7 +50,7 @@ def push(v: list[int]=None):
     if msg != "":
         msg = f"{msg},"
     if v:
-        run(f"git commit -am '{msg}https://hyk.fr.to/changelog#v{'-'.join([str(i) for i in v])}'")
+        run(f"git commit -am '{msg}https://ura.hyaku.download/changelog#v{'-'.join([str(i) for i in v])}'")
     else:
         run(f"git commit -am '{msg or 'push'}'")
     run("git push")
@@ -118,6 +118,7 @@ def bump():
                 with open("ura/__init__.py", "w") as f:
                     init = re.sub(r"vls.+", f"vls = {_vls}", init)
                     f.write(re.sub(r"__version__.+", f"__version__ = '{rv(_vls)}'", init))
+                gen_script()
                 push(_vls)
                 return
             case "n":
@@ -153,6 +154,10 @@ def set_ver():
         init = re.sub(r"vls.+", f"vls = {vls}", init)
         f.write(re.sub(r"__version__.+", f"__version__ = '{rv(vls)}'", init))
 
+def gen_script():
+    from scripts.scripts import main
+    main()
+
 def main():
     match inquirer.list_input(
         message="What action do you want to take",
@@ -160,6 +165,7 @@ def main():
             ["Copy constants to project folder", "cp"],
             ["Format code", "f"],
             ["Generate documentation", "docs"],
+            ["Generate scripts", "gs"],
             ["Push to github", "gh"],
             ["Bump a version", "bump"],
             ["Set the version manually", "set_ver"]
@@ -178,9 +184,13 @@ def main():
                 "Do you want to push this to github?",
                 default=False
             ):
+                gen_script()
                 push()
+        case "gs":
+            gen_script()
         case "gh":
             cp()
+            gen_script()
             push()
         case "bump":
             bump()

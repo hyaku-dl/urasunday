@@ -1,104 +1,114 @@
-raw_vars:
-  keywords:
-    - python
-    - windows
-    - macos
-    - linux
-    - cli
-    - scraper
-    - downloader
-    - manga
-    - python3
-    - urasunday
-
 variables:
   global:
     python_ver: "3.10"
+    python_ver_nd: "310"
+  local: {}
 
 matrix:
-  global:
-    bits:
-      - 86
-      - 64
+  bits:
+    - 86
+    - 64
 
 scripts:
+  pth:
+    path: docs/scripts/python${python_ver_nd}._pth
+    contents: |-
+      python${python_ver_nd}.zip
+      .
+      import site
+  bat:
+    path: docs/scripts/${project_name}.bat
+    contents: |-
+      @ECHO off
+      pushd %~dp0
+      shift
+      set params=%1
+      :loop
+      shift
+      if [%1]==[] goto afterloop
+      set params=%params% %1
+      goto loop
+      :afterloop
+      python Scripts\${project_name}.exe %*
+      popd
   linux_install:
     path: docs/scripts/li
     contents: |-
       #! /bin/sh
-      curl -L -o {project_name}.AppImage https://github.com/{organization}/{repo_name}/releases/download/{ver}/{project_name}-linux-x86_64.AppImage
-      chmod +x ./{project_name}.AppImage
-      ./{project_name}.AppImage --appimage-extract
-      rm -rf ./{project_name}.AppImage
-      rm -rf /usr/share/{project_name}
-      mv squashfs-root /usr/share/{project_name}
+      curl -L -o ${project_name}.AppImage https://github.com/${organization}/${repo_name}/releases/download/${ver}/${project_name}-linux-x86_64.AppImage
+      chmod +x ./${project_name}.AppImage
+      ./${project_name}.AppImage --appimage-extract
+      rm -rf ./${project_name}.AppImage
+      rm -rf /usr/share/${project_name}
+      mv squashfs-root /usr/share/${project_name}
       echo '#! /bin/sh
-      "exec" "/usr/share/{project_name}/usr/bin/python{python_ver}" "$0" "$@"
+      "exec" "/usr/share/${project_name}/usr/bin/python${python_ver}" "$0" "$@"
       # -*- coding: utf-8 -*-
       import re
       import sys
-      from {project_name}.cli import cli
+      from ${project_name}.cli import cli
       if __name__ == "__main__":
         sys.argv[0] = re.sub("r(-script\.pyw|\.exe)?$", "", sys.argv[0])
-        sys.exit(cli())' > /usr/bin/{project_name}
-      chmod +x /usr/bin/{project_name}
-    rm -rf linux-install.sh
+        sys.exit(cli())' > /usr/bin/${project_name}
+      chmod +x /usr/bin/${project_name}
+      rm -rf linux-install.sh
 
   linux_dl:
     path: docs/scripts/ld
     contents: |-
       #! /bin/sh
-      curl -L -o {project_name}.AppImage https://github.com/{organization}/{repo_name}/releases/download/{ver}/{project_name}-linux-x86_64.AppImage
-      chmod +x ./{project_name}.AppImage
+      curl -L -o ${project_name}.AppImage https://github.com/${organization}/${repo_name}/releases/download/${ver}/${project_name}-linux-x86_64.AppImage
+      chmod +x ./${project_name}.AppImage
 
   win_install:
-    path: docs/scripts/wi{matrix.bits}
+    path: docs/scripts/wi${matrix.bits}
     contents: |-
       Invoke-Expression ((New-Object System.Net.WebClient).DownloadString('https://community.chocolatey.org/install.ps1'))
       choco install -y curl 7zip.install
-      curl 'https://github.com/MangDL/MangDL/releases/download/{ver}/mangdl-winx{bits}.zip' -o mangdl.zip
-      $FolderName = 'C:\{project_name}\'
+      curl 'https://github.com/${organization}/${repo_name}/releases/download/${ver}/${project_name}-winx${matrix.bits}.zip' -o ${project_name}.zip
+      $FolderName = 'C:\${project_name}\'
       if (Test-Path $FolderName) {{
           Remove-Item -Force -Recurse $FolderName
-          "Set-Alias -Name {project_name} -Value C:\{project_name}\{project_name}.bat" >> $PROFILE.CurrentUserAllHosts
+          "Set-Alias -Name ${project_name} -Value C:\${project_name}\${project_name}.bat" >> $PROFILE.CurrentUserAllHosts
           . $PROFILE.CurrentUserAllHosts
       }}
-      tar -xf {project_name}.zip -C C:\
-      Remove-Item -Force {project_name}.zip
+      tar -xf ${project_name}.zip -C C:\
+      Remove-Item -Force ${project_name}.zip
 
   win_portable:
-    path: docs/scripts/wp{matrix.bits}
+    path: docs/scripts/wp${matrix.bits}
     contents: |-
       Invoke-Expression ((New-Object System.Net.WebClient).DownloadString('https://community.chocolatey.org/install.ps1'))
       choco install -y curl 7zip.install
-      curl 'https://github.com/{organization}/{repo_name}/releases/download/{ver}/{project_name}-winx{bits}.zip' -o mangdl.zip
-      $FolderName = 'C:\{project_name}\'
+      curl 'https://github.com/${organization}/${repo_name}/releases/download/${ver}/${project_name}-winx${matrix.bits}.zip' -o ${project_name}.zip
+      $FolderName = 'C:\${project_name}\'
       if (Test-Path $FolderName) {{
           Remove-Item -Force -Recurse $FolderName
       }}
-      tar -xf {project_name}.zip
-      Remove-Item -Force {project_name}.zip
+      tar -xf ${project_name}.zip
+      Remove-Item -Force ${project_name}.zip
 
   setup_py:
     path: setup.py
     contents: |-
       from setuptools import find_packages, setup
       setup(
-          name="{repo_name}",
+          name="${repo_name}",
           author="whinee",
-          author_email="{mail_acc}",
-          version='{ver}',
-          description='{desc}',
-          long_description='''{long_desc}''',
+          author_email="${mail_acc}",
+          version='${ver}',
+          description='${desc}',
+          long_description='''${long_desc}.
+          For full information, visit https://${site}''',
           long_description_content_type="text/markdown",
-          url="https://github.com/{organization}/{repo_name}",
-          project_urls={{
-              'Documentation': 'https://{site}',
-              'Source': 'https://github.com/{organization}/{repo_name}',
-              'Tracker': 'https://github.com/{organization}/{repo_name}/issues',
-          }},
+          url="https://github.com/${organization}/${repo_name}",
+          project_urls={
+              'Documentation': 'https://${site}',
+              'Source': 'https://github.com/${organization}/${repo_name}',
+              'Tracker': 'https://github.com/${organization}/${repo_name}/issues',
+          },
           license="MIT",
-          keywords={keywords},
+          keywords='python windows macos linux cli scraper downloader manga python3 urasunday',
           classifiers=[
               "Programming Language :: Python :: 3",
               "License :: OSI Approved :: MIT License",
@@ -107,8 +117,164 @@ scripts:
           packages=find_packages(),
           include_package_data=True,
           python_requires=">=3.10",
-          install_requires={req},
-          entry_points = {{
-              'console_scripts': ['{ep_con_script}'],
-          }},
+          install_requires=${req},
+          entry_points = {
+              'console_scripts': ['${project_name}=${project_name}.cli:cli'],
+          },
       )
+
+  build_yml:
+    path: .github/workflows/build.yml
+    contents: |-
+      name: Build
+
+      on:
+        push:
+          paths:
+            - version
+        workflow_dispatch:
+
+      jobs:
+        pypi:
+          name: PyPI
+          runs-on: ubuntu-latest
+          steps:
+            - name: Checkout
+              uses: actions/checkout@master
+            - name: Python${python_ver}
+              uses: actions/setup-python@v1
+              with:
+                python-version: ${python_ver}
+            - name: Build
+              run: |-
+                python3 -m pip install --upgrade pip
+                python -m pip install setuptools wheel
+                python setup.py sdist
+            - name: Publish
+              uses: pypa/gh-action-pypi-publish@master
+              with:
+                user: __token__
+                password: ${{ secrets.PYPI_TOKEN }}
+        release:
+          name: release
+          runs-on: ubuntu-latest
+          outputs:
+            upload_url: ${{ steps.create_release.outputs.upload_url }}
+          steps:
+            - name: Checkout
+              uses: actions/checkout@master
+            - name: Python${python_ver}
+              uses: actions/setup-python@v1
+              with:
+                python-version: ${python_ver}
+            - name: Create Release
+              id: create_release
+              uses: actions/create-release@v1
+              env:
+                GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+              with:
+                tag_name: ${ver}
+                release_name: ${project_name} release v${ver}
+                draft: false
+                prerelease: ${prerel}
+        linux:
+          name: Linux
+          needs: release
+          runs-on: ubuntu-latest
+          steps:
+            - name: Python${python_ver}
+              uses: actions/setup-python@v1
+              with:
+                python-version: ${python_ver}
+            - name: Install Prerequisites
+              run: |-
+                sudo apt install appstream
+            - name: Build
+              env:
+                python_ver: ${python_ver}
+              run: |-
+                wget -O python.AppImage `wget -qSO - "https://api.github.com/repos/niess/python-appimage/releases/tags/python${python_ver}" 2>&1 | grep -E "browser_download_url.*x86_64"| cut -d '"' -f4 | tail -1`
+                chmod +x python.AppImage
+                wget -O tool.AppImage https://github.com/AppImage/AppImageKit/releases/download/continuous/appimagetool-x86_64.AppImage
+                chmod +x ./tool.AppImage
+                ./python.AppImage --appimage-extract > /dev/null 2>&1
+                rm -rf python.AppImage
+                mv squashfs-root ${project_name}-linux-x86_64
+                chmod +x ./${project_name}-linux-x86_64/usr/bin/pip3
+                ./${project_name}-linux-x86_64/usr/bin/pip3 install --upgrade pip
+                ./${project_name}-linux-x86_64/usr/bin/pip3 install git+https://github.com/${organization}/${repo_name} --no-warn-script-location
+                rm -rf ./${project_name}-linux-x86_64/python3.10.0.desktop
+                echo "#!/usr/bin/env xdg-open
+                [Desktop Entry]
+                Type=Application
+                Name=${project_name}
+                Exec=${project_name}
+                Comment=${desc}
+                Categories=AudioVideo;
+                Icon=logo
+                Terminal=true" > ./${project_name}-linux-x86_64/${project_name}.desktop
+                echo '#! /bin/sh
+                "exec" "$(dirname $(readlink -f ${0}))/usr/bin/python3.10" "$0" "$@"
+                # -*- coding: utf-8 -*-
+                import re
+                import sys
+                from ${project_name}.cli import cli
+                if __name__ == "__main__":
+                    sys.argv[0] = re.sub("r(-script\.pyw|\.exe)?$", "", sys.argv[0])
+                    sys.exit(cli())' > ./${project_name}-linux-x86_64/AppRun
+                rm -rf ./${project_name}-linux-x86_64/python.png
+                rm -rf "./${project_name}-linux-x86_64/python"$python_ver_minor".desktop"
+                chmod +x ./${project_name}-linux-x86_64/${project_name}.desktop
+                rm -rf build/
+                ./tool.AppImage ${project_name}-linux-x86_64
+                rm -rf tool.AppImage
+                rm -rf ${project_name}-linux-x86_64
+            - name: Upload AppImage
+              id: upload-appimage
+              uses: actions/upload-release-asset@v1
+              env:
+                GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+              with:
+                upload_url: ${{needs.release.outputs.upload_url}}
+                asset_path: ./${project_name}-x86_64.AppImage
+                asset_name: ${project_name}-linux-x86_64.AppImage
+                asset_content_type: application/octet
+        win:
+          name: Windows
+          needs: release
+          runs-on: windows-latest
+          strategy:
+            matrix:
+              include:
+                - name: winx64
+                  embedable: https://www.python.org/ftp/python/3.10.0/python-3.10.0-embed-amd64.zip
+                - name: winx86
+                  embedable: https://www.python.org/ftp/python/3.10.0/python-3.10.0-embed-win32.zip
+
+          steps:
+            - name: Build ${project_name}-${{ matrix.name }}.zip
+              run: |-
+                git clone https://github.com/${organization}/${repo_name} ${project_name}
+                cd ${project_name}
+                curl -sSL ${{ matrix.embedable }} -o python.zip
+                curl -sSL https://bootstrap.pypa.io/get-pip.py -o get-pip.py
+                tar -xf python.zip
+                del python310._pth
+                curl -sSL https://${scripts_url}/python310._pth -o python310._pth
+                curl -sSL https://${scripts_url}/${project_name}.bat -o ${project_name}.bat
+                .\python get-pip.py
+                .\python -m pip install .
+                del python.zip
+                del get-pip.py
+                cd ..
+                tar -a -c -f ${project_name}.zip ${project_name}
+            - name: Upload
+              id: upload-release-asset
+              uses: actions/upload-release-asset@v1
+              env:
+                GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+              with:
+                upload_url: ${{ needs.release.outputs.upload_url }}
+                asset_path: ./${project_name}.zip
+                asset_name: ${project_name}-${{ matrix.name }}.zip
+                asset_content_type: application/zip
