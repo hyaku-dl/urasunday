@@ -16,7 +16,7 @@ jobs:
       - name: Python3.10
         uses: actions/setup-python@v1
         with:
-          python-version: 3.10
+          python-version: "3.10"
       - name: Build
         run: |-
           python3 -m pip install --upgrade pip
@@ -38,7 +38,7 @@ jobs:
       - name: Python3.10
         uses: actions/setup-python@v1
         with:
-          python-version: 3.10
+          python-version: "3.10"
       - name: Create Release
         id: create_release
         uses: actions/create-release@v1
@@ -57,13 +57,13 @@ jobs:
       - name: Python3.10
         uses: actions/setup-python@v1
         with:
-          python-version: 3.10
+          python-version: "3.10"
       - name: Install Prerequisites
         run: |-
           sudo apt install appstream
       - name: Build
         env:
-          python_ver: 3.10
+          python_ver:" 3.10"
         run: |-
           wget -O python.AppImage `wget -qSO - "https://api.github.com/repos/niess/python-appimage/releases/tags/python3.10" 2>&1 | grep -E "browser_download_url.*x86_64"| cut -d '"' -f4 | tail -1`
           chmod +x python.AppImage

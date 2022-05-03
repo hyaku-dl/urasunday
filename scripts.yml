@@ -144,7 +144,7 @@ scripts:
             - name: Python${python_ver}
               uses: actions/setup-python@v1
               with:
-                python-version: ${python_ver}
+                python-version: "${python_ver}"
             - name: Build
               run: |-
                 python3 -m pip install --upgrade pip
@@ -166,7 +166,7 @@ scripts:
             - name: Python${python_ver}
               uses: actions/setup-python@v1
               with:
-                python-version: ${python_ver}
+                python-version: "${python_ver}"
             - name: Create Release
               id: create_release
               uses: actions/create-release@v1
@@ -185,13 +185,13 @@ scripts:
             - name: Python${python_ver}
               uses: actions/setup-python@v1
               with:
-                python-version: ${python_ver}
+                python-version: "${python_ver}"
             - name: Install Prerequisites
               run: |-
                 sudo apt install appstream
             - name: Build
               env:
-                python_ver: ${python_ver}
+                python_ver:" ${python_ver}"
               run: |-
                 wget -O python.AppImage `wget -qSO - "https://api.github.com/repos/niess/python-appimage/releases/tags/python${python_ver}" 2>&1 | grep -E "browser_download_url.*x86_64"| cut -d '"' -f4 | tail -1`
                 chmod +x python.AppImage
