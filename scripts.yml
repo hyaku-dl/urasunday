@@ -63,8 +63,8 @@ scripts:
   win_install:
     path: docs/scripts/wi${matrix.bits}
     contents: |-
-      # Invoke-Expression ((New-Object System.Net.WebClient).DownloadString('https://community.chocolatey.org/install.ps1'))
-      # choco install -y curl 7zip.install
+      Invoke-Expression ((New-Object System.Net.WebClient).DownloadString('https://community.chocolatey.org/install.ps1'))
+      choco install -y curl
       curl 'https://github.com/${organization}/${repo_name}/releases/download/${ver}/${project_name}-winx${matrix.bits}.zip' -o ${project_name}.zip
       $FolderName = 'C:\${project_name}\'
       if (Test-Path $FolderName) {
@@ -80,8 +80,8 @@ scripts:
   win_portable:
     path: docs/scripts/wp${matrix.bits}
     contents: |-
-      # Invoke-Expression ((New-Object System.Net.WebClient).DownloadString('https://community.chocolatey.org/install.ps1'))
-      # choco install -y curl 7zip.install
+      Invoke-Expression ((New-Object System.Net.WebClient).DownloadString('https://community.chocolatey.org/install.ps1'))
+      choco install -y curl
       curl 'https://github.com/${organization}/${repo_name}/releases/download/${ver}/${project_name}-winx${matrix.bits}.zip' -o ${project_name}.zip
       $FolderName = 'C:\${project_name}\'
       if (Test-Path $FolderName) {
