@@ -96,7 +96,7 @@ jobs:
               sys.exit(cli())' > ./ura-linux-x86_64/AppRun
           rm -rf ./ura-linux-x86_64/python.png
           rm -rf "./ura-linux-x86_64/python"$python_ver_minor".desktop"
-          wget -O ./ura-linux-x86_64/logo.png https://github.com/hyaku-dl/urasunday/raw/master/docs/assets/images/icons/logo.png
+          wget -O ./ura-linux-x86_64/logo.png https://github.com/hyaku-dl/urasunday/raw/main/docs/assets/images/icons/logo.png
           chmod +x ./ura-linux-x86_64/ura.desktop
           rm -rf build/
           ./tool.AppImage ura-linux-x86_64
