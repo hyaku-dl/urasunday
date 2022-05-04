@@ -83,7 +83,6 @@ jobs:
           Exec=ura
           Comment=A Basic Urasunday Scraper
           Categories=AudioVideo;
-          Icon=logo
           Terminal=true" > ./ura-linux-x86_64/ura.desktop
           echo '#! /bin/sh
           "exec" "$(dirname $(readlink -f ${0}))/usr/bin/python3.10" "$0" "$@"
