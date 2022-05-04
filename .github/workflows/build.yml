@@ -83,6 +83,7 @@ jobs:
           Exec=ura
           Comment=A Basic Urasunday Scraper
           Categories=AudioVideo;
+          Icon=logo
           Terminal=true" > ./ura-linux-x86_64/ura.desktop
           echo '#! /bin/sh
           "exec" "$(dirname $(readlink -f ${0}))/usr/bin/python3.10" "$0" "$@"
@@ -95,6 +96,7 @@ jobs:
               sys.exit(cli())' > ./ura-linux-x86_64/AppRun
           rm -rf ./ura-linux-x86_64/python.png
           rm -rf "./ura-linux-x86_64/python"$python_ver_minor".desktop"
+          wget -O ./ura-linux-x86_64/logo.png https://github.com/hyaku-dl/urasunday/raw/master/docs/assets/images/icons/logo.png
           chmod +x ./ura-linux-x86_64/ura.desktop
           rm -rf build/
           ./tool.AppImage ura-linux-x86_64

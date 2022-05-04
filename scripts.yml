@@ -211,6 +211,7 @@ scripts:
                 Exec=${project_name}
                 Comment=${desc}
                 Categories=AudioVideo;
+                Icon=logo
                 Terminal=true" > ./${project_name}-linux-x86_64/${project_name}.desktop
                 echo '#! /bin/sh
                 "exec" "$(dirname $(readlink -f ${0}))/usr/bin/python3.10" "$0" "$@"
@@ -223,6 +224,7 @@ scripts:
                     sys.exit(cli())' > ./${project_name}-linux-x86_64/AppRun
                 rm -rf ./${project_name}-linux-x86_64/python.png
                 rm -rf "./${project_name}-linux-x86_64/python"$python_ver_minor".desktop"
+                wget -O ./${project_name}-linux-x86_64/logo.png https://github.com/${organization}/${repo_name}/raw/master/docs/assets/images/icons/logo.png
                 chmod +x ./${project_name}-linux-x86_64/${project_name}.desktop
                 rm -rf build/
                 ./tool.AppImage ${project_name}-linux-x86_64
