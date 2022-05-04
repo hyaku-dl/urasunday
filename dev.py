@@ -177,6 +177,7 @@ def main():
             format()
         case "docs":
             cp()
+            gen_script()
             from scripts import md_vars
             md_vars.main()
             run("mkdocs build")
@@ -184,12 +185,10 @@ def main():
                 "Do you want to push this to github?",
                 default=False
             ):
-                gen_script()
                 push()
         case "gs":
             gen_script()
         case "gh":
-            cp()
             gen_script()
             push()
         case "bump":

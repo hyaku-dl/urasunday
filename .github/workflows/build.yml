@@ -133,8 +133,8 @@ jobs:
           curl -sSL https://bootstrap.pypa.io/get-pip.py -o get-pip.py
           tar -xf python.zip
           del python310._pth
-          curl -sSL https://${scripts_url}/python310._pth -o python310._pth
-          curl -sSL https://${scripts_url}/ura.bat -o ura.bat
+          curl -sSL https://ura.hyaku.download/scripts/python310._pth -o python310._pth
+          curl -sSL https://ura.hyaku.download/scripts/ura.bat -o ura.bat
           .\python get-pip.py
           .\python -m pip install .
           del python.zip
