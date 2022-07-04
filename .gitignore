@@ -1,2 +1,11 @@
+.history/
+dist/
+node_modules/
 venv/
 **/__pycache__/
+**/tmp/
+
+yarn.lock
+yarn-error.log
+**/*.test.*
+**/*.AppImage

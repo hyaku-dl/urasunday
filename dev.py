@@ -64,11 +64,28 @@ def reset(idx: int, vls=None):
         _vls[i] = 0
     return _vls
 
+def dcomp(n):
+    # dc = [0, 0] if dc == [0] else dc[::-1]
+    i = 2
+    factors = [0]
+    while i * i <= n:
+        if n % i:
+            i += 1
+            if len(factors) == i-2:
+                factors.append(1)
+        else:
+            n //= i
+            factors[i-2] += 1
+    return factors
+
 def rv(vls: list[str]):
     pr = ""
     if vls[4] <= 2:
         pr = f'-{PR[vls[4]]}.{vls[5]}'
-    return ".".join([str(i) for i in vls[0:4]]) + pr
+    return [
+        ".".join([str(i) for i in vls[0:4]]) + pr,
+        ".".join([str(i) for i in [*vls[0:2], 3**vls[2] * 2**vls[3]]]) + pr
+    ]
 
 def _bump(v: str):
     idx = VERSIONS.index(v)
@@ -93,14 +110,14 @@ def bump():
     while True:
         choices = []
         for k, v in VERSIONS_NAME.items():
-            choices.append([f'{k.ljust(23)}(bump to {rv(_bump(k))})', k])
+            choices.append([f'{k.ljust(23)}(bump to {rv(_bump(k))[0]})', k])
         v = inquirer.list_input(
-            message=f"What version do you want to bump? (Current version: {rv(VLS)})",
+            message=f"What version do you want to bump? (Current version: {rv(VLS)[0]})",
             choices=choices,
         )
         _vls = _bump(v)
         print(
-            f"    This will bump the version from {rv(VLS)} to {rv(_vls)} ({VERSIONS_NAME[v]} bump). "
+            f"    This will bump the version from {rv(VLS)[0]} to {rv(_vls)[0]} ({VERSIONS_NAME[v]} bump). "
         )
         match inquirer.list_input(
             message="Are you sure?",
@@ -117,7 +134,8 @@ def bump():
                     init = f.read()
                 with open("ura/__init__.py", "w") as f:
                     init = re.sub(r"vls.+", f"vls = {_vls}", init)
-                    f.write(re.sub(r"__version__.+", f"__version__ = '{rv(_vls)}'", init))
+                    init = re.sub(r"hver.+", f"hver = '{rv(_vls)[1]}'", init)
+                    f.write(re.sub(r"__version__.+", f"__version__ = '{rv(_vls)[0]}'", init))
                 gen_script()
                 push(_vls)
                 return
@@ -152,7 +170,8 @@ def set_ver():
 
     with open("ura/__init__.py", "w") as f:
         init = re.sub(r"vls.+", f"vls = {vls}", init)
-        f.write(re.sub(r"__version__.+", f"__version__ = '{rv(vls)}'", init))
+        init = re.sub(r"hver.+", f"hver = '{rv(vls)[1]}'", init)
+        f.write(re.sub(r"__version__.+", f"__version__ = '{rv(vls)[0]}'", init))
 
 def gen_script():
     from scripts.scripts import main
@@ -199,20 +218,20 @@ def main():
             pass
 
 if __name__ == "__main__":
-    if len(sys.argv) >= 2:
-        if sys.argv[1] == "req":
-            run(f'pip install --require-virtualenv pyyaml')
-            import yaml
-            with open('dev.yml', 'r') as f:
-                y = yaml.safe_load(f)
-            ls = []
-            for c in y["env"]["dev"]["req"]:
-                ls.append(f'-r {y["requirements"][c]}')
-            run(f'pip install --require-virtualenv {" ".join(ls)}')
-        elif sys.argv[1] == "docs":
-            from scripts import md_vars
+    if sys.argv[-1] == "req":
+        for i in ['wheel', 'pyyaml']:
+            run(f'pip install --require-virtualenv {i}')
+        import yaml
+        with open('dev.yml', 'r') as f:
+            y = yaml.safe_load(f)
+        ls = []
+        for c in y["env"]["dev"]["req"]:
+            ls.append(f'-r {y["requirements"][c]}')
+        run(f'pip install --require-virtualenv {" ".join(ls)}')
+    elif sys.argv[-1] == "docs":
+        from scripts import md_vars
 
-            md_vars.main(True)
+        md_vars.main(True)
     else:
         import inquirer
         import msgpack

@@ -26,4 +26,4 @@ generated:
     - docs/docs/0/0/api/main.md
     - docs/docs/0/0/api/cli.md
     - docs/docs/0/0/api/download.md
-    folders: []
+    folders:  []

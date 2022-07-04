@@ -1,0 +1,10 @@
+cc(){
+    cs=$(date +%s.%N)
+    clear
+    python ~/whi_ne/1/tools/computer/scripts/fetch.py|d
+    echo $zi
+    echo "\033[38;2;151;120;211mfetch\033[0m   : `printf "%.2fs" $(echo "$(date +%s.%N) - $cs" | bc)`"
+}
+c(){cc;$@}
+dev(){python dev.py}
+wd(){nodemon -e ymd --watch raw_docs/ --watch ./dev.yml --exec 'python dev.py' docs}

@@ -2,8 +2,9 @@ version: 1.0.0
 config:
   download_dir:
     type: str
-    pap: lang
-    deafult: en
     abbr: Download Directory
     desc: |-
       Directory to download the chapter at.
+  overwrite:
+    type: bool
+    default: true

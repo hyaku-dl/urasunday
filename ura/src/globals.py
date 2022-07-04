@@ -2,7 +2,10 @@ import locale
 import os
 from os import get_terminal_size
 
-TW = get_terminal_size().columns
+try:
+    TW = get_terminal_size().columns
+except OSError as e:
+    TW = None
 
 if os.name != 'posix':
     import ctypes

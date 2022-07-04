@@ -39,7 +39,7 @@ cmd:
         help:
           - N/A (flag)
           - |-
-            Determines if the downloader overwrites the file if it exists.
+            Determines if the downloader overwrites the file if it exists. Defaults to True.
             (True | False).
   credits:
     args:

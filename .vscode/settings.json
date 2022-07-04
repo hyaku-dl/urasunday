@@ -4,6 +4,8 @@
         "reportUnboundVariable": "none",
         "reportSelfClsParameterName": "none",
         "reportMissingParameterType": "none",
-        "reportMissingParameterDoc": "error",
+        "reportUntypedFunctionDecorator": "none",
+        "reportOptionalCall": "none",
+        "reportMissingParameterDoc": "error"
     }
 }

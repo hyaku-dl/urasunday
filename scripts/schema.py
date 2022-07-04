@@ -25,7 +25,7 @@ class Config:
                         op[k] = []
                     case "dict":
                         op[k] = {}
-        wr_stg(None, op, path.join(dn(dn(ap(__file__))), "ura", "cf_tpl.mp"))
+        wr_stg(None, op, path.join(dn(dn(ap(__file__))), "ura", "src", "cf_tpl.mp"))
 
 def config(v: str):
     return getattr(Config, f'v{v.replace(".", "_")}')

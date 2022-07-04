@@ -4,11 +4,13 @@ aiofiles
 arrow
 bs4
 click
+eventlet
 httpx
 inquirer
 lxml
 msgpack
 patool
+python-socketio
 pyyaml
 tabulate
 toml

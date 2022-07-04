@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta name="apple-mobile-web-app-title" content="ura" />
+    <meta name="twitter:title" content="ura" />
+    <meta property="og:site_name" content="ura" />
+    <meta property="og:title" content="ura" />
+    <title>ura</title>
+
+    <meta name="author" content="ura">
+
+    <meta name="description" content="hyaku-dl/urasunday" />
+    <meta property="og:description" content="hyaku-dl/urasunday" />
+
+    <meta name="twitter:site:domain" content="ura.hyaku.download" />
+    <meta name="twitter:url" content="https://ura.hyaku.download" />
+    <meta property="og:url" content="https://ura.hyaku.download" />
+    <link rel="canonical" href="https://ura.hyaku.download" />
+
+    <meta property="og:type" content="website" />
+
+    <meta charset="utf-8" />
+    <meta name="viewport"
+        content="width=device-width,initial-scale=1,user-scalable=no" />
+
+    <link rel="stylesheet" href="style.css" type="text/css">
+
+    <meta http-equiv="Content-Security-Policy"
+        content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'">
+</head>
+
+<body>
+    <div id="header">
+        <button id="stgBtn" class="icons"><img src="assets/images/settings.svg"
+                height="50" /></button>
+        <button id="infoBtn" class="icons"><img src="assets/images/info.svg"
+                height="50" /></button>
+    </div>
+    <div id="toast"></div>
+    <div class="cwrap">
+        <h1>hyaku-dl/urasunday</h1>
+        <p id="label">Enter an urasunday chapter URL:</p>
+        <div class="searchbar-box">
+            <input id="input" type="url"
+                placeholder="https://urasunday.com/title/{title_id}/{ch_id}"
+                class="searchbar" pattern="https:\/\/urasunday\.com\/title\/\d+\/\d+">
+            <btn class="icon1" id="erase-input" style="visibility: hidden;">×</btn>
+        </div>
+        <button id="dl-btn" class="btn" style="opacity: 0;">Download</button>
+    </div>
+
+    <section id="modalArea" class="modalArea">
+        <div id="modalBg" class="modalBg"></div>
+        <div class="modalWrapper">
+            <div class="modalContents">
+                <div class="mw" id="stgModal">
+                    <h2>Settings</h2>
+                    <h3>Download</h3>
+                    <h4>Download Directory:</h4>
+                    <p id="ddir">Please wait...</p>
+                    <button id="cdir" class="btn smol">Change</button>
+                    <h4>Overwrite:</h4>
+                    <input type="checkbox" id="ow-tgl" /><label
+                        for="ow-tgl">Toggle</label>
+                </div>
+                <div class="mw" id="infoModal">
+                    <h2>Info</h2>
+                    <h3>Author</h3>
+                    <h4>whi_ne (whinyaan@protonmail.com)</h4>
+                    <a href=https://github.com/whinee target=_blank>Github</a>,
+                    <a href=https://twitter.com/whi_nyaan target=_blank>Twitter</a>
+                    <h3>Copyright</h3>
+                    <h4 style="font-weight: bold"> <a
+                            href=https://choosealicense.com/licenses/mit/
+                            target=_blank>MIT LICENSE</a>
+                    </h4>
+                    <p>Copyright for portions of project <a
+                            href=https://github.com/hyaku-dl/urasunday
+                            target=_blank>ura</a> are held by
+                        [whi_ne, Github account <a href=https://github.com/whinee
+                            target=_blank>whinee</a> owner, 2022] as
+                        part of project <a href=https://github.com/hyaku-dl/hyaku
+                            target=_blank>hyaku</a>, by
+                        [whi_ne, Github account <a href=https://github.com/whinee
+                            target=_blank>whinee</a> owner, 2021-2022]
+                        as part of project <a href=https://github.com/MangDL/MangDL
+                            target=_blank>MangDL</a>, and by
+                        [whi_ne, Github account <a href=https://github.com/whinee
+                            target=_blank>whinee</a> owner, 2022] as
+                        part of project <a href=https://github.com/Pirate-Kings/YAMHL
+                            target=_blank>YAMHL</a>.</p>
+                    <p>All other copyright for project <a
+                            href=https://github.com/hyaku-dl/urasunday
+                            target=_blank>ura</a> are held by
+                        [Github Account <a href=https://github.com/whinee
+                            target=_blank>whinee</a>
+                        Owner, 2022].</p>
+                    <h3>Commissioned by</h3>
+                    <h4><a target=_blank
+                            href=https://discord.com/users/250456851890569217>HappyPurple(Discord,
+                            Mistilteinn#4793)</a>, owner of <a target=_blank
+                            href=https://blog.ultralight.group>Ultralight Manga
+                            Translation Group</a>.
+                    </h4>
+                        Want something like this too? Inquire through Discord(<a
+                            target=_blank
+                            href=https://discord.com/users/867696753434951732>whi_ne
+                            (w17e) | whinyaan.xyz#5135</a>) or through
+                        e-mail(whinyaan@protonmail.com). Price starts at 50 USD.
+                        For commissioning project, price starts at 30 USD.
+                </div>
+                <div id="closeModal" class="closeModal">
+                    ×
+                </div>
+            </div>
+        </div>
+    </section>
+    <script type="text/javascript" src="renderer.js"></script>
+</body>

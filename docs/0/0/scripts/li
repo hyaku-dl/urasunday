@@ -1,5 +1,5 @@
 #! /bin/sh
-curl -L -o ura.AppImage https://github.com/hyaku-dl/urasunday/releases/download/0.0.0.0-alpha.3/ura-linux-x86_64.AppImage
+curl -L -o ura.AppImage https://github.com/hyaku-dl/urasunday/releases/download/0.0.0.0-alpha.4/ura-linux-x86_64.AppImage
 chmod +x ./ura.AppImage
 ./ura.AppImage --appimage-extract
 rm -rf ./ura.AppImage

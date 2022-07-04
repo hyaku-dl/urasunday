@@ -7,7 +7,7 @@ from typing import Any, Dict
 import msgpack
 import yaml
 
-from ura.globals import CFLOP
+from .globals import CFLOP
 
 
 def readcfg(file: str) -> Any:
@@ -106,5 +106,8 @@ def cfg_path() -> str:
             break
     return config_path
 
-def cfg(*args, **kwargs) -> Any:
-    return stg(*args, cfg_path(), **kwargs)
+def cfg(sstg) -> Any:
+    return stg(stg=sstg, file=cfg_path())
+
+def wr_cfg(sstg, value) -> Any:
+    return wr_stg(stg=sstg, value=value, file=cfg_path())

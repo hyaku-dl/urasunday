@@ -1,3 +1,4 @@
+import json
 import os
 from os import path
 from os.path import abspath as ap
@@ -7,6 +8,24 @@ from typing import Any, Dict
 import msgpack
 import yaml
 
+
+def parse_cfg(ext: str, data: Any) -> Any:
+    match ext:
+        case "yml":
+            return yaml.safe_load(data)
+        case "mp":
+            return msgpack.unpackb(data, raw=False, use_list=True)
+        case "json":
+            return json.loads(data)
+
+def dump_cfg(ext: str, data: Any) -> None:
+    match ext:
+        case "yml":
+            return yaml.dump(data, indent=2)
+        case "mp":
+            return msgpack.packb(data, use_bin_type=True)
+        case "json":
+            return json.dumps(data, indent=2)
 
 def readcfg(file: str) -> Any:
     """Read the contents of a file with the given file name.
@@ -18,13 +37,17 @@ def readcfg(file: str) -> Any:
         Any: The contents of the file.
     """
 
-    match file.split(".")[-1]:
+    ext = file.split(".")[-1]
+    op = "r"
+    match ext:
         case "yml":
-            with open(file, "r") as f:
-                return yaml.safe_load(f.read())
+            op = "r"
         case "mp":
-            with open(file, "rb") as f:
-                return msgpack.unpackb(f.read(), raw=False, use_list=True)
+            op = "rb"
+        case "json":
+            op = "r"
+    with open(file, op) as f:
+        return parse_cfg(ext, f.read())
 
 def stg(stg: str, file: str = path.join(dn(ap(__file__)), "stg.json")) -> Any:
     """Retrieve dictionary value of the config file with the given file name
@@ -65,13 +88,16 @@ def wr_stg(stg: str, value: Any, file: str = path.join(dn(ap(__file__)), "stg.js
     """
 
     def _write(stg_dict: dict[any, any]) -> None:
+        op = "w"
         match file.split(".")[-1]:
             case "yml":
-                with open(file, "w") as f:
-                    yaml.dump(stg_dict, f, indent=2)
+                op = "w"
             case "mp":
-                with open(file, "wb") as f:
-                    f.write(msgpack.packb(stg_dict, use_bin_type=True))
+                op = "wb"
+            case "json":
+                op = "w"
+        with open(file, op) as f:
+            f.write(dump_cfg(file.split(".")[-1], stg_dict))
 
     def _modify(stg: str, value: Any, stg_dict: Dict[Any, Any]):
         path_ls = stg.split("/")

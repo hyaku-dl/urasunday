@@ -11,13 +11,14 @@ matrix:
 
 scripts:
   pth:
-    path: docs/scripts/python${python_ver_nd}._pth
+    path: docs/${ver_u}/${ver_d}/scripts/python${python_ver_nd}._pth
     contents: |-
       python${python_ver_nd}.zip
       .
       import site
+
   bat:
-    path: docs/scripts/${project_name}.bat
+    path: docs/${ver_u}/${ver_d}/scripts/${project_name}.bat
     contents: |-
       @ECHO off
       pushd %~dp0
@@ -31,8 +32,9 @@ scripts:
       :afterloop
       python Scripts\${project_name}.exe %*
       popd
+
   linux_install:
-    path: docs/scripts/li
+    path: docs/${ver_u}/${ver_d}/scripts/li
     contents: |-
       #! /bin/sh
       curl -L -o ${project_name}.AppImage https://github.com/${organization}/${repo_name}/releases/download/${ver}/${project_name}-linux-x86_64.AppImage
@@ -54,14 +56,14 @@ scripts:
       rm -rf linux-install.sh
 
   linux_dl:
-    path: docs/scripts/ld
+    path: docs/${ver_u}/${ver_d}/scripts/ld
     contents: |-
       #! /bin/sh
       curl -L -o ${project_name}.AppImage https://github.com/${organization}/${repo_name}/releases/download/${ver}/${project_name}-linux-x86_64.AppImage
       chmod +x ./${project_name}.AppImage
 
   win_install:
-    path: docs/scripts/wi${matrix.bits}
+    path: docs/${ver_u}/${ver_d}/scripts/wi${matrix.bits}
     contents: |-
       Invoke-Expression ((New-Object System.Net.WebClient).DownloadString('https://community.chocolatey.org/install.ps1'))
       choco install -y curl
@@ -78,7 +80,7 @@ scripts:
       Remove-Item -Force ${project_name}.zip
 
   win_portable:
-    path: docs/scripts/wp${matrix.bits}
+    path: docs/${ver_u}/${ver_d}/scripts/wp${matrix.bits}
     contents: |-
       Invoke-Expression ((New-Object System.Net.WebClient).DownloadString('https://community.chocolatey.org/install.ps1'))
       choco install -y curl
@@ -125,6 +127,74 @@ scripts:
           },
       )
 
+  package_json:
+    path: package.json
+    og_ext: yml
+    ext: json
+    contents: |-
+      name: ${project_name}
+      version: ${hver}
+      description: ${desc}
+      main: ura/gui/main.js
+      scripts:
+        start: export NODE_ENV=development && export PYTHON_DIR=venv/bin/python &&
+          electron --trace-warnings .
+        dist: rm -rf dist/ && electron-builder
+      repository: https://github.com/${organization}/${repo_name}
+      keywords:
+        - Electron
+      author: ${user}
+      license: MIT
+      devDependencies:
+        electron: "^19.0.3"
+        electron-builder: "^23.0.3"
+      dependencies:
+        python-shell: "^3.0.0"
+        socket.io-client: "^4.5.0"
+      build:
+        appId: download.hyaku.ura
+        productName: ${project_name}
+        copyright: Copyright © ${year} ${user}
+
+        # Windows
+        win:
+          target:
+            - nsis
+            - msi
+        nsis:
+          oneClick: false
+          perMachine: false
+          allowElevation: true
+          license: "site/license/index.html"
+
+        # MacOS
+        mac:
+          category: public.app-category.entertainment
+          target:
+            - dmg
+          type: distribution
+
+        # Linux
+        linux:
+          target:
+            - appimage
+          synopsis: ${desc}
+          description: ${long_desc}
+          category: Graphics
+
+        # Settings
+        compression: store
+        artifactName: ${productName}.${ext}
+        asar: false
+        files:
+          - ura/**/*
+          - node_modules/**/*
+          - package.json
+        fileAssociations:
+          icon: docs/assets/images/icons/icon.png
+        publish:
+          - github
+
   build_yml:
     path: .github/workflows/build.yml
     contents: |-
@@ -137,26 +207,6 @@ scripts:
         workflow_dispatch:
 
       jobs:
-        pypi:
-          name: PyPI
-          runs-on: ubuntu-latest
-          steps:
-            - name: Checkout
-              uses: actions/checkout@master
-            - name: Python${python_ver}
-              uses: actions/setup-python@v1
-              with:
-                python-version: "${python_ver}"
-            - name: Build
-              run: |-
-                python3 -m pip install --upgrade pip
-                python -m pip install setuptools wheel
-                python setup.py sdist
-            - name: Publish
-              uses: pypa/gh-action-pypi-publish@master
-              with:
-                user: __token__
-                password: ${{ secrets.PYPI_TOKEN }}
         release:
           name: release
           runs-on: ubuntu-latest
@@ -195,43 +245,50 @@ scripts:
               env:
                 python_ver: "${python_ver}"
               run: |-
-                wget -O python.AppImage `wget -qSO - "https://api.github.com/repos/niess/python-appimage/releases/tags/python${python_ver}" 2>&1 | grep -E "browser_download_url.*x86_64"| cut -d '"' -f4 | tail -1`
-                chmod +x python.AppImage
-                wget -O tool.AppImage https://github.com/AppImage/AppImageKit/releases/download/continuous/appimagetool-x86_64.AppImage
-                chmod +x ./tool.AppImage
-                ./python.AppImage --appimage-extract > /dev/null 2>&1
-                rm -rf python.AppImage
-                mv squashfs-root ${project_name}-linux-x86_64
-                chmod +x ./${project_name}-linux-x86_64/usr/bin/pip3
-                ./${project_name}-linux-x86_64/usr/bin/pip3 install --upgrade pip
-                ./${project_name}-linux-x86_64/usr/bin/pip3 install git+https://github.com/${organization}/${repo_name} --no-warn-script-location
-                rm -rf ./${project_name}-linux-x86_64/python3.10.0.desktop
-                echo "#!/usr/bin/env xdg-open
-                [Desktop Entry]
-                Type=Application
+                rm -rf python.AppImage appimagekit.AppImage node_modules/
+
+                wget -O python.AppImage `wget -qSO - "https://api.github.com/repos/niess/python-appimage/releases/tags/${python_ver}" 2> /dev/null | grep -E "browser_download_url.*x86_64"| cut -d '"' -f4 | tail -1` > /dev/null &
+                wget -O appimagekit.AppImage https://github.com/AppImage/AppImageKit/releases/download/continuous/appimagetool-x86_64.AppImage > /dev/null &
+                yarn &
+                wait
+
+                chmod +x ./python.AppImage &
+                chmod +x ./appimagekit.AppImage &
+                yarn dist &
+                wait
+
+                rm -rf dist/linux-unpacked/
+                ./dist/${project_name}.AppImage --appimage-extract > /dev/null
+                mv squashfs-root dist/linux-unpacked/
+
+                ./python.AppImage --appimage-extract > /dev/null
+                mv squashfs-root dist/linux-unpacked/resources/app/python/
+
+                python -c "import re;F='dist/linux-unpacked/resources/app/${project_name}/gui/main.js'
+                with open(F,'r') as f:i=f.read()
+                with open(F,'w') as f:
+                i=re.sub(r'const scriptPath.+',f'const scriptPath = path.join(__dirname, \'../\')',i)
+                f.write(re.sub(r'const pythonPath.+',f'const pythonPath = path.join(__dirname, \'../../python/opt/python3.10/bin/python3.10\')',i))" &
+                echo "[Desktop Entry]
                 Name=${project_name}
-                Exec=${project_name}
+                Exec=AppRun --no-sandbox %U
+                Terminal=false
+                Type=Application
+                Icon=${project_name}
+                StartupWMClass=${project_name}
+                X-AppImage-Version=${hver}
                 Comment=${desc}
-                Categories=AudioVideo;
-                Icon=logo
-                Terminal=true" > ./${project_name}-linux-x86_64/${project_name}.desktop
-                echo '#! /bin/sh
-                "exec" "$(dirname $(readlink -f ${0}))/usr/bin/python3.10" "$0" "$@"
-                # -*- coding: utf-8 -*-
-                import re
-                import sys
-                from ${project_name}.cli import cli
-                if __name__ == "__main__":
-                    sys.argv[0] = re.sub("r(-script\.pyw|\.exe)?$", "", sys.argv[0])
-                    sys.exit(cli())' > ./${project_name}-linux-x86_64/AppRun
-                rm -rf ./${project_name}-linux-x86_64/python.png
-                rm -rf "./${project_name}-linux-x86_64/python"$python_ver_minor".desktop"
-                wget -O ./${project_name}-linux-x86_64/logo.png https://github.com/${organization}/${repo_name}/raw/main/docs/assets/images/icons/logo.png
-                chmod +x ./${project_name}-linux-x86_64/${project_name}.desktop
-                rm -rf build/
-                ./tool.AppImage ${project_name}-linux-x86_64
-                rm -rf tool.AppImage
-                rm -rf ${project_name}-linux-x86_64
+                Categories=Graphics;" > dist/linux-unpacked/${project_name}.desktop &
+                chmod +x ./dist/linux-unpacked/resources/app/python/usr/bin/pip3 &
+                wait
+
+                ./dist/linux-unpacked/resources/app/python/usr/bin/pip3 cache purge
+                ./dist/linux-unpacked/resources/app/python/usr/bin/pip3 install --upgrade pip --no-warn-script-location
+                ./dist/linux-unpacked/resources/app/python/usr/bin/pip3 install wheel --no-warn-script-location
+                ./dist/linux-unpacked/resources/app/python/usr/bin/pip3 install -r requirements.txt --no-warn-script-location
+
+                ./appimagekit.AppImage dist/linux-unpacked/
+                rm -rf python.AppImage appimagekit.AppImage node_modules/ ${project_name}-linux-x86_64
             - name: Upload AppImage
               id: upload-appimage
               uses: actions/upload-release-asset@v1
@@ -242,42 +299,42 @@ scripts:
                 asset_path: ./${project_name}-x86_64.AppImage
                 asset_name: ${project_name}-linux-x86_64.AppImage
                 asset_content_type: application/octet
-        win:
-          name: Windows
-          needs: release
-          runs-on: windows-latest
-          strategy:
-            matrix:
-              include:
-                - name: winx64
-                  embedable: https://www.python.org/ftp/python/3.10.0/python-3.10.0-embed-amd64.zip
-                - name: winx86
-                  embedable: https://www.python.org/ftp/python/3.10.0/python-3.10.0-embed-win32.zip
+        # win:
+        #   name: Windows
+        #   needs: release
+        #   runs-on: windows-latest
+        #   strategy:
+        #     matrix:
+        #       include:
+        #         - name: winx64
+        #           embedable: https://www.python.org/ftp/python/3.10.0/python-3.10.0-embed-amd64.zip
+        #         - name: winx86
+        #           embedable: https://www.python.org/ftp/python/3.10.0/python-3.10.0-embed-win32.zip
 
-          steps:
-            - name: Build ${project_name}-${{ matrix.name }}.zip
-              run: |-
-                git clone https://github.com/${organization}/${repo_name} ${project_name}
-                cd ${project_name}
-                curl -sSL ${{ matrix.embedable }} -o python.zip
-                curl -sSL https://bootstrap.pypa.io/get-pip.py -o get-pip.py
-                tar -xf python.zip
-                del python310._pth
-                curl -sSL https://${scripts_url}/python310._pth -o python310._pth
-                curl -sSL https://${scripts_url}/${project_name}.bat -o ${project_name}.bat
-                .\python get-pip.py
-                .\python -m pip install .
-                del python.zip
-                del get-pip.py
-                cd ..
-                tar -a -c -f ${project_name}.zip ${project_name}
-            - name: Upload
-              id: upload-release-asset
-              uses: actions/upload-release-asset@v1
-              env:
-                GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-              with:
-                upload_url: ${{ needs.release.outputs.upload_url }}
-                asset_path: ./${project_name}.zip
-                asset_name: ${project_name}-${{ matrix.name }}.zip
-                asset_content_type: application/zip
+        #   steps:
+        #     - name: Build ${project_name}-${{ matrix.name }}.zip
+        #       run: |-
+        #         git clone https://github.com/${organization}/${repo_name} ${project_name}
+        #         cd ${project_name}
+        #         curl -sSL ${{ matrix.embedable }} -o python.zip
+        #         curl -sSL https://bootstrap.pypa.io/get-pip.py -o get-pip.py
+        #         tar -xf python.zip
+        #         del python310._pth
+        #         curl -sSL https://${scripts_url}/python310._pth -o python310._pth
+        #         curl -sSL https://${scripts_url}/${project_name}.bat -o ${project_name}.bat
+        #         .\python get-pip.py
+        #         .\python -m pip install .
+        #         del python.zip
+        #         del get-pip.py
+        #         cd ..
+        #         tar -a -c -f ${project_name}.zip ${project_name}
+        #     - name: Upload
+        #       id: upload-release-asset
+        #       uses: actions/upload-release-asset@v1
+        #       env:
+        #         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        #       with:
+        #         upload_url: ${{ needs.release.outputs.upload_url }}
+        #         asset_path: ./${project_name}.zip
+        #         asset_name: ${project_name}-${{ matrix.name }}.zip
+        #         asset_content_type: application/zip

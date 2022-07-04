@@ -3,7 +3,7 @@ import re
 
 import ura
 
-from .settings import stg
+from .settings import dump_cfg, parse_cfg, stg
 from .utils import ddir, inmd
 
 RE_MX = r"(?<=\{matrix.)[a-zA-Z0-9-_]+?(?=\})"
@@ -21,7 +21,9 @@ with open("requirements.txt", "r") as f:
 PG = {
     "req": [i for i in REQ if i],
     "ver": ura.__version__,
+    "hver": ura.hver,
     "prerel": not ura.vls[-2] == 3,
+    **{"ver_" + k: v for k, v in zip(['u', 'd', 'm', 'p', 'pi', 'pv'], ura.vls)}
 }
 GLOBAL = {}
 for k, v in dict(
@@ -79,4 +81,8 @@ def main():
     for k, v in SCRIPTS["scripts"].items():
         for p, c in mr(k, v):
             with open(inmd(p), "w") as f:
+                if og_ext:=v.get("og_ext"):
+                    if ext:=v.get("ext"):
+                        op = parse_cfg(og_ext, c)
+                        c = dump_cfg(ext, op)
                 f.write(c)

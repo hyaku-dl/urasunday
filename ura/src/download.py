@@ -10,10 +10,9 @@ from typing import Any, Callable, Dict, List
 import aiofiles
 from tqdm.asyncio import tqdm_asyncio
 
-from ura.settings import cfg
-from ura.utils import sanitize_text
-
 from .base import class_usi, req, soup
+from .settings import cfg
+from .utils import sanitize_text
 
 USI = class_usi({
     "ch_id": 2,
@@ -100,12 +99,17 @@ class Downloader:
     def __init__(
         self,
         directory: str=None,
-        overwrite: bool=True,
+        overwrite: bool=None,
         **kwargs: Dict[str, Any]
     ):
         local = locals()
         for i in ["overwrite",]:
             setattr(self, i, local[i])
+        if overwrite:
+            self.overwrite = overwrite
+        else:
+            self.overwrite = cfg("overwrite") or True
+
         if directory:
             self.ddir = directory
         else:
@@ -150,7 +154,7 @@ class Downloader:
         #     v (List[str]): List of image urls.
         # """
         dl = True
-        jdir = os.path.join(self.ddir, manga, sanitize_filename(chapter))
+        self.jdir = jdir = os.path.join(self.ddir, manga, sanitize_filename(chapter))
         if os.path.isdir(jdir):
             if self.overwrite:
                 shutil.rmtree(jdir)
@@ -204,3 +208,5 @@ class Downloader:
         asyncio.get_event_loop().run_until_complete(
             self._dlch(title, f'{USI.ch_id(url)} - {chapter}', urls)
         )
+
+        return self.jdir

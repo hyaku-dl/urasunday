@@ -218,6 +218,7 @@ def cli():
 
 @command(cli)
 def dl(url: str, **kwargs: dict[str, Any]):
+    print(kwargs)
     Downloader(**kwargs).dlch(url)
 
 @command(cli)
