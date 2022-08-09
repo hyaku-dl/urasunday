@@ -112,6 +112,16 @@ scripts:
                 GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
               with:
                 upload_url: ${{needs.release.outputs.upload_url}}
-                asset_path: ./${project_name}-x86_64.AppImage
-                asset_name: ${project_name}-linux-x86_64.AppImage
+                asset_path: ./dist/${project_name}.AppImage
+                asset_name: ${project_name}.AppImage
+                asset_content_type: application/octet
+            - name: Upload latest-linux.yml
+              id: upload-appimage
+              uses: actions/upload-release-asset@v1
+              env:
+                GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+              with:
+                upload_url: ${{needs.release.outputs.upload_url}}
+                asset_path: ./dist/latest-linux.yml
+                asset_name: latest-linux.yml
                 asset_content_type: application/octet

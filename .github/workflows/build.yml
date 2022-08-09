@@ -74,6 +74,16 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{needs.release.outputs.upload_url}}
-          asset_path: ./ura-x86_64.AppImage
-          asset_name: ura-linux-x86_64.AppImage
+          asset_path: ./dist/ura.AppImage
+          asset_name: ura.AppImage
+          asset_content_type: application/octet
+      - name: Upload latest-linux.yml
+        id: upload-appimage
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{needs.release.outputs.upload_url}}
+          asset_path: ./dist/latest-linux.yml
+          asset_name: latest-linux.yml
           asset_content_type: application/octet
