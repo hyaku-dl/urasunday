@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta name="apple-mobile-web-app-title" content="ura" />
+    <meta name="twitter:title" content="ura" />
+    <meta property="og:site_name" content="ura" />
+    <meta property="og:title" content="ura" />
+    <title>ura</title>
+
+    <meta name="author" content="ura">
+
+    <meta name="description" content="hyaku-dl/urasunday" />
+    <meta property="og:description" content="hyaku-dl/urasunday" />
+
+    <meta name="twitter:site:domain" content="ura.hyaku.download" />
+    <meta name="twitter:url" content="https://ura.hyaku.download" />
+    <meta property="og:url" content="https://ura.hyaku.download" />
+    <link rel="canonical" href="https://ura.hyaku.download" />
+
+    <meta property="og:type" content="website" />
+
+    <meta charset="utf-8" />
+    <meta name="viewport"
+        content="width=device-width,initial-scale=1,user-scalable=no" />
+
+    <link rel="stylesheet" href="style.css" type="text/css">
+
+    <meta http-equiv="Content-Security-Policy"
+        content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'">
+
+    <style>
+        .spinner {
+            --spinner-size: 11;
+            --line-color: var(--fg-1);
+            --line-alpha: 1;
+            --ring-color: var(--bg-2);
+            --ring-alpha: 0.3;
+            --ring-size: 7;
+
+            font-size: calc(var(--spinner-size) * 1em);
+            width: 1em;
+            height: 1em;
+            border-radius: 50%;
+        }
+
+        .spinner .line {
+            fill: none;
+            stroke: var(--line-color);
+            stroke-width: var(--ring-size);
+            opacity: var(--line-alpha);
+            stroke-linecap: round;
+            transform-origin: 50% 50%;
+            transform: rotate3d(0, 0, 1, 0deg);
+            animation:
+                2156ms spinner-arc ease-in-out infinite,
+                1829ms spinner-rotate linear infinite;
+        }
+
+        .spinner .ring {
+            fill: none;
+            stroke: var(--ring-color);
+            stroke-width: var(--ring-size);
+            opacity: var(--ring-alpha);
+        }
+
+        @keyframes spinner-rotate {
+            to {
+                transform: rotate3d(0, 0, 1, 360deg);
+            }
+        }
+
+        @keyframes spinner-arc {
+            from {
+                stroke-dasharray: 0 150;
+                stroke-dashoffset: 0;
+            }
+
+            to {
+                stroke-dasharray: 100 150;
+                stroke-dashoffset: -140;
+            }
+        }
+    </style>
+
+</head>
+
+<body>
+    <div
+        style="position: absolute;left: 50%;top: 50%;-webkit-transform: translate(-50%, -50%);transform: translate(-50%, -50%);">
+        <svg viewBox="0 0 50 50" class="spinner">
+            <circle class="ring" cx="25" cy="25" r="22.5" />
+            <circle class="line" cx="25" cy="25" r="22.5" />
+        </svg>
+    </div>
+</body>

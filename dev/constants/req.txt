@@ -1,8 +1,10 @@
+black
 isort
 mako
 mkdocs
 mkdocs-material
 mkdocs-minify-plugin
 mkdocs-redirects
+niet
 pdoc3
 python-frontmatter

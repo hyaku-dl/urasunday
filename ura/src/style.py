@@ -12,16 +12,8 @@ from rich.table import Column, Table
 from rich.text import Text
 
 COLORS = {
-    "h": [
-        "#f2f774",
-        "#ff7b42",
-        "#e83140"
-    ],
-    "s": [
-        "#F3F78D",
-        "#FF8D5C",
-        "#E84855"
-    ]
+    "h": ["#f2f774", "#ff7b42", "#e83140"],
+    "s": ["#F3F78D", "#FF8D5C", "#E84855"],
 }
 
 COLORS_TYPE = {
@@ -30,7 +22,7 @@ COLORS_TYPE = {
             "#E68AFF",
             "#9D7DFF",
         ],
-        "named": {}
+        "named": {},
     },
     "t": {
         "n": [
@@ -42,7 +34,7 @@ COLORS_TYPE = {
             "warning": "#FFBA49",
             "error": "#FF9522",
             "critical": "#FA1928",
-        }
+        },
     },
 }
 
@@ -52,18 +44,10 @@ STYLE_TYPE = {
 }
 
 STYLE_ALL = {
-    "all": {
-        "padding": [
-            0,
-            5
-        ]
-    },
+    "all": {"padding": [0, 5]},
     "table": {
         "box": "ROUNDED",
-        "row_styles": [
-            "none",
-            "dim"
-        ],
+        "row_styles": ["none", "dim"],
         "show_lines": True,
         "title_justify": "center",
         "columns": [
@@ -79,15 +63,18 @@ STYLE_ALL = {
                 "header_style": "h2",
                 "style": "h2",
             },
-        ]
-    }
+        ],
+    },
 }
+
 
 class S:
     pass
 
+
 class C:
     pass
+
 
 for k, v in STYLE_TYPE.items():
     for idx, i in enumerate(COLORS_TYPE[k]["n"]):
@@ -99,8 +86,10 @@ for k, v in COLORS.items():
     for idx, i in enumerate(v):
         setattr(C, f"{k}{idx}", i)
 
+
 def pp(t: Any):
     print(Align.center(t))
+
 
 class ct:
     def group(*ls: list[Any]) -> Group:

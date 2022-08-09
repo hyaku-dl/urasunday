@@ -23,6 +23,7 @@ LVLS = [
     "NOTSET",
 ]
 
+
 def fn_log(lvl: int):
     if lvl == 1:
         l = "NOTSET"
@@ -33,17 +34,16 @@ def fn_log(lvl: int):
         level=l,
         format="%(message)s",
         datefmt="[%H:%M:%S.%f]",
-        handlers=[RichHandler(
-            omit_repeated_times=False,
-            markup=True,
-            rich_tracebacks=True
-        )]
+        handlers=[
+            RichHandler(omit_repeated_times=False, markup=True, rich_tracebacks=True)
+        ],
     )
 
     op = logging.getLogger("rich")
     if lvl == 1:
         logging.disable()
     globals.log = op
+
 
 def cao(
     group: click.group, cmd: str
@@ -77,23 +77,23 @@ def cao(
             for k, v in arguments.items():
                 arguments[k]["help"] = [
                     *v["help"],
-                    *[None for _ in range(3 - len(v["help"]))]
+                    *[None for _ in range(3 - len(v["help"]))],
                 ]
             for k, v in arguments.items():
                 t, h, e = v["help"]
-                e = '\nEx.: {e}' if e else ""
-                help.append([f"<{k}>", t, f'{h}{e}'])
+                e = "\nEx.: {e}" if e else ""
+                help.append([f"<{k}>", t, f"{h}{e}"])
         s, h = cmd["help"]
         return group.command(
             *de(cmd["args"], []),
             **dd(
                 {
-                    "context_settings": {'help_option_names': ['-h', '--help']},
+                    "context_settings": {"help_option_names": ["-h", "--help"]},
                     "short_help": s,
-                    "help": f"\b\n{h}\n{tabulate(help, tablefmt='plain')}"
+                    "help": f"\b\n{h}\n{tabulate(help, tablefmt='plain')}",
                 },
-                cmd["kwargs"]
-            )
+                cmd["kwargs"],
+            ),
         )(f)
 
     def a(
@@ -129,7 +129,7 @@ def cao(
         Returns:
             Callable[[Callable[[Any], Any]], Callable[[Any], Any]]
         """
-        if opts:= cmd["options"]:
+        if opts := cmd["options"]:
             n = 0
             args = {}
             kwargs = {}
@@ -138,7 +138,7 @@ def cao(
                 n = l if l > n else n
                 opts[k]["help"] = [
                     *v["help"],
-                    *[None for _ in range(3 - len(v["help"]))]
+                    *[None for _ in range(3 - len(v["help"]))],
                 ]
             for k, v in opts.items():
                 a = de(v["args"], [])
@@ -162,10 +162,11 @@ def cao(
                 if e:
                     els = []
                     for i, j in enumerate(e.split("\n")):
-                        els.append('{}{}{}'.format(
-                                ' ' * (n + (11 if i else 6)),
+                        els.append(
+                            "{}{}{}".format(
+                                " " * (n + (11 if i else 6)),
                                 "Ex.: " if not i else "",
-                                j
+                                j,
                             )
                         )
                     e = "\n" + "\n".join(els)
@@ -175,13 +176,7 @@ def cao(
                 if isinstance(kt, dict):
                     ktk, ktv = list(kt.items())[0]
                     kta, ktkw = [i[1] for i in ktv.items()]
-                    kw["type"] = getattr(
-                        click,
-                        ktk
-                    )(
-                        *kta,
-                        **ktkw if ktkw else {}
-                    )
+                    kw["type"] = getattr(click, ktk)(*kta, **ktkw if ktkw else {})
                 elif kt:
                     kw["type"] = getattr(builtins, kt)
                 args[k] = a
@@ -192,8 +187,9 @@ def cao(
 
     return c, a, o
 
+
 def command(
-    group: click.group
+    group: click.group,
 ) -> Callable[[Callable[[Any], Any]], Callable[[Any], Any]]:
     """
     Wrapper for click commands.
@@ -207,21 +203,26 @@ def command(
 
     def inner(f: Callable[[Any], Any]):
         m = inspect.getouterframes(inspect.currentframe())[1][4][0]
-        for m in cao(group, m[4:m.index("(")]):
+        for m in cao(group, m[4 : m.index("(")]):
             f = m(f)
         return f
+
     return inner
 
-@click.group(context_settings={'help_option_names': ['-h', '--help']})
+
+@click.group(context_settings={"help_option_names": ["-h", "--help"]})
 def cli():
     """Main command group."""
+
 
 @command(cli)
 def dl(url: str, **kwargs: dict[str, Any]):
     print(kwargs)
     Downloader(**kwargs).dlch(url)
 
+
 @command(cli)
 def version():
     from . import __version__
+
     pp(S.p1(__version__))

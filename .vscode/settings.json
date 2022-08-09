@@ -1,11 +1,11 @@
 {
-    "python.analysis.diagnosticSeverityOverrides": {
-        "reportMatchNotExhaustive": "none",
-        "reportUnboundVariable": "none",
-        "reportSelfClsParameterName": "none",
-        "reportMissingParameterType": "none",
-        "reportUntypedFunctionDecorator": "none",
-        "reportOptionalCall": "none",
-        "reportMissingParameterDoc": "error"
-    }
+    "python.defaultInterpreterPath": "./pyenv/bin/python",
+    "python.languageServer": "Jedi",
+    "vscode-yaml-sort.useCustomSortRecursively": true,
+    // "vscode-yaml-sort.customSortKeywords_1": [
+    //     "phrase",
+    //     "description",
+    //     "spec",
+    //     "link"
+    // ],
 }

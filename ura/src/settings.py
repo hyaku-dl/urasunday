@@ -28,6 +28,7 @@ def readcfg(file: str) -> Any:
             with open(file, "rb") as f:
                 return msgpack.unpackb(f.read(), raw=False, use_list=True)
 
+
 def stg(stg: str, file: str = path.join(dn(ap(__file__)), "stg.json")) -> Any:
     """Retrieve dictionary value of the config file with the given file name
     using recursive indexing with a string.
@@ -49,7 +50,9 @@ def stg(stg: str, file: str = path.join(dn(ap(__file__)), "stg.json")) -> Any:
     return op
 
 
-def wr_stg(stg: str, value: Any, file: str = path.join(dn(ap(__file__)), "stg.json")) -> None:
+def wr_stg(
+    stg: str, value: Any, file: str = path.join(dn(ap(__file__)), "stg.json")
+) -> None:
     """Rewrite dictionary value of the config file with the given file name
     using recursive indexing with a string.
     ex.:
@@ -99,6 +102,7 @@ def wr_stg(stg: str, value: Any, file: str = path.join(dn(ap(__file__)), "stg.js
     else:
         _write(value)
 
+
 def cfg_path() -> str:
     for i in CFLOP:
         if os.path.exists(str(i)):
@@ -106,8 +110,10 @@ def cfg_path() -> str:
             break
     return config_path
 
+
 def cfg(sstg) -> Any:
     return stg(stg=sstg, file=cfg_path())
+
 
 def wr_cfg(sstg, value) -> Any:
     return wr_stg(stg=sstg, value=value, file=cfg_path())

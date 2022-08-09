@@ -1,7 +1,7 @@
 .history/
 dist/
 node_modules/
-venv/
+pyenv/
 **/__pycache__/
 **/tmp/
 

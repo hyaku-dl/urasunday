@@ -14,14 +14,16 @@ import arrow
 
 # https://stackoverflow.com/a/93029
 ALL_CHARS = (chr(i) for i in range(sys.maxunicode))
-CATEGORIES = {'Cn'}
-CCHARS = ''.join(map(chr, itertools.chain(range(0x00,0x20), range(0x7f,0xa0))))
-CCHARS_RE = re.compile('[%s]' % re.escape(CCHARS))
+CATEGORIES = {"Cn"}
+CCHARS = "".join(map(chr, itertools.chain(range(0x00, 0x20), range(0x7F, 0xA0))))
+CCHARS_RE = re.compile("[%s]" % re.escape(CCHARS))
+
 
 def sanitize_text(s: str):
-    return unicodedata.normalize("NFKD", CCHARS_RE.sub('', s)).strip()
+    return unicodedata.normalize("NFKD", CCHARS_RE.sub("", s)).strip()
 
-def dnrp(file: str, n: int=1) -> str:
+
+def dnrp(file: str, n: int = 1) -> str:
     """
     Get the directory component of a pathname by n times recursively then return it.
 
@@ -36,6 +38,7 @@ def dnrp(file: str, n: int=1) -> str:
     for _ in range(n):
         op = dn(op)
     return op
+
 
 def de(a: Any, d: Any) -> Any:
     """
@@ -52,6 +55,7 @@ def de(a: Any, d: Any) -> Any:
         return a
     else:
         return d
+
 
 def dd(default: dict[Any, Any], d: dict[Any, Any] | None) -> dict[Any, Any]:
     """
@@ -71,7 +75,8 @@ def dd(default: dict[Any, Any], d: dict[Any, Any] | None) -> dict[Any, Any]:
             op[a] = v
     return op
 
-def ddir(d: dict[Any, Any], dir: str, de: Any={}) -> Any:
+
+def ddir(d: dict[Any, Any], dir: str, de: Any = {}) -> Any:
     """
     Retrieve dictionary value using recursive indexing with a string.
     ex.:
@@ -91,10 +96,9 @@ def ddir(d: dict[Any, Any], dir: str, de: Any={}) -> Any:
         op = op[a]
     return op or de
 
+
 def dpop(
-    d: dict[Any, Any],
-    pop: list[int | tuple[str | int | tuple] | str],
-    de: Any=None
+    d: dict[Any, Any], pop: list[int | tuple[str | int | tuple] | str], de: Any = None
 ) -> Any:
     """
     Iterate through the preferred order of precedence (`pop`) and see if
@@ -112,9 +116,10 @@ def dpop(
     """
 
     for i in pop:
-        if op:= d.get(i):
+        if op := d.get(i):
             return op
     return de
+
 
 @lru_cache
 def dt(dt: str, format: str) -> str:
@@ -137,10 +142,14 @@ def dt(dt: str, format: str) -> str:
     if tz:
         iso, s, ho, mo = tz.groups()
         s = -1 if s == "-" else 1
-        op = (datetime.fromisoformat(iso) - (s * timedelta(hours=int(ho), minutes=int(mo)))).strftime("%Y-%m-%dT%H:%M:%S")
+        op = (
+            datetime.fromisoformat(iso)
+            - (s * timedelta(hours=int(ho), minutes=int(mo)))
+        ).strftime("%Y-%m-%dT%H:%M:%S")
     else:
         op = strftime("%Y-%m-%dT%H:%M:%S", strptime(dt, format))
     return op
+
 
 @lru_cache
 def dt_ts(ts: str) -> str:
@@ -156,10 +165,12 @@ def dt_ts(ts: str) -> str:
 
     return (datetime.utcfromtimestamp(int(ts))).strftime("%Y-%m-%dT%H:%M:%S")
 
+
 def le(expr: str) -> Any:
     return ast.literal_eval(expr) if expr else expr
 
-def dnrp(file: str, n: int=1) -> str:
+
+def dnrp(file: str, n: int = 1) -> str:
     """
     Get the directory component of a pathname by n times recursively then return it.
 

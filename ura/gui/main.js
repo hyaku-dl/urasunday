@@ -26,7 +26,7 @@ pyshell.on('stderr', function (stderr) {
     console.log(stderr);
 });
 
-function createWindow() {
+app.whenReady().then(() => {
     const mainWindow = new BrowserWindow({
         width: 800,
         height: 600,
@@ -36,9 +36,14 @@ function createWindow() {
             contextIsolation: false,
         },
         autoHideMenuBar: true,
+        backgroundColor: '#151723',
     });
 
-    mainWindow.loadFile(path.join(__dirname, "index.html"));
+    mainWindow.loadFile(path.join(__dirname, "loading.html"));
+
+    mainWindow.once('ready-to-show', () => {
+        mainWindow.loadFile(path.join(__dirname, "index.html"));
+    })
 
     mainWindow.webContents.on('new-window', (event, url) => {
         event.preventDefault();
@@ -60,20 +65,15 @@ function createWindow() {
             console.log(err)
         })
     });
-}
+
+    mainWindow.once('ready-to-show', () => {
+        mainWindow.show()
+    })
+});
 
 function quit() {
-    pyshell.end(function (err, code, signal) {
-        if (err) throw err;
-        console.log('The exit code was: ' + code);
-        console.log('The exit signal was: ' + signal);
-        console.log('finished');
-    });
+    pyshell.childProcess.kill('SIGINT');
 }
-
-app.whenReady().then(() => {
-    createWindow();
-});
 
 app.on("window-all-closed", function () {
     quit();

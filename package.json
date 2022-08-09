@@ -1,70 +1,23 @@
 {
-  "name": "ura",
-  "version": "0.0.1-alpha.4",
-  "description": "A Basic Urasunday Scraper",
-  "main": "ura/gui/main.js",
-  "scripts": {
-    "start": "export NODE_ENV=development && export PYTHON_DIR=venv/bin/python && electron --trace-warnings .",
-    "dist": "rm -rf dist/ && electron-builder"
-  },
-  "repository": "https://github.com/hyaku-dl/urasunday",
-  "keywords": [
-    "Electron"
-  ],
-  "author": "whinee",
-  "license": "MIT",
-  "devDependencies": {
-    "electron": "^19.0.3",
-    "electron-builder": "^23.0.3"
-  },
-  "dependencies": {
-    "python-shell": "^3.0.0",
-    "socket.io-client": "^4.5.0"
-  },
-  "build": {
-    "appId": "download.hyaku.ura",
-    "productName": "ura",
-    "copyright": "Copyright \u00a9 2022 whinee",
-    "win": {
-      "target": [
-        "nsis",
-        "msi"
-      ]
+    "name": "ura",
+    "version": "0.0.1-alpha.5",
+    "description": "A Basic Urasunday Scraper",
+    "main": "tmp/gui/main.js",
+    "scripts": {
+        "start": "NODE_ENV=development electron --trace-warnings ura/gui/main.js"
     },
-    "nsis": {
-      "oneClick": false,
-      "perMachine": false,
-      "allowElevation": true,
-      "license": "site/license/index.html"
-    },
-    "mac": {
-      "category": "public.app-category.entertainment",
-      "target": [
-        "dmg"
-      ],
-      "type": "distribution"
-    },
-    "linux": {
-      "target": [
-        "appimage"
-      ],
-      "synopsis": "A Basic Urasunday Scraper",
-      "description": "A no-nonsense, simple and easy to use scraper for urasunday.com",
-      "category": "Graphics"
-    },
-    "compression": "store",
-    "artifactName": "${productName}.${ext}",
-    "asar": false,
-    "files": [
-      "ura/**/*",
-      "node_modules/**/*",
-      "package.json"
+    "repository": "https://github.com/hyaku-dl/urasunday",
+    "keywords": [
+        "Electron"
     ],
-    "fileAssociations": {
-      "icon": "docs/assets/images/icons/icon.png"
+    "author": "whinee",
+    "license": "MIT",
+    "devDependencies": {
+        "electron": "^19.0.3",
+        "electron-builder": "^23.0.3"
     },
-    "publish": [
-      "github"
-    ]
-  }
+    "dependencies": {
+        "python-shell": "^3.0.0",
+        "socket.io-client": "^4.5.0"
+    }
 }

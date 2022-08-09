@@ -3,7 +3,7 @@ name: Build
 on:
   push:
     paths:
-      - version
+      - version.yml
   workflow_dispatch:
 
 jobs:
@@ -15,18 +15,14 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@master
-      - name: Python3.10
-        uses: actions/setup-python@v1
-        with:
-          python-version: "3.10"
       - name: Create Release
         id: create_release
         uses: actions/create-release@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          tag_name: 0.0.0.0-alpha.4
-          release_name: ura release v0.0.0.0-alpha.4
+          tag_name: 0.0.0.0-alpha.5
+          release_name: ura release v0.0.0.0-alpha.5
           draft: false
           prerelease: True
   linux:
@@ -38,57 +34,38 @@ jobs:
         uses: actions/setup-python@v1
         with:
           python-version: "3.10"
-      - name: Install Prerequisites
-        run: |-
-          sudo apt install appstream
       - name: Build
         env:
           python_ver: "3.10"
         run: |-
-          rm -rf python.AppImage appimagekit.AppImage node_modules/
-
-          wget -O python.AppImage `wget -qSO - "https://api.github.com/repos/niess/python-appimage/releases/tags/python3.10" 2> /dev/null | grep -E "browser_download_url.*x86_64"| cut -d '"' -f4 | tail -1` > /dev/null &
-          wget -O appimagekit.AppImage https://github.com/AppImage/AppImageKit/releases/download/continuous/appimagetool-x86_64.AppImage > /dev/null &
-          yarn &
-          wait
-
-          chmod +x ./python.AppImage &
-          chmod +x ./appimagekit.AppImage &
-          yarn dist &
-          wait
-
-          rm -rf dist/linux-unpacked/
-          ./dist/ura.AppImage --appimage-extract > /dev/null
-          mv squashfs-root dist/linux-unpacked/
-
-          ./python.AppImage --appimage-extract > /dev/null
-          mv squashfs-root dist/linux-unpacked/resources/app/python/
-
-          python -c "import re;F='dist/linux-unpacked/resources/app/ura/gui/main.js'
+          (
+            python -m pip install -r dev/constants/req.txt &
+            rm -rf dist/ tmp/ &
+            wait
+          ) &&
+          mkdir tmp/ &&
+          (
+              cp -r ura/** tmp/ &
+              wget -O tmp/python.AppImage "$(wget -qSO - "https://api.github.com/repos/niess/python-appimage/releases/tags/python3.10" 2>/dev/null | grep -E "browser_download_url.*x86_64" | cut -d '"' -f4 | tail -1)" >/dev/null &
+              python -c "from dev.scripts.py.eb import main;main('linux','tmp/cfg.yml')" &
+              wait
+          ) &&
+          chmod +x ./tmp/python.AppImage &&
+          ./tmp/python.AppImage --appimage-extract >/dev/null &&
+          mv squashfs-root tmp/python/ &&
+          (
+              rm -f ./tmp/python.AppImage &
+              python -c "import re
+          F='tmp/gui/main.js'
           with open(F,'r') as f:i=f.read()
-          with open(F,'w') as f:
           i=re.sub(r'const scriptPath.+',f'const scriptPath = path.join(__dirname, \'../\')',i)
-          f.write(re.sub(r'const pythonPath.+',f'const pythonPath = path.join(__dirname, \'../../python/opt/python3.10/bin/python3.10\')',i))" &
-          echo "[Desktop Entry]
-          Name=ura
-          Exec=AppRun --no-sandbox %U
-          Terminal=false
-          Type=Application
-          Icon=ura
-          StartupWMClass=ura
-          X-AppImage-Version=0.0.1-alpha.4
-          Comment=A Basic Urasunday Scraper
-          Categories=Graphics;" > dist/linux-unpacked/ura.desktop &
-          chmod +x ./dist/linux-unpacked/resources/app/python/usr/bin/pip3 &
-          wait
-
-          ./dist/linux-unpacked/resources/app/python/usr/bin/pip3 cache purge
-          ./dist/linux-unpacked/resources/app/python/usr/bin/pip3 install --upgrade pip --no-warn-script-location
-          ./dist/linux-unpacked/resources/app/python/usr/bin/pip3 install wheel --no-warn-script-location
-          ./dist/linux-unpacked/resources/app/python/usr/bin/pip3 install -r requirements.txt --no-warn-script-location
-
-          ./appimagekit.AppImage dist/linux-unpacked/
-          rm -rf python.AppImage appimagekit.AppImage node_modules/ ura-linux-x86_64
+          with open(F,'w') as f:f.write(re.sub(r'const pythonPath.+',f'const pythonPath = path.join(__dirname, \'../python/opt/python3.10/bin/python3.10\')',i))" &
+              ./tmp/python/usr/bin/pip3 install --upgrade pip --no-warn-script-location --no-cache-dir --disable-pip-version-check &
+              ./tmp/python/usr/bin/pip3 uninstall wheel -y --no-cache-dir --disable-pip-version-check &
+              wait
+          ) &&
+          ./tmp/python/usr/bin/pip3 install --no-warn-script-location --no-cache-dir --disable-pip-version-check -r requirements.txt &&
+          yarn electron-builder --config "tmp/cfg.yml"
       - name: Upload AppImage
         id: upload-appimage
         uses: actions/upload-release-asset@v1
@@ -99,42 +76,3 @@ jobs:
           asset_path: ./ura-x86_64.AppImage
           asset_name: ura-linux-x86_64.AppImage
           asset_content_type: application/octet
-  # win:
-  #   name: Windows
-  #   needs: release
-  #   runs-on: windows-latest
-  #   strategy:
-  #     matrix:
-  #       include:
-  #         - name: winx64
-  #           embedable: https://www.python.org/ftp/python/3.10.0/python-3.10.0-embed-amd64.zip
-  #         - name: winx86
-  #           embedable: https://www.python.org/ftp/python/3.10.0/python-3.10.0-embed-win32.zip
-
-  #   steps:
-  #     - name: Build ura-${{ matrix.name }}.zip
-  #       run: |-
-  #         git clone https://github.com/hyaku-dl/urasunday ura
-  #         cd ura
-  #         curl -sSL ${{ matrix.embedable }} -o python.zip
-  #         curl -sSL https://bootstrap.pypa.io/get-pip.py -o get-pip.py
-  #         tar -xf python.zip
-  #         del python310._pth
-  #         curl -sSL https://ura.hyaku.download/scripts/python310._pth -o python310._pth
-  #         curl -sSL https://ura.hyaku.download/scripts/ura.bat -o ura.bat
-  #         .\python get-pip.py
-  #         .\python -m pip install .
-  #         del python.zip
-  #         del get-pip.py
-  #         cd ..
-  #         tar -a -c -f ura.zip ura
-  #     - name: Upload
-  #       id: upload-release-asset
-  #       uses: actions/upload-release-asset@v1
-  #       env:
-  #         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-  #       with:
-  #         upload_url: ${{ needs.release.outputs.upload_url }}
-  #         asset_path: ./ura.zip
-  #         asset_name: ura-${{ matrix.name }}.zip
-  #         asset_content_type: application/zip

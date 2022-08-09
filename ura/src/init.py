@@ -21,14 +21,14 @@ if TW:
             S.t_error("Your terminal width is well below than"),
             S.t_error("the bare minimum"),
             S.t_error(f"({TW} instead of 40 and above)"),
-            S.t_error(f"Consider resizing\n")
+            S.t_error(f"Consider resizing\n"),
         ]
     else:
         if TW < 55:
             tww = [
-                    S.t_warning("Your terminal width is below than"),
-                    S.t_warning(f"recommended ({TW} instead of 55 and above)\n")
-                ]
+                S.t_warning("Your terminal width is below than"),
+                S.t_warning(f"recommended ({TW} instead of 55 and above)\n"),
+            ]
 
     wcd = stg(None, path.join(dn(ap(__file__)), "hc.yml"))
 
@@ -42,13 +42,14 @@ if TW:
         )
     )
 
+
 def init(idx: int) -> None:
     cm = stg(None, path.join(dn(ap(__file__)), "cf_tpl.mp"))
 
     if sys.platform == "win32":
-        ddir = os.path.join(os.path.join(os.environ['USERPROFILE']), 'Desktop', 'Manga')
+        ddir = os.path.join(os.path.join(os.environ["USERPROFILE"]), "Desktop", "Manga")
     else:
-        ddir = os.path.join(os.path.expanduser('~'), "Manga")
+        ddir = os.path.join(os.path.expanduser("~"), "Manga")
 
     if TW:
         validate = False
@@ -58,11 +59,14 @@ def init(idx: int) -> None:
                 choices=[
                     [ddir, False],
                     ["Input it myself", True],
-                ]
+                ],
             ):
                 pd = input("Input the path to download the chapter to: ")
                 if not path.isdir(pd):
-                    if inquirer.confirm("The path does not exist. Do you want to make it?", default=False):
+                    if inquirer.confirm(
+                        "The path does not exist. Do you want to make it?",
+                        default=False,
+                    ):
                         makedirs(pd)
                         validate = True
                 ddir = pd
@@ -71,6 +75,7 @@ def init(idx: int) -> None:
 
     cm["download_dir"] = ddir
     wr_stg(None, cm, CFLOP[idx])
+
 
 config_path = None
 for i in CFLOP:
@@ -81,6 +86,7 @@ for i in CFLOP:
 if config_path is None:
     if POSIX:
         from . import appimage
+
         if appimage:
             init(1)
         else:

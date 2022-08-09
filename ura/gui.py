@@ -9,17 +9,21 @@ from src.settings import cfg, wr_cfg
 sio = socketio.Server()
 app = socketio.WSGIApp(sio)
 
+
 @sio.event
 def connect(sid, environ):
-    print('connect ', sid)
+    print("connect ", sid)
+
 
 @sio.event
 def connect_error(data):
     print("The connection failed!")
 
+
 @sio.event
 def disconnect(sid):
-    print('disconnect ', sid)
+    print("disconnect ", sid)
+
 
 class Exp:
     def config(sid, *args, **kwargs):
@@ -41,8 +45,9 @@ class Exp:
         except Exception:
             return False, traceback.format_exc()
 
+
 for i in [f for f in dir(Exp) if callable(getattr(Exp, f)) and not f.startswith("__")]:
     sio.on(i, getattr(Exp, i))
 
-if __name__ == '__main__':
-    eventlet.wsgi.server(eventlet.listen(('', 9173)), app)
+if __name__ == "__main__":
+    eventlet.wsgi.server(eventlet.listen(("", 9173)), app)

@@ -1,0 +1,116 @@
+variables:
+  global:
+    python_ver: "3.10"
+    python_ver_nd: "310"
+  local: {}
+
+matrix:
+  bits:
+    - 86
+    - 64
+
+scripts:
+  package_json:
+    path: package.json
+    og_ext: yml
+    ext: json
+    contents: |-
+      name: ${project_name}
+      version: ${hver}
+      description: ${desc}
+      main: tmp/gui/main.js
+      scripts:
+        start: NODE_ENV=development electron --trace-warnings ${project_name}/gui/main.js
+      repository: https://github.com/${organization}/${repo_name}
+      keywords:
+        - Electron
+      author: ${user}
+      license: MIT
+      devDependencies:
+        electron: "^19.0.3"
+        electron-builder: "^23.0.3"
+      dependencies:
+        python-shell: "^3.0.0"
+        socket.io-client: "^4.5.0"
+
+  build_yml:
+    path: .github/workflows/build.yml
+    contents: |-
+      name: Build
+
+      on:
+        push:
+          paths:
+            - version.yml
+        workflow_dispatch:
+
+      jobs:
+        release:
+          name: release
+          runs-on: ubuntu-latest
+          outputs:
+            upload_url: ${{ steps.create_release.outputs.upload_url }}
+          steps:
+            - name: Checkout
+              uses: actions/checkout@master
+            - name: Create Release
+              id: create_release
+              uses: actions/create-release@v1
+              env:
+                GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+              with:
+                tag_name: ${ver}
+                release_name: ${project_name} release v${ver}
+                draft: false
+                prerelease: ${prerel}
+        linux:
+          name: Linux
+          needs: release
+          runs-on: ubuntu-latest
+          steps:
+            - name: Python${python_ver}
+              uses: actions/setup-python@v1
+              with:
+                python-version: "${python_ver}"
+            - name: Build
+              env:
+                python_ver: "${python_ver}"
+              run: |-
+                (
+                  python -m pip install -r dev/constants/req.txt &
+                  rm -rf dist/ tmp/ &
+                  wait
+                ) &&
+                mkdir tmp/ &&
+                (
+                    cp -r ${project_name}/** tmp/ &
+                    wget -O tmp/python.AppImage "$(wget -qSO - "https://api.github.com/repos/niess/python-appimage/releases/tags/python${python_ver}" 2>/dev/null | grep -E "browser_download_url.*x86_64" | cut -d '"' -f4 | tail -1)" >/dev/null &
+                    python -c "from dev.scripts.py.eb import main;main('linux','tmp/cfg.yml')" &
+                    wait
+                ) &&
+                chmod +x ./tmp/python.AppImage &&
+                ./tmp/python.AppImage --appimage-extract >/dev/null &&
+                mv squashfs-root tmp/python/ &&
+                (
+                    rm -f ./tmp/python.AppImage &
+                    python -c "import re
+                F='tmp/gui/main.js'
+                with open(F,'r') as f:i=f.read()
+                i=re.sub(r'const scriptPath.+',f'const scriptPath = path.join(__dirname, \'../\')',i)
+                with open(F,'w') as f:f.write(re.sub(r'const pythonPath.+',f'const pythonPath = path.join(__dirname, \'../python/opt/python${python_ver}/bin/python${python_ver}\')',i))" &
+                    ./tmp/python/usr/bin/pip3 install --upgrade pip --no-warn-script-location --no-cache-dir --disable-pip-version-check &
+                    ./tmp/python/usr/bin/pip3 uninstall wheel -y --no-cache-dir --disable-pip-version-check &
+                    wait
+                ) &&
+                ./tmp/python/usr/bin/pip3 install --no-warn-script-location --no-cache-dir --disable-pip-version-check -r requirements.txt &&
+                yarn electron-builder --config "tmp/cfg.yml"
+            - name: Upload AppImage
+              id: upload-appimage
+              uses: actions/upload-release-asset@v1
+              env:
+                GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+              with:
+                upload_url: ${{needs.release.outputs.upload_url}}
+                asset_path: ./${project_name}-x86_64.AppImage
+                asset_name: ${project_name}-linux-x86_64.AppImage
+                asset_content_type: application/octet

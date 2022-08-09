@@ -14,12 +14,16 @@ from .base import class_usi, req, soup
 from .settings import cfg
 from .utils import sanitize_text
 
-USI = class_usi({
-    "ch_id": 2,
-})
+USI = class_usi(
+    {
+        "ch_id": 2,
+    }
+)
+
 
 class DownloadFailed(Exception):
     pass
+
 
 def sanitize_filename(filename: str) -> str:
     """
@@ -46,6 +50,7 @@ def get_extension(filename: str) -> str:
     """
     return filename.strip("/").split("/")[-1].split("?")[0].split(".")[-1]
 
+
 def ordinal(n: int) -> str:
     """
     Convert the given number to ordinal number.
@@ -56,7 +61,8 @@ def ordinal(n: int) -> str:
     Returns:
         str: The said ordinal number.
     """
-    return "%d%s" % (n, "tsnrhtdd"[(n//10%10!=1)*(n%10<4)*n%10::4])
+    return "%d%s" % (n, "tsnrhtdd"[(n // 10 % 10 != 1) * (n % 10 < 4) * n % 10 :: 4])
+
 
 def _cr(rs: str):
     """
@@ -73,9 +79,18 @@ def _cr(rs: str):
         start, end, singular = matches.groups()
         if (start and end) and float(start) > float(end):
             start, end = end, start
-        yield (lambda x, s=singular: float(s) == x) if singular else (lambda x: True) if not (start or end) else (lambda x, s=start: x >= float(s)) if start and not end else (lambda x, e=end: x <= float(e)) if not start and end else (lambda x, s=start, e=end: float(s) <= x <= float(e))
+        yield (lambda x, s=singular: float(s) == x) if singular else (
+            lambda x: True
+        ) if not (start or end) else (
+            lambda x, s=start: x >= float(s)
+        ) if start and not end else (
+            lambda x, e=end: x <= float(e)
+        ) if not start and end else (
+            lambda x, s=start, e=end: float(s) <= x <= float(e)
+        )
     if not rs:
         return lambda *args, **kwargs: True
+
 
 def cr(rs: str) -> Callable[[int], bool]:
     """
@@ -89,21 +104,20 @@ def cr(rs: str) -> Callable[[int], bool]:
         Callable[[int], bool]: The function that checks if the given int is within the range or not.
     """
 
-
     if rs:
         return lambda x: any(condition(x) for condition in _cr(rs))
     else:
         return lambda x: True
 
+
 class Downloader:
     def __init__(
-        self,
-        directory: str=None,
-        overwrite: bool=None,
-        **kwargs: Dict[str, Any]
+        self, directory: str = None, overwrite: bool = None, **kwargs: Dict[str, Any]
     ):
         local = locals()
-        for i in ["overwrite",]:
+        for i in [
+            "overwrite",
+        ]:
             setattr(self, i, local[i])
         if overwrite:
             self.overwrite = overwrite
@@ -115,14 +129,14 @@ class Downloader:
         else:
             self.ddir = cfg("download_dir")
 
-    async def _dlf(self, file: list[str], n: int=0):
+    async def _dlf(self, file: list[str], n: int = 0):
         """
         The core individual image downloader.
         Args:
             file (str): List containing the filename and the url of the file.
             n (int, optional): Times the download for this certain file is retried. Defaults to 0.
         """
-        async with aiofiles.open(file[0] + ".tmp", 'wb') as f:
+        async with aiofiles.open(file[0] + ".tmp", "wb") as f:
             r = req.get(file[1])
             if r.status_code == 200:
                 async for data in r.aiter_bytes():
@@ -146,7 +160,7 @@ class Downloader:
         await self._dlf(file)
         os.replace(f"{file[0]}.tmp", file[0])
 
-    async def _dlch(self, manga: str, chapter: str, urls: List[str], n: int=0):
+    async def _dlch(self, manga: str, chapter: str, urls: List[str], n: int = 0):
         # """
         # Individual chapter downloader.
         # Args:
@@ -169,10 +183,15 @@ class Downloader:
                         self.ddir,
                         manga,
                         sanitize_filename(chapter),
-                        f"{index}.{get_extension(str(page))}"
+                        f"{index}.{get_extension(str(page))}",
                     ).replace("\\", "/")
                     files.append((filename, page))
-                fmt = chapter + " [{remaining_s:05.2f} secs, {rate_fmt:0>12}] " + "{bar}" +" [{n:03d}/{total:03d}, {percentage:03.0f}%]"
+                fmt = (
+                    chapter
+                    + " [{remaining_s:05.2f} secs, {rate_fmt:0>12}] "
+                    + "{bar}"
+                    + " [{n:03d}/{total:03d}, {percentage:03.0f}%]"
+                )
                 try:
                     await tqdm_asyncio.gather(
                         *[self.dlf(file) for file in files],
@@ -182,7 +201,7 @@ class Downloader:
                         disable=False,
                         dynamic_ncols=True,
                         smoothing=1,
-                        bar_format=fmt
+                        bar_format=fmt,
                     )
                 except DownloadFailed as e:
                     raise e
@@ -197,8 +216,8 @@ class Downloader:
         resp = req.get(url, headers=headers)
         wrong_json = re.search(RP, resp.text).group(0)[14:-1].replace("'", '"')
         wrong_json = re.sub(r"(.+?): ", r'"\1": ', wrong_json)
-        wrong_json = re.sub(r'\",\s+}', r'"}', wrong_json)
-        pages = re.sub(r'\},\s+]', r'}]', wrong_json)
+        wrong_json = re.sub(r"\",\s+}", r'"}', wrong_json)
+        pages = re.sub(r"\},\s+]", r"}]", wrong_json)
 
         ms = soup(url)
         title = sanitize_text(ms.select_one("div.info h1").text)
@@ -206,7 +225,7 @@ class Downloader:
 
         urls = [i["src"] for i in json.loads(pages)]
         asyncio.get_event_loop().run_until_complete(
-            self._dlch(title, f'{USI.ch_id(url)} - {chapter}', urls)
+            self._dlch(title, f"{USI.ch_id(url)} - {chapter}", urls)
         )
 
         return self.jdir

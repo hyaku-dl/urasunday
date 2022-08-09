@@ -12,6 +12,7 @@ from yarl import URL
 METHODS = ["get", "options", "head", "post", "put", "patch", "delete"]
 SESSION = httpx.Client()
 
+
 def urel_fn(url: str) -> str:
     """Turn an absolute URL to a relative one. If the given URL is already a
     relative one, a URL object from the url will be returned.
@@ -26,6 +27,7 @@ def urel_fn(url: str) -> str:
     if url.is_absolute():
         url = url.relative()
     return url
+
 
 def url_slug_idx(idx: int) -> callable[[str], str]:
     """From an index, get the slug from a URL whether it is a relative or an
@@ -52,6 +54,7 @@ def url_slug_idx(idx: int) -> callable[[str], str]:
 
     return _inner
 
+
 def class_usi(dict_usi: dict[str, int]):
     """From the given key-value pairs of slug name and
     slug index, return a class with attributes for each slug, passed to
@@ -67,18 +70,20 @@ def class_usi(dict_usi: dict[str, int]):
 
     class _class:
         """The class to return."""
+
     for k, v in dict_usi.items():
         setattr(_class, k, url_slug_idx(v))
     return _class
 
+
 def _req(
-        url: str,
-        ra: Callable[[httpx.Response], int]=None,
-        method: str = "get",
-        session: httpx.Client = SESSION,
-        *args: List[Any],
-        **kwargs: Dict[str, Any]
-    ) -> httpx.Response:
+    url: str,
+    ra: Callable[[httpx.Response], int] = None,
+    method: str = "get",
+    session: httpx.Client = SESSION,
+    *args: List[Any],
+    **kwargs: Dict[str, Any]
+) -> httpx.Response:
     """Custom request function with retry after capabilities for 429s.
 
     Args:
@@ -99,8 +104,10 @@ def _req(
             return _req(url, ra, method, session, *args, **kwargs)
     return resp
 
+
 class req:
     pass
+
 
 req_dict = {
     req: {},
@@ -110,7 +117,10 @@ for r, kw in req_dict.items():
     for i in METHODS:
         setattr(r, i, partial(_req, method=i, **kw))
 
-def soup(url: str, req: Type[req]=req, method: str="get", **kwargs: Dict[str, Any]) -> BeautifulSoup:
+
+def soup(
+    url: str, req: Type[req] = req, method: str = "get", **kwargs: Dict[str, Any]
+) -> BeautifulSoup:
     """Returns a soup from the given url.
 
     Args:
