@@ -184,6 +184,7 @@ def main():
         choices=[
             ["Generate documentation", "docs"],
             ["Push to github", "gh"],
+            ["Generate scripts", "gs"],
             ["Bump a version", "bump"],
             ["Set the version manually", "set_ver"]
         ]
@@ -198,7 +199,10 @@ def main():
             ):
                 push()
         case "gh":
+            scripts.main()
             push()
+        case "gs":
+            scripts.main()
         case "bump":
             bump()
         case "set_ver":

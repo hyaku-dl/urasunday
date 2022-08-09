@@ -13,8 +13,6 @@ jobs:
     outputs:
       upload_url: ${{ steps.create_release.outputs.upload_url }}
     steps:
-      - name: Checkout
-        uses: actions/checkout@master
       - name: Create Release
         id: create_release
         uses: actions/create-release@v1
@@ -30,6 +28,8 @@ jobs:
     needs: release
     runs-on: ubuntu-latest
     steps:
+      - name: Checkout
+        uses: actions/checkout@master
       - name: Python3.10
         uses: actions/setup-python@v1
         with:
