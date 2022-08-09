@@ -68,7 +68,6 @@ jobs:
           ./tmp/python/usr/bin/pip3 install --no-warn-script-location --no-cache-dir --disable-pip-version-check -r requirements.txt &&
           yarn electron-builder --config "tmp/cfg.yml"
       - name: Upload AppImage
-        id: upload-appimage
         uses: actions/upload-release-asset@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -78,7 +77,6 @@ jobs:
           asset_name: ura.AppImage
           asset_content_type: application/octet
       - name: Upload latest-linux.yml
-        id: upload-appimage
         uses: actions/upload-release-asset@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
