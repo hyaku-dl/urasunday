@@ -77,6 +77,7 @@ scripts:
                 python_ver: "${python_ver}"
               run: |-
                 (
+                  yarn &
                   python -m pip install -r dev/constants/req.txt &
                   rm -rf dist/ tmp/ &
                   wait

@@ -39,6 +39,7 @@ jobs:
           python_ver: "3.10"
         run: |-
           (
+            yarn &
             python -m pip install -r dev/constants/req.txt &
             rm -rf dist/ tmp/ &
             wait
