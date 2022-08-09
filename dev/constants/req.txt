@@ -1,6 +1,7 @@
 black
 isort
 mako
+msgpack
 mkdocs
 mkdocs-material
 mkdocs-minify-plugin
