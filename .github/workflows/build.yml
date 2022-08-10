@@ -35,8 +35,6 @@ jobs:
         with:
           python-version: "3.10"
       - name: Build
-        env:
-          python_ver: "3.10"
         run: |-
           (
             yarn &
@@ -65,9 +63,9 @@ jobs:
               ./tmp/python/usr/bin/pip3 uninstall wheel -y --no-cache-dir --disable-pip-version-check &
               wait
           ) &&
-          ./tmp/python/usr/bin/pip3 install --no-warn-script-location --no-cache-dir --disable-pip-version-check -r requirements.txt &&
+          ./tmp/python/usr/bin/pip3 install --no-warn-script-location --no-cache-dir --disable-pip-version-check -I -r requirements.txt &&
           yarn electron-builder --config "tmp/cfg.yml" --publish never
-      - name: Upload AppImage
+      - name: Upload .AppImage
         uses: actions/upload-release-asset@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -84,4 +82,82 @@ jobs:
           upload_url: ${{needs.release.outputs.upload_url}}
           asset_path: ./dist/latest-linux.yml
           asset_name: latest-linux.yml
+          asset_content_type: application/octet
+  win:
+    name: Windows
+    needs: release
+    runs-on: windows-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@master
+      - name: Python3.10
+        uses: actions/setup-python@v1
+        with:
+          python-version: "3.10"
+      - name: Build
+        run: |-
+          Remove-Item dist\ -Recurse -Force
+          Remove-Item tmp\ -Recurse -Force
+          python -m pip install -r dev\constants\req.txt
+          yarn
+
+          New-Item -itemtype Directory -path 'tmp\python'
+          Copy-Item -Path 'ura\**' -Destination 'tmp\' -recurse -Force
+          Set-Location tmp\
+          Invoke-WebRequest 'https://bootstrap.pypa.io/get-pip.py' -o get-pip.py
+          Set-Location python
+          Invoke-WebRequest 'https://www.python.org/ftp/python/3.10.0/python-3.10.0-embed-amd64.zip' -o python.zip
+          tar -xf python.zip
+          Remove-Item python.zip
+          Remove-Item python310._pth
+          Set-Location ..
+          .\python\python get-pip.py
+          Remove-Item get-pip.py
+          Set-Location ..
+
+          .\tmp\python\python -m pip uninstall wheel -y --no-cache-dir --disable-pip-version-check
+          .\tmp\python\python -m pip install --upgrade pip --no-warn-script-location --no-cache-dir --disable-pip-version-check
+          .\tmp\python\python -m pip install  --no-warn-script-location --no-cache-dir --disable-pip-version-check -I -r requirements.txt
+
+          python -c "from dev.scripts.py.eb import main;main('win','tmp\cfg.yml')"
+          python -c "import re;F='tmp\\gui\\main.js'
+          with open(F,'r') as f:i=f.read()
+          i=re.sub(r'const scriptPath.+',f'const scriptPath = path.join(__dirname, \'..\\\\\\\\\')',i,count=1)
+          with open(F,'w') as f:f.write(re.sub(r'const pythonPath.+',f'const pythonPath = path.join(__dirname, \'..\\\\\\\\python\\\\\\\\python\')',i))"
+          yarn electron-builder --config "tmp\cfg.yml"
+      - name: Upload .exe
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{needs.release.outputs.upload_url}}
+          asset_path: ./dist/ura.exe
+          asset_name: ura.exe
+          asset_content_type: application/octet
+      - name: Upload .exe.blockmap
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{needs.release.outputs.upload_url}}
+          asset_path: ./dist/ura.exe.blockmap
+          asset_name: ura.exe.blockmap
+          asset_content_type: application/octet
+      - name: Upload .msi
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{needs.release.outputs.upload_url}}
+          asset_path: ./dist/ura.msi
+          asset_name: ura.msi
+          asset_content_type: application/octet
+      - name: Upload latest-win.yml
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{needs.release.outputs.upload_url}}
+          asset_path: ./dist/latest.yml
+          asset_name: latest-win.yml
           asset_content_type: application/octet

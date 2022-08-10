@@ -99,17 +99,16 @@ build:
       target:
         - nsis
         - msi
-      icon: docs/assets/images/icons/icon.png
+      icon: docs\assets\images\icons\icon.png
     nsis:
       oneClick: false
       perMachine: false
       allowElevation: true
-      license: site/license/index.html
+      license: dev\site\license\index.html
     files:
       - filter:
-          - dist/ura/**/*
-          - node_modules/**/*
-          - package.json
+          - node_modules\**\*
+          - tmp\**\*
   linux:
     linux:
       target:

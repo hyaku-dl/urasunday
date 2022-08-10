@@ -1,0 +1,2 @@
+function tmp{python -m black -q .};t "Python Files Formatted" "Formatting Python Files Failed." tmp
+function tmp{python -m isort -q --gitignore .};t "Sorting Python Imports" "Sorting Python Imports Failed." tmp

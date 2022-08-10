@@ -5,6 +5,7 @@ pyenv/
 **/__pycache__/
 **/tmp/
 
+ura.yml
 yarn.lock
 yarn-error.log
 **/*.test.*
