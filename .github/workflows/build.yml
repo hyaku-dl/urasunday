@@ -39,7 +39,7 @@ jobs:
           (
             yarn &
             python -m pip install -r dev/constants/req.txt &
-            rm -rf dist/ tmp/ &
+            # rm -rf dist/ tmp/ &
             wait
           ) &&
           mkdir tmp/ &&
@@ -96,8 +96,8 @@ jobs:
           python-version: "3.10"
       - name: Build
         run: |-
-          Remove-Item dist\ -Recurse -Force
-          Remove-Item tmp\ -Recurse -Force
+          # Remove-Item dist\ -Recurse -Force
+          # Remove-Item tmp\ -Recurse -Force
           python -m pip install -r dev\constants\req.txt
           yarn
 
