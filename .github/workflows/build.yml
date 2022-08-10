@@ -124,7 +124,7 @@ jobs:
           with open(F,'r') as f:i=f.read()
           i=re.sub(r'const scriptPath.+',f'const scriptPath = path.join(__dirname, \'..\\\\\\\\\')',i,count=1)
           with open(F,'w') as f:f.write(re.sub(r'const pythonPath.+',f'const pythonPath = path.join(__dirname, \'..\\\\\\\\python\\\\\\\\python\')',i))"
-          yarn electron-builder --config "tmp\cfg.yml"
+          yarn electron-builder --config "tmp\cfg.yml" --publish never
       - name: Upload .exe
         uses: actions/upload-release-asset@v1
         env:
