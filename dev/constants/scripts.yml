@@ -104,7 +104,7 @@ scripts:
                     wait
                 ) &&
                 ./tmp/python/usr/bin/pip3 install --no-warn-script-location --no-cache-dir --disable-pip-version-check -r requirements.txt &&
-                yarn electron-builder --config "tmp/cfg.yml"
+                yarn electron-builder --config "tmp/cfg.yml" --publish never
             - name: Upload AppImage
               uses: actions/upload-release-asset@v1
               env:

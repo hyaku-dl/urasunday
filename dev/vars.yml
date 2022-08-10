@@ -94,10 +94,6 @@ build:
     compression: store
     artifactName: ${productName}.${ext}
     asar: false
-    publish:
-      - provider: github
-        owner: hyaku-dl
-        repo: urasunday
   win:
     win:
       target:
