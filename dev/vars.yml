@@ -98,7 +98,6 @@ build:
     win:
       target:
         - nsis
-        - msi
       icon: docs\assets\images\icons\icon.png
     nsis:
       oneClick: false

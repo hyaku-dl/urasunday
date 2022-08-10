@@ -143,15 +143,6 @@ jobs:
           asset_path: ./dist/ura.exe.blockmap
           asset_name: ura.exe.blockmap
           asset_content_type: application/octet
-      - name: Upload .msi
-        uses: actions/upload-release-asset@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          upload_url: ${{needs.release.outputs.upload_url}}
-          asset_path: ./dist/ura.msi
-          asset_name: ura.msi
-          asset_content_type: application/octet
       - name: Upload latest-win.yml
         uses: actions/upload-release-asset@v1
         env:
