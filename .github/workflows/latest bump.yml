@@ -11,6 +11,8 @@ jobs:
     name: Comment
     runs-on: ubuntu-latest
     steps:
+      - name: Checkout
+        uses: actions/checkout@master
       - id: get-comment-body
         run: |
           body=$(cat "docs/latest bump.md")
