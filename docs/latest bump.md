@@ -3,7 +3,9 @@
     Latest Version Bump
 </h1>
 
-## 0.0.0.0-alpha.5 (Pre-release version bump)
+## 0.0.0.0-alpha.5
+
+Pre-release version bump. 
 
 ### <a href="#added" id="added">Added</a>
 

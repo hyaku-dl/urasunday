@@ -57,10 +57,11 @@
         href = v["anchor"]
         comp = ""
         if (idx + 1) != len(vls_ls):
-            comp = f" ({compare(vls_ls[idx+1], vls_ls[idx])})"
-        md_op += f'\n\n## <a href="#{href}" id="{href}">{k}{comp}</a>'
-        if desc:=v["desc"]:
-            md_op += f'\n\n{desc}\n\n'
+            comp = f"{compare(vls_ls[idx+1], vls_ls[idx])}. "
+        md_op += f'\n\n## <a href="#{href}" id="{href}">{k}</a>'
+        desc = v.get("desc", "")
+        if (desc != "") or (comp != ""):
+            md_op += f'\n\n{comp}{desc}'
         else:
             md_op += ''
         for t, chls in v["changes"].items():

@@ -2,6 +2,7 @@
 <h1 align="center" style="font-weight: bold">
     Latest Commit
 </h1>
+
 ## **Summary**
 
 This commit aims to improve the developer utilities, and bring it back to its working state.

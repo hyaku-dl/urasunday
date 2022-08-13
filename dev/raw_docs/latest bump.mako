@@ -52,10 +52,10 @@
             ovt.append(ch)
 
     if len(vbls) != 1:
-        comp = f" ({compare(vbls[1][0].split(), vls)})"
-    md_op += f'## {rv(vls)}{comp}'
-    if desc:
-        md_op += f'\n\n{desc}\n\n'
+        comp = f"{compare(vbls[1][0].split(), vls)}. "
+    md_op += f'## {rv(vls)}'
+    if (desc != "") or (comp != ""):
+        md_op += f'\n\n{comp}{desc}'
     else:
         md_op += ''
     for t, chls in changes.items():
