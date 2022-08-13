@@ -33,6 +33,4 @@ flowchart TD
 
 #### Preferred Language of Translation (PLOT)
 
-
-
 PLOT is a language preferred by the user for the lookup of translations. It uses ISO 639-1 language codes.

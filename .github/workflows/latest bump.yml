@@ -1,0 +1,24 @@
+name: Latest Bump Comment
+
+on:
+  push:
+    paths:
+      - version.yml
+  workflow_dispatch:
+
+jobs:
+  Comment:
+    name: Comment
+    runs-on: ubuntu-latest
+    steps:
+      - id: get-comment-body
+        run: |
+          body=$(cat "docs/latest bump.md")
+          body="${body//'%'/'%25'}"
+          body="${body//$'\n'/'%0A'}"
+          body="${body//$'\r'/'%0D'}"
+          echo ::set-output name=body::$body
+      - name: Create commit comment
+        uses: peter-evans/commit-comment@v2
+        with:
+          body: ${{ steps.get-comment-body.outputs.body }}

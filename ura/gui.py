@@ -2,9 +2,10 @@ import traceback
 
 import eventlet
 import socketio
-from src import init  # type: ignore
-from src.download import Downloader
-from src.settings import cfg, wr_cfg
+
+from .src import init  # type: ignore
+from .src.download import Downloader
+from .src.settings import cfg, wr_cfg
 
 sio = socketio.Server()
 app = socketio.WSGIApp(sio)

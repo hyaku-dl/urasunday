@@ -2,7 +2,7 @@
     <a target="_blank" href="https://choosealicense.com/licenses/mit/">MIT LICENSE</a>
 </h1>
 
-Copyright for portions of project [ura](https://github.com/hyaku-dl/ura) are held by [whi_ne, Github account [whinee](https://github.com/whinee) owner, 2022] as part of project [hyaku](https://github.com/hyaku-dl/hyaku), by [whi_ne, Github account [whinee](https://github.com/whinee) owner, 2021-2022] as part of project [MangDL](https://github.com/MangDL/MangDL), and by [whi_ne, Github account [whinee](https://github.com/whinee) owner, 2022] as part of project [YAMHL](https://github.com/Pirate-Kings/YAMHL).
+Copyright for portions of project [ura](https://github.com/hyaku-dl/ura) are held by [whi_ne, Github account [whinee](https://github.com/whinee) owner, 2022] as part of project [hyaku](https://github.com/hyaku-dl/hyaku), by [whi_ne, Github account [whinee](https://github.com/whinee) owner, 2021-2022] as part of project [MangDL](https://github.com/MangDL/MangDL), by [whi_ne, Github account [whinee](https://github.com/whinee) owner, 2022] as part of project [YAMHL](https://github.com/Pirate-Kings/YAMHL), and by [whi_ne, Github account [whinee](https://github.com/whinee) owner, 2022] as part of project [snippets.py](https://github.com/whinee/snippets.py).
 
 All other copyright for project [ura](https://github.com/hyaku-dl/ura) are held by [Github Account [whinee](https://github.com/whinee) Owner, 2022].
 

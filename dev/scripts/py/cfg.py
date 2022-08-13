@@ -1,5 +1,5 @@
-from typing import Any
 import json
+from typing import Any
 
 import msgpack
 import yaml
@@ -17,8 +17,9 @@ TYPES = {
         [["yaml", "yml"], ["w", lambda x: yaml.dump(x, indent=2)]],
         [["mp"], ["wb", lambda x: msgpack.packb(x, use_bin_type=True)]],
         [["json"], ["w", lambda x: json.dumps(x, indent=4, sort_keys=False)]],
-    ]
+    ],
 }
+
 
 @c_exc_str
 class ExtensionNotSupported(NotImplementedError):
@@ -43,6 +44,7 @@ def pcfg(d: str, type: str) -> CustomDict:
             return CustomDict(v[1](d))
     raise ExtensionNotSupported(type)
 
+
 def dcfg(value: dict, ext: str) -> str:
     """Dump the given value to a string with the given extension.
 
@@ -58,6 +60,7 @@ def dcfg(value: dict, ext: str) -> str:
         if ext in k:
             return v[1](value)
     raise ExtensionNotSupported(ext)
+
 
 def rcfg(file: str) -> CustomDict:
     """Read the contents of a file with the given file name.
@@ -88,4 +91,6 @@ def wcfg(file: str, value: dict[Any, Any] | list[Any]) -> None:
     for k, v in TYPES["w"]:
         if ext in k:
             with open(file, v[0]) as f:
+                if value.__class__.__mro__[-2] is dict:
+                    value = dict(value)
                 f.write(v[1](value))

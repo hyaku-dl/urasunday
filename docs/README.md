@@ -33,15 +33,15 @@
 </p>
 <p align="center">
     <a target="_blank" href="https://discord.com/invite/JbAtUxGcJZ">
-        <img src="https://inviter.whinyaan.xyz/JbAtUxGcJZ?color[background]=00000000&color[serverName]=d64f50&color[header]=9383e2&color[presenceText]=684fe2">
+        <img src="https://invidget.switchblade.xyz/JbAtUxGcJZ?color[background]=00000000&color[serverName]=d64f50&color[header]=9383e2&color[presenceText]=684fe2">
     </a>
 </p>
 
-<!-- About section. Preferrably 2-5 sentences long. -->
+<!-- About section. Preferably 2-5 sentences long. -->
 ---
 
 <h4 align="center">
-A no-nonsense, simple and easy to use scraper for <a target="_blank" href="https://urasunday.com">urasunday</a>
+A no-nonsense, simple and easy to use scraper for urasunday.com
 </h4>
 
 ---
@@ -52,9 +52,9 @@ Website: [ura.hyaku.download](https://ura.hyaku.download)
 
 ---
 
-Commisioned by <a target="_blank" href="https://discord.com/users/250456851890569217">@HappyPurple(Discord, Mistilteinn#4793)</a>, owner of <a target="_blank" href="https://blog.ultralight.group">Ultralight Manga Translation Group</a>.
+Commissioned by <a target="_blank" href="https://discord.com/users/250456851890569217">@HappyPurple(Discord, Mistilteinn#4793)</a>, owner of <a target="_blank" href="https://blog.ultralight.group">Ultralight Manga Translation Group</a>.
 
-Interested in commisioning projects? Inquire through Discord(<a target="_blank" href="https://discord.com/users/867696753434951732">whi_ne | whinyaan.xyz#5135</a>) or through e-mail(<a target="_blank" href="mailto:whinyaan@pm.me">whinyaan@pm.me</a>). Price starts at 15 USD.
+Interested in commissioning projects? Inquire through Discord(<a target="_blank" href="https://discord.com/users/867696753434951732">whi_ne | whinyaan.xyz#5135</a>) or through e-mail(<a target="_blank" href="mailto:whinyaan@pm.me">whinyaan@pm.me</a>). Price starts at 15 USD.
 
 To be updated, be sure to watch this repository and join the [Discord Support Server](https://discord.com/invite/JbAtUxGcJZ).
 
@@ -64,56 +64,25 @@ For the terms of usage and legals, visit [LICENSE](license) and [terms of usage 
 
 Since people are looking for the download first, here you go:
 
-Follow [this link](https://ura.hyaku.download/installation) to install ura in your machine.
+Follow [this link](https://github.com/hyaku-dl/urasunday/releases), and download the appropriate executable for your machine.
 
 ## **Features**
 
 - Download manga from [urasunday.com](https://urasunday.com), no nonsense
 - Ad free
 - 0% tracking and analytics
-- Can be used as a library (programmatic usage)
 
 ### Supported OSes
 
 - Windows
-- MacOS
 - Linux
-
-<!-- TOC section. Update when adding sections and subsections fitted in TOC. -->
-## **Table of Contents**
-
-- [**Features**](#features)
-    - [Supported OSes](#supported-oses)
-- [**Table of Contents**](#table-of-contents)
-- [**Usage**](#usage)
-- [**Getting Started**](#getting-started)
-    - [**Prerequisites**](#prerequisites)
-    - [**Setup**](#setup)
-- [**Contributions**](#contributions)
-- [**Known Issues and Limitations**](#known-issues-and-limitations)
-- [**Future of this project**](#future-of-this-project)
-- [**License**](#license)
-- [**Credits**](#credits)
-    - [Thank you](#thank-you)
-    - [MIT Logo](#mit-logo)
-    - [Icons](#icons)
 
 <!-- Mention examples of application of this repository. -->
 ## **Usage**
 
-Before using this project, it is recommended to visit [license](license) and [terms of usage & disclaimer](tou_disc) for the terms of usage, disclaimer, and legals.
-
-```bash
-ura -h
-```
-
-Downloading:
-
-```bash
-ura dl <url> [OPTIONS]
-```
-
-For programmatic use, visit the documentation: [ura.hyaku.download/docs](https://ura.hyaku.download/docs/index.html)
+<i>
+    This section is not yet complete.
+</i>
 
 ## **Getting Started**
 
@@ -121,81 +90,38 @@ These instructions will get you a copy of the project up and running on your loc
 
 ### **Prerequisites**
 
-The following are the required programs and/or packages to run this project:
-
-- For all operating systems:
-    - Python 3.10 and higher
-        <details>
-        <summary>To check that you have Python 3.10 and higher installed, in your preferred terminal, run the following command:</summary>
-
-        ```bash
-        python3 --version
-        ```
-
-        </details>
-
-    - pip (Package Installer for Python)
-        <details>
-        <summary>To check that you have pip installed, in your preferred terminal, run the following command:</summary>
-
-        ```bash
-        pip3 --version
-        ```
-
-        </details>
-
-    - git
-        <details>
-        <summary>To check that you have git installed, in your preferred terminal, run the following command:</summary>
-
-        ```bash
-        git --version
-        ```
-
-        </details>
+<i>
+    This section is not yet complete.
+</i>
 
 ### **Setup**
 
-Follow [this link](https://ura.hyaku.download/installation) to install ura in your machine.
+<i>
+    This section is not yet complete.
+</i>
 
 ## **Contributions**
 
-You can contribute by creating a new issue, or by creating pull requests.
+<i>
+    This section is not yet complete.
+</i>
 
-At the time of writing, there are no templates for both creating a new issue and pull requests.
-
-The developer notes however that the said template will be created if a trend of users using this project is evident.
-
-For creating a new issue, please make sure that the said issue is not on the list of closed and open issues.
-
-After checking that that is the case, create a new issue.
-
-The title of the issue must summarize its contents.
-
-The body must contain the following:
-
-- a clear description of the bug
-- Python version used for running and/or testing the project
-- OS name and version
-
-<!-- Mention the issus and limitations of this repository. Preferrably 1-5 sentences long. -->
+<!-- Mention the issus and limitations of this repository. Preferably 1-5 sentences long. -->
 ## **Known Issues and Limitations**
 
-At the time of writing, this project can not be run in Termux due to a fatal error.
+This application can not run at Mac OS as of now.
 
-Also, something is broken and I don't know what is, 'cause I forgot!
-
-<!-- Mention the plans for the repository. Preferrably 2-5 sentences long. -->
+<!-- Mention the plans for the repository. Preferably 2-5 sentences long. -->
 ## **Future of this project**
 
-The TODO will be done, except for that, nothing else.
+After supporting Windows, the app will be feature-freezed and will be under maintenance mode until further notice.
 
 <!-- License section. Leave unchanged except when updating the year, using a different license, or changing the style altogether. -->
 ## **License**
 
 ### <a target="_blank" href="https://choosealicense.com/licenses/mit/">MIT</a>
 
-Copyright for portions of project [ura](https://github.com/hyaku-dl/ura) are held by [whi_ne, Github account [whinee](https://github.com/whinee) owner, 2022] as part of project [hyaku](https://github.com/hyaku-dl/hyaku), by [whi_ne, Github account [whinee](https://github.com/whinee) owner, 2021-2022] as part of project [MangDL](https://github.com/MangDL/MangDL), and by [whi_ne, Github account [whinee](https://github.com/whinee) owner, 2022] as part of project [YAMHL](https://github.com/Pirate-Kings/YAMHL).
+Copyright for portions of project [ura](https://github.com/hyaku-dl/ura) are held by [whi_ne, Github account [whinee](https://github.com/whinee) owner, 2022] as part of project [hyaku](https://github.com/hyaku-dl/hyaku), by [whi_ne, Github account [whinee](https://github.com/whinee) owner, 2021-2022] as part of project [MangDL](https://github.com/MangDL/MangDL), by [whi_ne, Github account [whinee](https://github.com/whinee) owner, 2022] as part of project [YAMHL](https://github.com/Pirate-Kings/YAMHL), and by [whi_ne, Github account [whinee](https://github.com/whinee) owner, 2022] as part of project [snippets.py](https://github.com/whinee/snippets.py).
 
 All other copyright for project [ura](https://github.com/hyaku-dl/ura) are held by [Github Account [whinee](https://github.com/whinee) Owner, 2022].
 
@@ -205,7 +131,7 @@ Check the [license](license) for more details.
 
 ### Thank you
 
-- To [@HappyPurple(Discord, Mistilteinn#4793)](https://discord.com/users/250456851890569217) for commisioning this project.
+- To [@HappyPurple(Discord, Mistilteinn#4793)](https://discord.com/users/250456851890569217) for commissioning this project.
 
 ### MIT Logo
 
@@ -217,6 +143,6 @@ Check the [license](license) for more details.
 
 <sub>
     <i>
-        <b>NOTE:</b> If a reference or source material is not attributed properly or not at all, please kindly message me at Discord: <a target="_blank" href="https://discord.com/users/867696753434951732">whi_ne | whinyaan.xyz#5135</a> or create a pull request so I can properly give credit to their respective authors.
+        <b>NOTE:</b> If a reference or source material is not attributed properly or not at all, create a pull request so I can properly give credit to their respective authors.
     </i>
 </sub>

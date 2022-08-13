@@ -1,10 +1,11 @@
 import itertools
 import re
 
-from .cfg import pcfg, rcfg, dcfg
+from .cfg import dcfg, pcfg, rcfg
 from .utils import inmd
 
 RE_MX = r"(?<=\{matrix.)[a-zA-Z0-9-_]+?(?=\})"
+
 
 def cd(*k: list[str]):
     op = []
@@ -12,6 +13,7 @@ def cd(*k: list[str]):
     for i in itertools.product(*dls):
         op.append(dict(zip(k, i)))
     return op
+
 
 def repl(key: str, fn: str, contents: str):
     s, c = fn, contents
@@ -24,9 +26,10 @@ def repl(key: str, fn: str, contents: str):
 
     return s, c
 
+
 def mr(k: str, v: dict[str, str]):
     s, c = repl(k, v["path"], v["contents"])
-    if mx_match:=re.findall(RE_MX, s):
+    if mx_match := re.findall(RE_MX, s):
         op = []
         for i in cd(*mx_match):
             _s = s
@@ -38,6 +41,7 @@ def mr(k: str, v: dict[str, str]):
         return op
     else:
         return [[s, c]]
+
 
 def main():
     global GLOBAL, MATRIX, VLS, VYML, YML, SCRIPTS
@@ -57,31 +61,23 @@ def main():
         "ver": VER["str"],
         "hver": VER["sv"],
         "prerel": not (VER["ls"][-2] == 3),
-        **{"ver_" + k: v for k, v in zip(['u', 'd', 'm', 'p', 'pi', 'pv'], VER["ls"])}
+        **{"ver_" + k: v for k, v in zip(["u", "d", "m", "p", "pi", "pv"], VER["ls"])},
     }
     GLOBAL = {}
-    for k, v in dict(
-        MD_VARS["global"],
-        **SCRIPTS["variables"]["global"],
-        **PG
-    ).items():
+    for k, v in dict(MD_VARS["global"], **SCRIPTS["variables"]["global"], **PG).items():
         GLOBAL[k] = str(v)
 
     PL = {
         "req": [i for i in REQ if i],
     }
     LOCAL = {}
-    for k, v in dict(
-        MD_VARS["local"],
-        **SCRIPTS["variables"]["local"],
-        **PL
-    ).items():
+    for k, v in dict(MD_VARS["local"], **SCRIPTS["variables"]["local"], **PL).items():
         LOCAL[k] = str(v)
 
     for k, v in SCRIPTS["scripts"].items():
         for p, c in mr(k, v):
             with open(inmd(p), "w") as f:
-                if og_ext:=v.get("og_ext"):
-                    if ext:=v.get("ext"):
+                if og_ext := v.get("og_ext"):
+                    if ext := v.get("ext"):
                         c = dcfg(pcfg(c, og_ext), ext)
                 f.write(c)

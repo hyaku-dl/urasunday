@@ -8,7 +8,7 @@ from typing import Any
 PR = ["alpha", "beta", "rc"]
 
 # Functions
-def inmd(p: str, ls: list[str]=None):
+def inmd(p: str, ls: list[str] = None):
     """
     "If Not `path.isdir`, Make Directories"
 
@@ -22,6 +22,7 @@ def inmd(p: str, ls: list[str]=None):
         if ls:
             ls.append(pd)
     return p
+
 
 def ivnd(var: Any, de: Any) -> Any:
     """If Var is None, return Default else var.
@@ -37,12 +38,21 @@ def ivnd(var: Any, de: Any) -> Any:
         return de
     return var
 
+
 def repl(s: str, repl_dict: dict[str, list[str]]) -> str:
     op = s
     for k, v in repl_dict.items():
         for i in v:
             op = op.replace(i, k)
     return op
+
+
+def dnn(fn: str, n: str) -> str:
+    op = fn
+    for _ in range(n):
+        op = path.dirname(op)
+    return op
+
 
 def run(s: str):
     call(shlex.split(s))

@@ -1,10 +1,14 @@
 import re
-import shlex
-from subprocess import call
+from os import path
 from typing import Any
-from .cfg import rcfg, wcfg
+
 import inquirer
+
 from . import scripts
+from .cfg import rcfg, wcfg
+from .md_vars import GLOBAL, VYML
+from .schema import Config
+from .utils import run
 
 # Constants
 VERSIONS_NAME = [
@@ -19,35 +23,51 @@ PR = ["alpha", "beta", "rc"]
 
 # Derived Constants
 VLS_STR_RE = re.compile(r"^(((0|[1-9][0-9]*) ){4}([0-2] (0|[1-9][0-9]*)|3 0))$")
-
-YML = rcfg("dev/vars.yml")
-VYML = rcfg("version.yml")
-
-GLOBAL = YML.dir("md_vars/global")
 VLS = VYML["ls"]
+META_YML = rcfg(path.join("dev/constants", *[str(_) for _ in VLS[0:2]], "_meta.yml"))
 
-def run(s: str):
-    call(shlex.split(s))
 
-def push(v: list[int]=None):
+def cc():
+    for k, v in META_YML["cp"].items():
+        wcfg(
+            f'{v["dir"]}.{v.get("ext", "mp")}',
+            rcfg(path.join("dev/constants", *[str(_) for _ in VLS[0:2]], f"{k}.yml")),
+        )
+
+    cf_tpl = rcfg(path.join("dev/constants", *[str(_) for _ in VLS[0:2]], "config.yml"))
+    Config(cf_tpl["version"])(cf_tpl["config"])
+
+
+def docs():
+    from .docs import main
+    from .md_vars import RMDV
+
+    main(RMDV)
+
+
+def push(v: list[int] = None):
     msg = inquirer.text(message="Enter commit message", default="")
     run("git add .")
     if msg != "":
         msg = f"{msg},"
     if v:
-        run(f"git commit -am '{msg}https://{GLOBAL['site']}/changelog#v{'-'.join([str(i) for i in v])}'")
+        run(
+            f"git commit -am '{msg}https://{GLOBAL['site']}/changelog#v{'-'.join([str(i) for i in v])}'"
+        )
     else:
         run(f"git commit -am '{msg or 'push'}'")
     run("git push")
 
+
 def vls_str(vls: list[str]) -> list[str]:
     pr = ""
     if vls[4] < 3:
-        pr = f'-{PR[vls[4]]}.{vls[5]}'
+        pr = f"-{PR[vls[4]]}.{vls[5]}"
     return [
         ".".join([str(i) for i in vls[0:4]]) + pr,
-        ".".join([str(i) for i in [*vls[0:2], 3**vls[2] * 2**vls[3]]]) + pr
+        ".".join([str(i) for i in [*vls[0:2], 3 ** vls[2] * 2 ** vls[3]]]) + pr,
     ]
+
 
 def dcomp(x: int) -> list[int]:
     """Given a number x, return a list of times a prime factor of x occured.
@@ -70,6 +90,7 @@ def dcomp(x: int) -> list[int]:
                 pass
     return factors
 
+
 def py_var_sub(file: str, kv: dict[str, Any]) -> None:
     with open(file, "r") as f:
         op = f.read()
@@ -79,9 +100,10 @@ def py_var_sub(file: str, kv: dict[str, Any]) -> None:
                 v = f'"{v}"'
             else:
                 v = f"'{v}'"
-        op = re.sub(fr'{k}.+', f'{k} = {v}', op, count=1)
+        op = re.sub(rf"{k}.+", f"{k} = {v}", op, count=1)
     with open(file, "w") as f:
         f.write(op)
+
 
 def _set_ver(vls: list[int]) -> None:
     """Set version, and write to file.
@@ -91,7 +113,11 @@ def _set_ver(vls: list[int]) -> None:
     """
     op_ls = [vls, *vls_str(vls)]
     wcfg("version.yml", {k: v for k, v in zip(["ls", "str", "sv"], op_ls)})
-    py_var_sub("ura/src/__init__.py", {k: v for k, v in zip(["vls", "__version__", "hver"], op_ls)})
+    py_var_sub(
+        "ura/src/__init__.py",
+        {k: v for k, v in zip(["vls", "__version__", "hver"], op_ls)},
+    )
+
 
 def vfn(answers: list[Any], current: str) -> bool:
     x, y = VLS_STR_RE.match(current).span()
@@ -101,6 +127,7 @@ def vfn(answers: list[Any], current: str) -> bool:
         return True
 
     raise Exception("Invalid version digits")
+
 
 def vlir(idx: int, vls: list[int]) -> list[int]:
     """Version Lower than Index will be Reset
@@ -113,12 +140,13 @@ def vlir(idx: int, vls: list[int]) -> list[int]:
         list[int]: Modified version list.
     """
 
-    for i in range(idx + 1, len(VLS)):
+    for i in range(idx + 1, len(vls)):
         if i == 4:
             vls[i] = 3
         else:
             vls[i] = 0
     return vls
+
 
 def _bump(idx: int) -> list[int]:
     """_summary_
@@ -145,11 +173,12 @@ def _bump(idx: int) -> list[int]:
             _vls[idx] += 1
     return _vls
 
+
 def bump():
     while True:
         choices = []
         for idx, k in enumerate(VERSIONS_NAME):
-            choices.append([f'{k.ljust(23)}(bump to {vls_str(_bump(idx))[0]})', idx])
+            choices.append([f"{k.ljust(23)}(bump to {vls_str(_bump(idx))[0]})", idx])
         idx = inquirer.list_input(
             message=f"What version do you want to bump? (Current version: {vls_str(VLS)[0]})",
             choices=choices,
@@ -164,7 +193,7 @@ def bump():
                 ["Yes", "y"],
                 ["No", "n"],
                 ["Cancel", "c"],
-            ]
+            ],
         ):
             case "y":
                 _set_ver(_vls)
@@ -178,28 +207,29 @@ def bump():
             case _:
                 pass
 
+
 def main():
     match inquirer.list_input(
         message="What action do you want to take",
         choices=[
+            ["Copy constants", "cc"],
             ["Generate documentation", "docs"],
             ["Push to github", "gh"],
-            ["Generate scripts", "gs"],
             ["Bump a version", "bump"],
-            ["Set the version manually", "set_ver"]
-        ]
+            ["Generate scripts", "gs"],
+            ["Set the version manually", "set_ver"],
+        ],
     ):
+        case "cc":
+            cc()
         case "docs":
-            from scripts import md_vars
-            md_vars.main()
-            run("mkdocs build")
-            if inquirer.confirm(
-                "Do you want to push this to github?",
-                default=False
-            ):
+            docs()
+            if inquirer.confirm("Do you want to push this to github?", default=False):
                 push()
         case "gh":
+            cc()
             scripts.main()
+            docs()
             push()
         case "gs":
             scripts.main()
@@ -207,8 +237,7 @@ def main():
             bump()
         case "set_ver":
             inquirer.text(
-                message="Enter version digits seperated by spaces",
-                validate = vfn
+                message="Enter version digits seperated by spaces", validate=vfn
             )
         case _:
             pass

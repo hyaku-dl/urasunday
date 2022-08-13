@@ -1,15 +1,18 @@
 docs:
-  input: raw_docs
+  input: dev/raw_docs
   op: docs
 
 pdoc:
   project: ura
   op: docs
+  tpl: dev/constants/tpl
 
 mako:
   gen:
     path:
       - changelog.mako
+      - latest bump.mako
+      - latest commit.mako
     glob:
       - docs/**/**/index.mako
 
@@ -18,7 +21,6 @@ md_vars:
     project_name: ura
     repo_name: urasunday
     site: ura.hyaku.download
-    scripts_url: ura.hyaku.download/scripts
     organization: hyaku-dl
     user: whinee
     year: 2022
@@ -40,7 +42,7 @@ md_vars:
       title: ura
 
 rules:
-  del:
+  del: {}
   repl:
     'src="https://${site}/assets':
       - 'src="./assets'
@@ -128,10 +130,12 @@ fetch:
     onefetch --no-palette --no-bots -d languages lines_of_code size --show-logo never -a emacs-lisp
   types:
     Project Source: |-
-      onefetch --no-palette --no-bots --show-logo never -e *.sh *.py scripts/ site/ -d git_info project head pending version created dependencies authors last_change contributors repo commits size license
+      onefetch --no-palette --no-bots --show-logo never -e "*.ps1" "*.sh" dev/ docs/ -d git_info project head pending version created dependencies authors last_change contributors repo commits size license
     Core: |-
-      onefetch --no-palette --no-bots --show-logo never -e *.sh *.py scripts/ site/ ura/gui -d git_info project head pending version created dependencies authors last_change contributors repo commits size license
+      onefetch --no-palette --no-bots --show-logo never -e "*.ps1" "*.sh" dev/ ura/gui/ -d git_info project head pending version created dependencies authors last_change contributors repo commits size license
     GUI: |-
-      onefetch --no-palette --no-bots --show-logo never -e *.sh *.py scripts/ site/ ura/src ura/gui.py -d git_info project head pending version created dependencies authors last_change contributors repo commits size license
-    Documentation: |-
-      onefetch --no-palette --no-bots --show-logo never -e ura/ -T markup prose -d git_info project head pending version created dependencies authors last_change contributors repo commits size license
+      onefetch --no-palette --no-bots --show-logo never -e "*.ps1" "*.sh" dev/ ura/src/ -d git_info project head pending version created dependencies authors last_change contributors repo commits size license
+    Docs: |-
+      onefetch --no-palette --no-bots --show-logo never -e dev/constants/ dev/scripts/ dev/site ura/ "*.ps1" "*.sh" "*.xml" -T programming markup prose data -d git_info project head pending version created dependencies authors last_change contributors repo commits size license
+    Site: |-
+      onefetch --no-palette --no-bots --show-logo never -e dev/constants/ dev/raw_docs/ dev/scripts/ docs/ ura/ "*.ps1" "*.sh" "*.xml" -T programming markup prose data -d git_info project head pending version created dependencies authors last_change contributors repo commits size license

@@ -1,6 +1,6 @@
 {
     "python.defaultInterpreterPath": "./pyenv/bin/python",
-    "python.languageServer": "Jedi",
+    "python.languageServer": "Pylance",
     "vscode-yaml-sort.useCustomSortRecursively": true,
     // "vscode-yaml-sort.customSortKeywords_1": [
     //     "phrase",

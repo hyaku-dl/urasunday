@@ -1,6 +1,7 @@
 from .cfg import rcfg, wcfg
 from .utils import ivnd
 
+
 def merge_dict(dict1, dict2):
     for key, val in dict1.items():
         if isinstance(val, dict):
@@ -14,6 +15,7 @@ def merge_dict(dict1, dict2):
             dict1[key] = val
 
     return dict1
+
 
 def main(fmt: str, op: str, override: dict = None):
     override = ivnd(override, {})

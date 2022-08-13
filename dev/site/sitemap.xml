@@ -2,97 +2,112 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
     <url>
          <loc>https://ura.hyaku.download/</loc>
-         <lastmod>2022-05-04</lastmod>
+         <lastmod>2022-08-13</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://ura.hyaku.download/changelog/</loc>
-         <lastmod>2022-05-04</lastmod>
+         <lastmod>2022-08-13</lastmod>
+         <changefreq>daily</changefreq>
+    </url>
+    <url>
+         <loc>https://ura.hyaku.download/latest%20bump/</loc>
+         <lastmod>2022-08-13</lastmod>
+         <changefreq>daily</changefreq>
+    </url>
+    <url>
+         <loc>https://ura.hyaku.download/latest%20commit/</loc>
+         <lastmod>2022-08-13</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://ura.hyaku.download/license/</loc>
-         <lastmod>2022-05-04</lastmod>
+         <lastmod>2022-08-13</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://ura.hyaku.download/notes%20to%20self/</loc>
-         <lastmod>2022-05-04</lastmod>
+         <lastmod>2022-08-13</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://ura.hyaku.download/notes/</loc>
-         <lastmod>2022-05-04</lastmod>
+         <lastmod>2022-08-13</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://ura.hyaku.download/docs/0/0/</loc>
-         <lastmod>2022-05-04</lastmod>
+         <lastmod>2022-08-13</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://ura.hyaku.download/docs/0/0/config/</loc>
-         <lastmod>2022-05-04</lastmod>
+         <lastmod>2022-08-13</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://ura.hyaku.download/docs/0/0/setup/</loc>
-         <lastmod>2022-05-04</lastmod>
+         <lastmod>2022-08-13</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://ura.hyaku.download/docs/0/0/structure/</loc>
-         <lastmod>2022-05-04</lastmod>
+         <lastmod>2022-08-13</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://ura.hyaku.download/docs/0/0/api/</loc>
-         <lastmod>2022-05-04</lastmod>
+         <lastmod>2022-08-13</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
-         <loc>https://ura.hyaku.download/docs/0/0/api/base/</loc>
-         <lastmod>2022-05-04</lastmod>
+         <loc>https://ura.hyaku.download/docs/0/0/api/gui/</loc>
+         <lastmod>2022-08-13</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
-         <loc>https://ura.hyaku.download/docs/0/0/api/cli/</loc>
-         <lastmod>2022-05-04</lastmod>
+         <loc>https://ura.hyaku.download/docs/0/0/api/src/</loc>
+         <lastmod>2022-08-13</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
-         <loc>https://ura.hyaku.download/docs/0/0/api/download/</loc>
-         <lastmod>2022-05-04</lastmod>
+         <loc>https://ura.hyaku.download/docs/0/0/api/src/base/</loc>
+         <lastmod>2022-08-13</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
-         <loc>https://ura.hyaku.download/docs/0/0/api/globals/</loc>
-         <lastmod>2022-05-04</lastmod>
+         <loc>https://ura.hyaku.download/docs/0/0/api/src/cli/</loc>
+         <lastmod>2022-08-13</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
-         <loc>https://ura.hyaku.download/docs/0/0/api/init/</loc>
-         <lastmod>2022-05-04</lastmod>
+         <loc>https://ura.hyaku.download/docs/0/0/api/src/download/</loc>
+         <lastmod>2022-08-13</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
-         <loc>https://ura.hyaku.download/docs/0/0/api/main/</loc>
-         <lastmod>2022-05-04</lastmod>
+         <loc>https://ura.hyaku.download/docs/0/0/api/src/globals/</loc>
+         <lastmod>2022-08-13</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
-         <loc>https://ura.hyaku.download/docs/0/0/api/settings/</loc>
-         <lastmod>2022-05-04</lastmod>
+         <loc>https://ura.hyaku.download/docs/0/0/api/src/init/</loc>
+         <lastmod>2022-08-13</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
-         <loc>https://ura.hyaku.download/docs/0/0/api/style/</loc>
-         <lastmod>2022-05-04</lastmod>
+         <loc>https://ura.hyaku.download/docs/0/0/api/src/settings/</loc>
+         <lastmod>2022-08-13</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
-         <loc>https://ura.hyaku.download/docs/0/0/api/utils/</loc>
-         <lastmod>2022-05-04</lastmod>
+         <loc>https://ura.hyaku.download/docs/0/0/api/src/style/</loc>
+         <lastmod>2022-08-13</lastmod>
+         <changefreq>daily</changefreq>
+    </url>
+    <url>
+         <loc>https://ura.hyaku.download/docs/0/0/api/src/utils/</loc>
+         <lastmod>2022-08-13</lastmod>
          <changefreq>daily</changefreq>
     </url>
 </urlset>

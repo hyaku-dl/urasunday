@@ -1,11 +1,16 @@
 black
 isort
 mako
-msgpack
+mdformat
+mdformat-frontmatter
+mdformat-footnote
+mdformat-gfm
+# mdformat-shfmt
 mkdocs
 mkdocs-material
 mkdocs-minify-plugin
 mkdocs-redirects
+msgpack
 niet
 pdoc3
 python-frontmatter
