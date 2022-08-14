@@ -4,10 +4,14 @@
 
 ## **Summary**
 
-Just fixed a lil' but of mess up.
+Just read the thingy below...
 
 ## **Changes**
 
-### **Fixed**
+### **Added**
 
-- Fixed `.github/workflows/latest commit comment.yml` to trigger when changes are made to `dev/raw_docs/latest commit.mmd` instead of `dev/raw_docs/latest commit.md`.
+- Added `docs/latest release notes.md` for notes of new releases, and made it so that it will be used as the release notes for upcoming Github releases.
+
+### **Changed**
+
+- Changed default push messages.

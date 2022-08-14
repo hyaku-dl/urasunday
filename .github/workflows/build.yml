@@ -13,6 +13,8 @@ jobs:
     outputs:
       upload_url: ${{ steps.create_release.outputs.upload_url }}
     steps:
+      - name: Checkout
+        uses: actions/checkout@master
       - name: Create Release
         id: create_release
         uses: actions/create-release@v1
@@ -21,6 +23,7 @@ jobs:
         with:
           tag_name: 0.0.0.0-beta.0
           release_name: ura release v0.0.0.0-beta.0
+          body_path: docs/latest bump.md
           draft: false
           prerelease: True
   linux:

@@ -20,6 +20,8 @@ VERSIONS_NAME = [
     "Pre-release version",
 ]
 PR = ["alpha", "beta", "rc"]
+DE_PUSH_MSG = "For info, check `docs/latest commit.md` or this commit's comments"
+PUSH_CMD = 'git commit -am "{}"'
 
 # Derived Constants
 VLS_STR_RE = re.compile(r"^(((0|[1-9][0-9]*) ){4}([0-2] (0|[1-9][0-9]*)|3 0))$")
@@ -50,17 +52,19 @@ def fmt():
 
 
 def push(v: list[int] = None):
-    fmt()
     msg = inquirer.text(message="Enter commit message", default="")
     run("git add .")
-    if msg != "":
-        msg = f"{msg},"
+    if msg == "":
+        msg = DE_PUSH_MSG
     if v:
-        run(
-            f"git commit -am '{msg}https://{GLOBAL['site']}/changelog#v{'-'.join([str(i) for i in v])}'"
+        msg = "\n".join(
+            [
+                msg,
+                f"Release notes: https://{GLOBAL['site']}/changelog#{'-'.join([str(i) for i in v])} or `docs/latest release notes.md`",
+            ]
         )
-    else:
-        run(f"git commit -am '{msg or 'push'}'")
+    fmt()
+    run(PUSH_CMD.format(msg))
     run("git push")
 
 

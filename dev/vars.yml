@@ -13,6 +13,7 @@ mako:
       - changelog.mako
       - latest bump.mako
       - latest commit.mako
+      - latest release notes.mako
     glob:
       - docs/**/**/index.mako
 
