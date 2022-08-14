@@ -1,77 +1,77 @@
-Module ura.src.style
-====================
+# Module ura.src.style
 
-Functions
----------
+## Functions
 
-    
 `pp(t: Any)`
-:   
+:
 
-Classes
--------
+## Classes
 
 `C()`
-:   
+:
 
-    ### Class variables
+```
+### Class variables
 
-    `h0`
-    :
+`h0`
+:
 
-    `h1`
-    :
+`h1`
+:
 
-    `h2`
-    :
+`h2`
+:
 
-    `s0`
-    :
+`s0`
+:
 
-    `s1`
-    :
+`s1`
+:
 
-    `s2`
-    :
+`s2`
+:
+```
 
 `S()`
-:   
+:
 
-    ### Class variables
+```
+### Class variables
 
-    `p0`
-    :
+`p0`
+:
 
-    `p1`
-    :
+`p1`
+:
 
-    `t0`
-    :
+`t0`
+:
 
-    `t1`
-    :
+`t1`
+:
 
-    `t2`
-    :
+`t2`
+:
 
-    `t_critical`
-    :
+`t_critical`
+:
 
-    `t_error`
-    :
+`t_error`
+:
 
-    `t_warning`
-    :
+`t_warning`
+:
+```
 
 `ct()`
-:   
+:
 
-    ### Methods
+```
+### Methods
+```
 
-    
 `group(*ls: list[typing.Any]) ‑> rich.console.Group`
-:   
+:
 
-    
 `table(cols: list[str], rows: list[list[str]])`
 :

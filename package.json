@@ -1,6 +1,6 @@
 {
     "name": "ura",
-    "version": "0.0.1-alpha.5",
+    "version": "0.0.1-beta.0",
     "description": "A Basic Urasunday Scraper",
     "main": "tmp/gui/main.js",
     "scripts": {

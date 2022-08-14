@@ -44,10 +44,9 @@ For adding new features.
     - minor
 -->
 
-- Comment in the latest commit for version bumps and comments on the latest commit (this one!)
-- pdoc .mako templates
-- Documentation of header styles
-- Support for installable modules for developer utilities (`dev/scripts/py/inst_mods/*`)
+- Added SC2045 exclusion for `dev/scripts/sh/source.sh` cuz' shellcheck do be like that.
+- Added multiple entries to `dev/constants/dictionary.txt`, cuz' spell checking.
+- Added Wakatime badge and beta testing notice on `docs/README.md`.
 
 ### **Changed**
 
@@ -57,7 +56,8 @@ For changes in existing functionality.
     - dev
 -->
 
-- Formatted `.md` and `.py` files
+- Refactored `dev/scripts/py/main.py` as `Jedi` is a fucking bitch, and whines about my match statements
+- Refactored the app for easier maintenance in anticipation of the maintenance phase of the app
 
 ### **Deprecated**
 
@@ -79,6 +79,8 @@ For removing features.
 <!--
 For any kind of fixes, formatting not included.
 -->
+
+- Codacy link on `docs/README.md` to link to the proper branch of the repository
 
 ### **Security**
 

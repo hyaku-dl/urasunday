@@ -11,14 +11,21 @@ import aiofiles
 from tqdm.asyncio import tqdm_asyncio
 
 from .base import class_usi, req, soup
-from .settings import cfg
+from .cfg import de_rcfg
 from .utils import sanitize_text
 
+# Constants
 USI = class_usi(
     {
         "ch_id": 2,
     }
 )
+
+CFG = de_rcfg()
+
+
+def get_stg(path: str, de: Any):
+    return de_rcfg().dir(path, de)
 
 
 class DownloadFailed(Exception):
@@ -122,12 +129,12 @@ class Downloader:
         if overwrite:
             self.overwrite = overwrite
         else:
-            self.overwrite = cfg("overwrite") or True
+            self.overwrite = get_stg("overwrite", True)
 
         if directory:
             self.ddir = directory
         else:
-            self.ddir = cfg("download_dir")
+            self.ddir = get_stg("download_dir")
 
     async def _dlf(self, file: list[str], n: int = 0):
         """

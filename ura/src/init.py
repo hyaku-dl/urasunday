@@ -7,8 +7,9 @@ from os.path import dirname as dn
 
 import inquirer
 
+from . import globals
+from .cfg import rcfg, wcfg
 from .globals import CFLOP, POSIX, TW
-from .settings import stg, wr_stg
 from .style import S, ct, pp
 
 if TW:
@@ -21,7 +22,7 @@ if TW:
             S.t_error("Your terminal width is well below than"),
             S.t_error("the bare minimum"),
             S.t_error(f"({TW} instead of 40 and above)"),
-            S.t_error(f"Consider resizing\n"),
+            S.t_error("Consider resizing\n"),
         ]
     else:
         if TW < 55:
@@ -30,7 +31,7 @@ if TW:
                 S.t_warning(f"recommended ({TW} instead of 55 and above)\n"),
             ]
 
-    wcd = stg(None, path.join(dn(ap(__file__)), "hc.yml"))
+    wcd = rcfg(path.join(dn(ap(__file__)), "hc.yml"))
 
     pp(
         ct.group(
@@ -44,7 +45,7 @@ if TW:
 
 
 def init(idx: int) -> None:
-    cm = stg(None, path.join(dn(ap(__file__)), "cf_tpl.mp"))
+    cm = rcfg(path.join(dn(ap(__file__)), "cf_tpl.mp"))
 
     if sys.platform == "win32":
         ddir = os.path.join(os.path.join(os.environ["USERPROFILE"]), "Desktop", "Manga")
@@ -74,16 +75,11 @@ def init(idx: int) -> None:
                 validate = True
 
     cm["download_dir"] = ddir
-    wr_stg(None, cm, CFLOP[idx])
+    globals.CFG_PATH = CFLOP[idx]
+    wcfg(CFLOP[idx], cm)
 
 
-config_path = None
-for i in CFLOP:
-    if os.path.exists(str(i)):
-        config_path = i
-        break
-
-if config_path is None:
+if globals.CFG_PATH is None:
     if POSIX:
         from . import appimage
 

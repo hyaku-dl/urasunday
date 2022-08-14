@@ -1,4 +1,5 @@
-<!-- Repository Name. Preferrably 1-5 words long. -->
+<!-- Repository Name. Preferably 1-5 words long. -->
+
 <h1 align="center" style="font-weight: bold">
     <span>ura</span>
 </h1>
@@ -21,14 +22,15 @@
     </a>
 </p>
 <p align="center">
-    <a href="https://app.codacy.com/gh/hyaku-dl/urasunday/dashboard?branch=master">
+    <a href="https://app.codacy.com/gh/hyaku-dl/urasunday/dashboard">
         <img alt="Codacy Badge" src="https://img.shields.io/codacy/grade/385ceb2d55424256a93f9ad6f8007f91?style=flat-square">
     </a>
+    <img alt="Wakatime Badge" src="https://wakatime.com/badge/github/hyaku-dl/urasunday.svg?style=flat-square">
     <a href="https://github.com/hyaku-dl/urasunday/releases">
         <img alt="GitHub release (latest by date including pre-releases)" src="https://img.shields.io/github/v/release/hyaku-dl/urasunday?include_prereleases&style=flat-square">
     </a>
     <a href="https://github.com/hyaku-dl/urasunday/releases">
-        <img alt="GitHub Workflow Status" src="https://img.shields.io/github/workflow/status/hyaku-dl/urasunday/Build?label=Build&style=flat-square">
+        <img alt="GitHub Workflow Status" src="https://img.shields.io/github/workflow/status/hyaku-dl/urasunday/Build?label=build&style=flat-square">
     </a>
 </p>
 <p align="center">
@@ -38,19 +40,20 @@
 </p>
 
 <!-- About section. Preferably 2-5 sentences long. -->
----
+
+______________________________________________________________________
 
 <h4 align="center">
 A no-nonsense, simple and easy to use scraper for urasunday.com
 </h4>
 
----
+______________________________________________________________________
 
 Github: [github.com/hyaku-dl/urasunday](https://github.com/hyaku-dl/urasunday)
 
 Website: [ura.hyaku.download](https://ura.hyaku.download)
 
----
+______________________________________________________________________
 
 Commissioned by <a target="_blank" href="https://discord.com/users/250456851890569217">@HappyPurple(Discord, Mistilteinn#4793)</a>, owner of <a target="_blank" href="https://blog.ultralight.group">Ultralight Manga Translation Group</a>.
 
@@ -59,6 +62,10 @@ Interested in commissioning projects? Inquire through Discord(<a target="_blank"
 To be updated, be sure to watch this repository and join the [Discord Support Server](https://discord.com/invite/JbAtUxGcJZ).
 
 For the terms of usage and legals, visit [LICENSE](license) and [terms of usage & disclaimer](tou_disc).
+
+## **Important**
+
+This app is currently in beta! If you can spare some time and effort, please consider testing the app and reporting the bugs you find either through [raising a new Github issue](https://github.com/hyaku-dl/urasunday/issues/new) or through [the Discord Support Server](https://discord.com/invite/JbAtUxGcJZ). Any suggestions are also welcome! Thank you to everyone who supported this app from the very beginning.
 
 ## **Downloads**
 
@@ -78,6 +85,7 @@ Follow [this link](https://github.com/hyaku-dl/urasunday/releases), and download
 - Linux
 
 <!-- Mention examples of application of this repository. -->
+
 ## **Usage**
 
 <i>
@@ -107,23 +115,26 @@ These instructions will get you a copy of the project up and running on your loc
 </i>
 
 <!-- Mention the issus and limitations of this repository. Preferably 1-5 sentences long. -->
+
 ## **Known Issues and Limitations**
 
 This application can not run at Mac OS as of now.
 
 <!-- Mention the plans for the repository. Preferably 2-5 sentences long. -->
+
 ## **Future of this project**
 
-After supporting Windows, the app will be feature-freezed and will be under maintenance mode until further notice.
+After beta testing, the app will be feature-freezed and will be under maintenance mode until further notice.
 
 <!-- License section. Leave unchanged except when updating the year, using a different license, or changing the style altogether. -->
+
 ## **License**
 
 ### <a target="_blank" href="https://choosealicense.com/licenses/mit/">MIT</a>
 
-Copyright for portions of project [ura](https://github.com/hyaku-dl/ura) are held by [whi_ne, Github account [whinee](https://github.com/whinee) owner, 2022] as part of project [hyaku](https://github.com/hyaku-dl/hyaku), by [whi_ne, Github account [whinee](https://github.com/whinee) owner, 2021-2022] as part of project [MangDL](https://github.com/MangDL/MangDL), by [whi_ne, Github account [whinee](https://github.com/whinee) owner, 2022] as part of project [YAMHL](https://github.com/Pirate-Kings/YAMHL), and by [whi_ne, Github account [whinee](https://github.com/whinee) owner, 2022] as part of project [snippets.py](https://github.com/whinee/snippets.py).
+Copyright for portions of project [ura](https://github.com/hyaku-dl/ura) are held by \[whi_ne, Github account [whinee](https://github.com/whinee) owner, 2022\] as part of project [hyaku](https://github.com/hyaku-dl/hyaku), by \[whi_ne, Github account [whinee](https://github.com/whinee) owner, 2021-2022\] as part of project [MangDL](https://github.com/MangDL/MangDL), by \[whi_ne, Github account [whinee](https://github.com/whinee) owner, 2022\] as part of project [YAMHL](https://github.com/Pirate-Kings/YAMHL), and by \[whi_ne, Github account [whinee](https://github.com/whinee) owner, 2022\] as part of project [snippets.py](https://github.com/whinee/snippets.py).
 
-All other copyright for project [ura](https://github.com/hyaku-dl/ura) are held by [Github Account [whinee](https://github.com/whinee) Owner, 2022].
+All other copyright for project [ura](https://github.com/hyaku-dl/ura) are held by \[Github Account [whinee](https://github.com/whinee) Owner, 2022\].
 
 Check the [license](license) for more details.
 

@@ -1,9 +1,6 @@
 import time
 from functools import partial
-from typing import Any
-from typing import Callable
-from typing import Callable as callable
-from typing import Dict, List, Type
+from typing import Any, Callable, Dict, List, Type
 
 import httpx
 from bs4 import BeautifulSoup
@@ -29,7 +26,7 @@ def urel_fn(url: str) -> str:
     return url
 
 
-def url_slug_idx(idx: int) -> callable[[str], str]:
+def url_slug_idx(idx: int) -> Callable[[str], str]:
     """From an index, get the slug from a URL whether it is a relative or an
     an absolute URL.
 
@@ -37,7 +34,7 @@ def url_slug_idx(idx: int) -> callable[[str], str]:
         idx (int): The index of the slug from.
 
     Returns:
-        callable[[str], str]: Method to input the URL to and get the slug.
+        Callable[[str], str]: Method to input the URL to and get the slug.
     """
 
     def _inner(url: str) -> str:

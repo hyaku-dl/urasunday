@@ -1,9 +1,6 @@
-Module ura.src.init
-===================
+# Module ura.src.init
 
-Functions
----------
+## Functions
 
-    
 `init(idx: int) ‑> None`
 :

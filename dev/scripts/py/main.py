@@ -45,7 +45,12 @@ def docs():
     main(RMDV)
 
 
+def fmt():
+    run("bash dev/scripts/sh/source.sh fmt")
+
+
 def push(v: list[int] = None):
+    fmt()
     msg = inquirer.text(message="Enter commit message", default="")
     run("git add .")
     if msg != "":
@@ -159,18 +164,16 @@ def _bump(idx: int) -> list[int]:
     """
 
     _vls = list(VLS)
-    match idx:
-        case 4:
-            match _vls[idx]:
-                case 3:
-                    _vls[3] += 1
-                    _vls[4] = _vls[5] = 0
-                case _:
-                    _vls = vlir(idx, _vls)
-                    _vls[idx] += 1
-        case _:
+    if idx == 4:
+        if _vls[idx] == 3:
+            _vls[3] += 1
+            _vls[4] = _vls[5] = 0
+        else:
             _vls = vlir(idx, _vls)
             _vls[idx] += 1
+    else:
+        _vls = vlir(idx, _vls)
+        _vls[idx] += 1
     return _vls
 
 

@@ -1,30 +1,29 @@
-Module ura.src.cli
-==================
+# Module ura.src.cli
 
-Functions
----------
+## Functions
 
-    
-`cao(group: <function group at 0x7f11864053f0>, cmd: str) ‑> List[Callable[[Callable[[Any], Any]], Callable[[Any], Any]]]`
+`cao(group: <function group at 0x7fc10f415480>, cmd: str) ‑> List[Callable[[Callable[[Any], Any]], Callable[[Any], Any]]]`
 :   Retruns wrappers for a click command evaluated from the given arguments.
-    
-    Args:
-        group (click.group): Command group of the command to be under.
-        cmd (str): Name of the command.
-    
-    Returns:
-        List[Callable[[Callable[[Any], Any]], Callable[[Any], Any]]]: The wrappers.
 
-    
-`command(group: <function group at 0x7f11864053f0>) ‑> Callable[[Callable[[Any], Any]], Callable[[Any], Any]]`
+```
+Args:
+    group (click.group): Command group of the command to be under.
+    cmd (str): Name of the command.
+
+Returns:
+    List[Callable[[Callable[[Any], Any]], Callable[[Any], Any]]]: The wrappers.
+```
+
+`command(group: <function group at 0x7fc10f415480>) ‑> Callable[[Callable[[Any], Any]], Callable[[Any], Any]]`
 :   Wrapper for click commands.
-    
-    Args:
-        group (click.group): Command group of the command to be under.
-    
-    Returns:
-        Callable[[Callable[[Any], Any]], Callable[[Any], Any]]
 
-    
+```
+Args:
+    group (click.group): Command group of the command to be under.
+
+Returns:
+    Callable[[Callable[[Any], Any]], Callable[[Any], Any]]
+```
+
 `fn_log(lvl: int)`
 :

@@ -30,3 +30,9 @@ else:
     if xch := os.getenv("XDG_CONFIG_HOME"):
         CFLOP.insert(1, f"{xch}/ura/config.yml")
     LOCALE = locale.getdefaultlocale()[0][:2]
+
+CFG_PATH = None
+for i in CFLOP:
+    if os.path.exists(str(i)):
+        CFG_PATH = i
+        break

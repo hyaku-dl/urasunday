@@ -1,26 +1,59 @@
 import ast
 import itertools
 import re
+import shlex
 import sys
 import unicodedata
 from datetime import datetime, timedelta
 from functools import lru_cache
+from os import makedirs, path
 from os.path import dirname as dn
 from os.path import realpath as rp
+from subprocess import call
 from time import strftime, strptime
 from typing import Any
 
 import arrow
 
-# https://stackoverflow.com/a/93029
-ALL_CHARS = (chr(i) for i in range(sys.maxunicode))
+# Constants
 CATEGORIES = {"Cn"}
+PR = ["alpha", "beta", "rc"]
+
+# Derived Constants
+ALL_CHARS = (chr(i) for i in range(sys.maxunicode))
 CCHARS = "".join(map(chr, itertools.chain(range(0x00, 0x20), range(0x7F, 0xA0))))
 CCHARS_RE = re.compile("[%s]" % re.escape(CCHARS))
 
+# Functions
+def inmd(p: str, ls: list[str] = None):
+    """
+    "If Not `path.isdir`, Make Directories"
 
-def sanitize_text(s: str):
-    return unicodedata.normalize("NFKD", CCHARS_RE.sub("", s)).strip()
+    Args:
+        p (str): [description]
+    """
+
+    pd = path.dirname(p)
+    if (pd) and (not path.isdir(pd)):
+        makedirs(pd)
+        if ls:
+            ls.append(pd)
+    return p
+
+
+def ivnd(var: Any, de: Any) -> Any:
+    """If Var is None, return Default else var.
+
+    Args:
+        var (Any): Variable to check if it is None.
+        de (Any): Default value to return if var is None.
+
+    Returns:
+        Any: var if var is not None else de.
+    """
+    if var is None:
+        return de
+    return var
 
 
 def dnrp(file: str, n: int = 1) -> str:
@@ -40,63 +73,6 @@ def dnrp(file: str, n: int = 1) -> str:
     return op
 
 
-def de(a: Any, d: Any) -> Any:
-    """
-    Defaults. Return a if a is True, else returns d.
-
-    Args:
-        a (Any): Object to be tested, will be returned if evaluates to True.
-        d (Any): Default object to be returned if `a` evaluates to False.
-
-    Returns:
-        Any
-    """
-    if a:
-        return a
-    else:
-        return d
-
-
-def dd(default: dict[Any, Any], d: dict[Any, Any] | None) -> dict[Any, Any]:
-    """
-    Defaults dictionary. Overwrite the items in the default dict with the
-    items in the d dict.
-
-    Args:
-        default (Dict[Any, Any]): The dict to rewrite the items to.
-        d (Union[Dict[Any, Any], None]): The dict to rewrite the items from.
-
-    Returns:
-        dict[Any, Any]
-    """
-    op = default
-    if d:
-        for a, v in d.items():
-            op[a] = v
-    return op
-
-
-def ddir(d: dict[Any, Any], dir: str, de: Any = {}) -> Any:
-    """
-    Retrieve dictionary value using recursive indexing with a string.
-    ex.:
-        `ddir({"data": {"attr": {"ch": 1}}}, "data/attr/ch")`
-        will return `1`
-
-
-    Args:
-        dict (dict): Dictionary to retrieve the value from.
-        dir (str): Directory of the value to be retrieved.
-
-    Returns:
-        op (Any): Retrieved value.
-    """
-    op = d
-    for a in dir.split("/"):
-        op = op[a]
-    return op or de
-
-
 def dpop(
     d: dict[Any, Any], pop: list[int | tuple[str | int | tuple] | str], de: Any = None
 ) -> Any:
@@ -107,7 +83,7 @@ def dpop(
 
     Args:
         d (Dict[Any, Any]): Dictionary to retrieve the value from.
-        pop (list[int | tuple[str | int | tuple]  |  str]): List of keys to
+        pop (list[int | tuple[str | int | tuple] | str]): List of keys to
             iterate through.
         de (Any, optional): Default object to be returned. Defaults to None.
 
@@ -170,18 +146,18 @@ def le(expr: str) -> Any:
     return ast.literal_eval(expr) if expr else expr
 
 
-def dnrp(file: str, n: int = 1) -> str:
-    """
-    Get the directory component of a pathname by n times recursively then return it.
-
-    Args:
-        file (str): File to get the directory of.
-        n (int, optional): Number of times to get up the directory???? Defaults to 1.
-
-    Returns:
-        op (str): The directory component got recursively by n times from the given pathname
-    """
-    op = rp(file)
-    for _ in range(n):
-        op = dn(op)
+def repl(s: str, repl_dict: dict[str, list[str]]) -> str:
+    op = s
+    for k, v in repl_dict.items():
+        for i in v:
+            op = op.replace(i, k)
     return op
+
+
+def run(s: str):
+    call(shlex.split(s))
+
+
+# https://stackoverflow.com/a/93029
+def sanitize_text(s: str):
+    return unicodedata.normalize("NFKD", CCHARS_RE.sub("", s)).strip()

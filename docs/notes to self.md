@@ -46,17 +46,17 @@ flowchart TD
 As used in the changelog, the following types of changes shall have the following implications, of which, their allowed version bumps should be everything, unless explicably stated otherwise:
 
 - `Added` for new features.
-    - user
-    - dev
-    - minor
+  - user
+  - dev
+  - minor
 - `Changed` for changes in existing functionality.
-    - user
-    - dev
+  - user
+  - dev
 - `Deprecated` for soon-to-be removed features.
-    - patch
+  - patch
 - `Removed` for now removed features.
-    - user
-    - dev
+  - user
+  - dev
 - `Fixed` for any bug fixes.
 - `Security` in case of vulnerabilities.
 

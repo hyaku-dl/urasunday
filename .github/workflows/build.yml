@@ -19,8 +19,8 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          tag_name: 0.0.0.0-alpha.5
-          release_name: ura release v0.0.0.0-alpha.5
+          tag_name: 0.0.0.0-beta.0
+          release_name: ura release v0.0.0.0-beta.0
           draft: false
           prerelease: True
   linux:
@@ -117,7 +117,7 @@ jobs:
 
           .\tmp\python\python -m pip uninstall wheel -y --no-cache-dir --disable-pip-version-check
           .\tmp\python\python -m pip install --upgrade pip --no-warn-script-location --no-cache-dir --disable-pip-version-check
-          .\tmp\python\python -m pip install  --no-warn-script-location --no-cache-dir --disable-pip-version-check -I -r requirements.txt
+          .\tmp\python\python -m pip install --no-warn-script-location --no-cache-dir --disable-pip-version-check -I -r requirements.txt
 
           python -c "from dev.scripts.py.eb import main;main('win','tmp\cfg.yml')"
           python -c "import re;F='tmp\\gui\\main.js'

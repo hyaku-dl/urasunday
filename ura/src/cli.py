@@ -9,11 +9,12 @@ from tabulate import tabulate
 
 from . import init  # type: ignore
 from . import globals
+from .cfg import rcfg
 from .download import Downloader
-from .settings import stg
 from .style import S, pp
-from .utils import dd, de, dnrp
+from .utils import dnrp
 
+# Constants
 LVLS = [
     "CRITICAL",
     "ERROR",
@@ -22,6 +23,9 @@ LVLS = [
     "DEBUG",
     "NOTSET",
 ]
+
+# Derived Constants
+CMD = rcfg(f"{dnrp(__file__)}/cmd.mp")
 
 
 def fn_log(lvl: int):
@@ -58,7 +62,7 @@ def cao(
     Returns:
         List[Callable[[Callable[[Any], Any]], Callable[[Any], Any]]]: The wrappers.
     """
-    cmd = stg(f"cmd/{cmd}", f"{dnrp(__file__)}/cmd.mp")
+    cmd = CMD.dir(f"cmd/{cmd}")
     arguments = cmd["arguments"]
 
     def c(
@@ -80,19 +84,22 @@ def cao(
                     *[None for _ in range(3 - len(v["help"]))],
                 ]
             for k, v in arguments.items():
-                t, h, e = v["help"]
+                vh = v["help"]
+                if len(vh) < 3:
+                    vh = [*vh, *[None for _ in range(3 - len(vh))]]
+                t, h, e = vh
                 e = "\nEx.: {e}" if e else ""
                 help.append([f"<{k}>", t, f"{h}{e}"])
         s, h = cmd["help"]
         return group.command(
-            *de(cmd["args"], []),
-            **dd(
+            *(cmd["args"] or []),
+            **dict(
                 {
                     "context_settings": {"help_option_names": ["-h", "--help"]},
                     "short_help": s,
                     "help": f"\b\n{h}\n{tabulate(help, tablefmt='plain')}",
                 },
-                cmd["kwargs"],
+                **(cmd["kwargs"] or {}),
             ),
         )(f)
 
@@ -111,8 +118,8 @@ def cao(
         if arguments:
             for k, v in arguments.items():
                 kw = {"metavar": f"<{k}>"}
-                args[k] = [k, *de(v["args"], [])]
-                kwargs[k] = dd(kw, v["kwargs"])
+                args[k] = [k, *(v["args"] or [])]
+                kwargs[k] = dict(kw, **(v["kwargs"] or {}))
             for i in list(args.keys()):
                 f = click.argument(*args[i], **kwargs[i])(f)
         return f
@@ -141,12 +148,15 @@ def cao(
                     *[None for _ in range(3 - len(v["help"]))],
                 ]
             for k, v in opts.items():
-                a = de(v["args"], [])
-                kw = de(v["kwargs"], {})
+                a = v["args"] or []
+                kw = v["kwargs"] or {}
                 a[0] = f"--{a[0]}"
                 a.insert(0, f"-{k}")
                 kt = kw.get("type", None)
-                t, h, e = v["help"]
+                vh = v["help"]
+                if len(vh) < 3:
+                    vh = [*vh, *[None for _ in range(3 - len(vh))]]
+                t, h, e = vh
                 t = t or ""
                 if h:
                     hls = []

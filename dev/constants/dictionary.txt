@@ -3,3 +3,11 @@ bprv
 pdoc
 vlir
 traceback
+Mistilteinn
+urasunday
+cholder
+Mysid
+Codacy
+Wakatime
+shellcheck
+whinee

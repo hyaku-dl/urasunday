@@ -1,16 +1,21 @@
-
 <h1 align="center" style="font-weight: bold">
     Latest Version Bump
 </h1>
 
-## 0.0.0.0-alpha.5
+## 0.0.0.0-beta.0
 
-Pre-release version bump. 
+Pre-release identifier bump.
 
 ### <a href="#added" id="added">Added</a>
 
-- Loading screen for app initialization
+- Icon for .AppImage distribution of that app
 
-### <a href="#fixed" id="fixed">Fixed</a>
+- Logging information to help debug the application
 
-- AppImages to be marked as AppImages (means that the config now goes on the config folder instead of the same directory as the AppImage)
+- The app now reflects changes made on the configuration file on the app
+
+### <a href="#changed" id="changed">Changed</a>
+
+- Improved loading of the app, so that when the loading page is removed, the app is totally usable
+
+- Uses parts of private project (`whinee/snippets.py`) for the configuration of the app, and others

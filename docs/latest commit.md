@@ -1,4 +1,3 @@
-
 <h1 align="center" style="font-weight: bold">
     Latest Commit
 </h1>
@@ -13,11 +12,15 @@ The documentation are also being improved.
 
 ### **Added**
 
-- Comment in the latest commit for version bumps and comments on the latest commit (this one!)
-- pdoc .mako templates
-- Documentation of header styles
-- Support for installable modules for developer utilities (`dev/scripts/py/inst_mods/*`)
+- Added SC2045 exclusion for `dev/scripts/sh/source.sh` cuz' shellcheck do be like that.
+- Added multiple entries to `dev/constants/dictionary.txt`, cuz' spell checking.
+- Added Wakatime badge and beta testing notice on `docs/README.md`.
 
 ### **Changed**
 
-- Formatted `.md` and `.py` files
+- Refactored `dev/scripts/py/main.py` as `Jedi` is a fucking bitch, and whines about my match statements
+- Refactored the app for easier maintenance in anticipation of the maintenance phase of the app
+
+### **Fixed**
+
+- Codacy link on `docs/README.md` to link to the proper branch of the repository

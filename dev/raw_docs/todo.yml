@@ -16,12 +16,12 @@
 4:
   0:
     - Auto-update
+  1:
     - |-
       Detect the windows boot drive, for ura to be installed at.
       Currently, ura will be installed at Drive C:.
-  1:
 5:
   0:
-    - GUI
     - Update script
   1:
+    - GUI

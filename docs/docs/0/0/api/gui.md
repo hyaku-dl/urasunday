@@ -1,37 +1,36 @@
-Module ura.gui
-==============
+# Module ura.gui
 
-Functions
----------
+## Functions
 
-    
 `connect(sid, environ)`
-:   
+:
 
-    
 `connect_error(data)`
-:   
+:
 
-    
 `disconnect(sid)`
-:   
+:
 
-Classes
--------
+`texc(func: Callable[[Any], Any]) ‑> Callable[[Any], Any]`
+:
 
-`Exp()`
-:   
+## Classes
 
-    ### Methods
+`Expose()`
+:
 
-    
-`config(sid, *args, **kwargs)`
-:   
+```
+### Methods
+```
 
-    
-`dl(sid, url)`
-:   
+`cfg_path(*args, **kwargs)`
+:
 
-    
-`write_config(sid, stg, value)`
+`config(*args, **kwargs)`
+:
+
+`dl(*args, **kwargs)`
+:
+
+`write_config(*args, **kwargs)`
 :

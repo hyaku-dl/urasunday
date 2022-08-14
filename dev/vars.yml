@@ -117,6 +117,7 @@ build:
       synopsis: A Basic Urasunday Scraper
       description: A no-nonsense, simple and easy to use scraper for urasunday.com
       category: Graphics
+    icon: docs/assets/images/icons/icon.png
     files:
       - filter:
           - node_modules/**/*

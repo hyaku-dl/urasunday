@@ -1,2 +1,1 @@
-Module ura.src.globals
-======================
+# Module ura.src.globals

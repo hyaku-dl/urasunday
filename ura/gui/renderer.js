@@ -1,9 +1,17 @@
+window.addEventListener("error", errorLog);
+
 // Imports
 const { ipcRenderer } = require('electron')
 const { io } = require("socket.io-client");
+const fs = require('fs');
 
 // Constants
 const modals = ["stg", "info"]
+
+// Modal Functions
+Date.prototype.timeNow = function () {
+    return ((this.getHours() < 10) ? "0" : "") + this.getHours() + ":" + ((this.getMinutes() < 10) ? "0" : "") + this.getMinutes() + ":" + ((this.getSeconds() < 10) ? "0" : "") + this.getSeconds() + "." + ((this.getMilliseconds() < 10) ? "00" : ((this.getMilliseconds() < 100) ? "0" : "")) + this.getMilliseconds();
+}
 
 // Document Selectors
 const eraseBtn = document.querySelector('#erase-input');
@@ -37,14 +45,53 @@ for (let i of modals) {
 
 // Derived Constants
 const socket = io("http://0.0.0.0:9173");
-socket.emit('config', null, (err, res) => {
-    console.log(err);
-    console.log(res);
-    ddir.textContent = res.download_dir;
-    owTgl.checked = res.overwrite;
-})
 
 // Functions
+function log(...args) {
+    ipcRenderer.send("log", ...args);
+    console.log(...args);
+}
+
+function errorLog(event) {
+    let msg = source = lineno = colno = error = time = "";
+    msg = event.message;
+    source = event.filename;
+    lineno = event.lineno;
+    colno = event.colno;
+    error = event.error;
+    time = event.time;
+
+    log(`Script Error was Found
+    Message: ${msg}
+    Source Info: ${source}
+    Line No: ${lineno}
+    Column No: ${colno}
+    Error Info: ${error}`)
+}
+
+function emit(eventName, ...args) {
+    callback = args.pop(-1);
+    function opCallback(err, res) {
+        log(`${eventName} (err): ${err}`);
+        if (res != null && res.constructor == Object) {
+            logRes = JSON.stringify(res);
+        } else {
+            logRes = res;
+        }
+        log(`${eventName} (res): ${logRes}`);
+        log(args)
+        callback(err, res);
+    }
+    socket.emit(eventName, ...args, opCallback);
+}
+
+function updateConfig() {
+    emit('config', null, (err, res) => {
+        ddir.textContent = res.download_dir;
+        owTgl.checked = res.overwrite;
+    })
+}
+
 function fadeOut(el) {
     el.style.opacity = 0;
 };
@@ -184,9 +231,7 @@ function toast({ title = "", message = "", type = "info", duration = 3000 }) {
 input.addEventListener('input', inputFn);
 eraseBtn.addEventListener('click', eraseInput);
 owTgl.addEventListener('change', () => {
-    socket.emit('write_config', stg = "overwrite", value = owTgl.checked, (err, res) => {
-        console.log(err);
-        console.log(res);
+    emit('write_config', stg = "overwrite", value = owTgl.checked, (err, res) => {
         if (err) {
             var title = "Settings updated"
             var message = `${owTgl.checked ? "Enabled" : "Disabled"} overwrite successfully`
@@ -204,10 +249,9 @@ owTgl.addEventListener('change', () => {
         });
     });
 });
+
 dlBtn.addEventListener('click', () => {
-    socket.emit('dl', url = input.value, (err, res) => {
-        console.log(err);
-        console.log(res);
+    emit('dl', url = input.value, (err, res) => {
         if (err) {
             var title = "Settings updated"
             var message = `Sucessfully downloaded "${input.value}" to "${res}"`
@@ -229,11 +273,13 @@ dlBtn.addEventListener('click', () => {
 cdir.addEventListener('click', function () { ipcRenderer.send("cds") })
 
 // IPC Listeners
+ipcRenderer.on('logPath', function (event, path) {
+    window.logPath = path;
+    log("Log Path:", path);
+});
 ipcRenderer.on('cdr', function (event, cdr) {
     ddir.textContent = cdr;
-    socket.emit('write_config', stg = "download_dir", value = cdr, (err, res) => {
-        console.log(err);
-        console.log(res);
+    emit('write_config', stg = "download_dir", value = cdr, (err, res) => {
         if (err) {
             var title = "Settings updated"
             var message = `Sucessfully updated the Download directory to "${cdr}"`
@@ -251,3 +297,15 @@ ipcRenderer.on('cdr', function (event, cdr) {
         });
     });
 });
+
+emit('cfg_path', null, (err, res) => {
+    log(res);
+    fs.watchFile(res, () => {
+        updateConfig();
+    });
+})
+
+// Initialize
+
+updateConfig();
+ipcRenderer.send("logPath");

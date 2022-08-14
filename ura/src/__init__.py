@@ -1,4 +1,4 @@
-__version__ = "0.0.0.0-alpha.5"
-hver = "0.0.1-alpha.5"
-vls = [0, 0, 0, 0, 0, 5]
+__version__ = "0.0.0.0-beta.0"
+hver = "0.0.1-beta.0"
+vls = [0, 0, 0, 0, 1, 0]
 appimage = False

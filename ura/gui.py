@@ -1,11 +1,13 @@
 import traceback
+from typing import Any, Callable
 
 import eventlet
 import socketio
 
 from .src import init  # type: ignore
+from .src.cfg import de_rcfg, de_wcfg
 from .src.download import Downloader
-from .src.settings import cfg, wr_cfg
+from .src.globals import CFG_PATH
 
 sio = socketio.Server()
 app = socketio.WSGIApp(sio)
@@ -13,42 +15,58 @@ app = socketio.WSGIApp(sio)
 
 @sio.event
 def connect(sid, environ):
-    print("connect ", sid)
+    print("c0VjUmVUX2NPZEUgYnkgd2hpX25l: Connected")
 
 
 @sio.event
 def connect_error(data):
-    print("The connection failed!")
+    print("Connection failed.")
 
 
 @sio.event
 def disconnect(sid):
-    print("disconnect ", sid)
+    print("Disconnected")
 
 
-class Exp:
-    def config(sid, *args, **kwargs):
+def texc(func: Callable[[Any], Any]) -> Callable[[Any], Any]:
+    def inner(*args, **kwargs):
         try:
-            return True, cfg(None)
-        except Exception:
-            return False, traceback.format_exc()
+            return func(*args, **kwargs)
+        except Exception as e:
+            return False, "\n    ".join(traceback.format_exc().split("\n"))
 
+    return inner
+
+
+class Expose:
+    @texc
+    def cfg_path(*args, **kwargs):
+        return True, CFG_PATH
+
+    @texc
+    def config(*args, **kwargs):
+        return True, de_rcfg()
+
+    @texc
     def write_config(sid, stg, value):
-        try:
-            wr_cfg(stg, value)
-            return True, None
-        except Exception:
-            return False, traceback.format_exc()
+        op = de_rcfg()
+        op.modify(stg, value)
+        de_wcfg(op)
+        return True, None
 
+    @texc
     def dl(sid, url):
-        try:
-            return True, Downloader().dlch(url)
-        except Exception:
-            return False, traceback.format_exc()
+        return True, Downloader().dlch(url)
 
 
-for i in [f for f in dir(Exp) if callable(getattr(Exp, f)) and not f.startswith("__")]:
-    sio.on(i, getattr(Exp, i))
+expose = []
+
+for i in dir(Expose):
+    if callable(getattr(Expose, i)) and not i.startswith("__"):
+        expose.append(i)
+
+for i in expose:
+    sio.on(i, getattr(Expose, i))
 
 if __name__ == "__main__":
     eventlet.wsgi.server(eventlet.listen(("", 9173)), app)

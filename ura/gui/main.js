@@ -2,8 +2,11 @@
 const { app, BrowserWindow, dialog, ipcMain } = require("electron");
 const { PythonShell } = require('python-shell');
 const path = require("path");
+const EventEmitter = require('events');
+const fs = require('fs');
 
 // Constants
+const secretRe = /c0VjUmVUX2NPZEUgYnkgd2hpX25l: (.+)/msg;
 const pythonPath = ""
 const scriptPath = "ura"
 const po = {
@@ -14,19 +17,37 @@ const po = {
     args: []
 };
 
+// Modal Functions
+Date.prototype.timeNow = function () {
+    return ((this.getHours() < 10) ? "0" : "") + this.getHours() + ":" + ((this.getMinutes() < 10) ? "0" : "") + this.getMinutes() + ":" + ((this.getSeconds() < 10) ? "0" : "") + this.getSeconds() + "." + ((this.getMilliseconds() < 10) ? "00" : ((this.getMilliseconds() < 100) ? "0" : "")) + this.getMilliseconds();
+}
+
 // Derived Constants
 const env = process.env.NODE_ENV || "production";
-
-// Python Init
+const loadingEvents = new EventEmitter()
+const userDataPath = app.getPath('userData')
+const logPath = path.join(userDataPath, 'log.txt');
+const myConsole = new console.Console(fs.createWriteStream(logPath));
 const pyshell = new PythonShell('gui.py', po);
-pyshell.on('message', function (message) {
-    console.log(message);
-});
-pyshell.on('stderr', function (stderr) {
-    console.log(stderr);
-});
 
+// Variable Init
+var init = false;
+
+// Functions
+
+function log(...args) {
+    let ts = new Date().timeNow();
+    console.log(...args)
+    myConsole.log(`[${ts}]`, ...args)
+}
+
+function quit() {
+    pyshell.childProcess.kill('SIGINT');
+}
+
+// App Init
 app.whenReady().then(() => {
+    // Init
     const mainWindow = new BrowserWindow({
         width: 800,
         height: 600,
@@ -41,7 +62,12 @@ app.whenReady().then(() => {
 
     mainWindow.loadFile(path.join(__dirname, "loading.html"));
 
-    mainWindow.once('ready-to-show', () => {
+    if (env === 'development') {
+        mainWindow.webContents.openDevTools()
+    }
+
+    // Event Listeners
+    loadingEvents.on('finished', () => {
         mainWindow.loadFile(path.join(__dirname, "index.html"));
     })
 
@@ -50,9 +76,9 @@ app.whenReady().then(() => {
         require('electron').shell.openExternal(url);
     })
 
-    if (env === 'development') {
-        mainWindow.webContents.openDevTools()
-    }
+    ipcMain.on('logPath', function (event, arg) {
+        event.sender.send('logPath', logPath);
+    });
 
     ipcMain.on('cds', function (event, arg) {
         dialog.showOpenDialog(mainWindow, {
@@ -62,19 +88,31 @@ app.whenReady().then(() => {
                 event.sender.send('cdr', result.filePaths[0]);
             }
         }).catch(err => {
-            console.log(err)
+            log(err)
         })
     });
-
-    mainWindow.once('ready-to-show', () => {
-        mainWindow.show()
-    })
 });
 
-function quit() {
-    pyshell.childProcess.kill('SIGINT');
-}
+// Event Listeners
+/// Python Shell
+pyshell.on('message', function (message) {
+    if (init == false) {
+        var m = secretRe.exec(message)
+        if (m !== null && m[1] === "Connected") {
+            init = true;
+            loadingEvents.emit('finished')
+            log(m[1]);
+            return;
+        }
+    }
+    log(message);
+});
 
+pyshell.on('stderr', function (stderr) {
+    log(stderr);
+});
+
+/// Electron
 app.on("window-all-closed", function () {
     quit();
     app.quit();
@@ -83,4 +121,9 @@ app.on("window-all-closed", function () {
 app.on("quit", function () {
     quit();
     app.quit();
+});
+
+/// IPC
+ipcMain.on('log', function (event, ...args) {
+    log(...args)
 });
