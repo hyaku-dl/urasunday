@@ -6,7 +6,7 @@ import inquirer
 
 from . import scripts
 from .cfg import rcfg, wcfg
-from .md_vars import GLOBAL, VYML
+from .md_vars import RMDV, VYML
 from .schema import Config
 from .utils import run
 
@@ -24,6 +24,7 @@ DE_PUSH_MSG = "For info, check `docs/latest commit.md` or this commit's comments
 PUSH_CMD = 'git commit -am "{}"'
 
 # Derived Constants
+GLOBAL = RMDV["md_vars"]["global"]
 VLS_STR_RE = re.compile(r"^(((0|[1-9][0-9]*) ){4}([0-2] (0|[1-9][0-9]*)|3 0))$")
 VLS = VYML["ls"]
 META_YML = rcfg(path.join("dev/constants", *[str(_) for _ in VLS[0:2]], "_meta.yml"))
@@ -39,10 +40,18 @@ def cc():
     cf_tpl = rcfg(path.join("dev/constants", *[str(_) for _ in VLS[0:2]], "config.yml"))
     Config(cf_tpl["version"])(cf_tpl["config"])
 
+    init_file = "ura/src/__init__.py"
+    with open(init_file, "r") as f:
+        op = f.read()
+    with open(init_file, "w") as f:
+        f.write(re.sub(r'(cholder = """)(.*?)(?="""|$)', f'$1{GLOBAL["cholder"]}', op))
+
 
 def docs():
     from .docs import main
     from .md_vars import RMDV
+
+    scripts.main()
 
     main(RMDV)
 
@@ -52,6 +61,7 @@ def fmt():
 
 
 def push(v: list[int] = None):
+    cc()
     msg = inquirer.text(message="Enter commit message", default="")
     run("git add .")
     if msg == "":
@@ -215,8 +225,8 @@ def bump():
                 pass
 
 
-def main():
-    match inquirer.list_input(
+def main(choice: str = None):
+    match choice or inquirer.list_input(
         message="What action do you want to take",
         choices=[
             ["Copy constants", "cc"],
@@ -230,17 +240,17 @@ def main():
         case "cc":
             cc()
         case "docs":
+            pp = inquirer.confirm("Do you want to push this to github?", default=False)
             docs()
-            if inquirer.confirm("Do you want to push this to github?", default=False):
+            if pp:
                 push()
         case "gh":
-            cc()
-            scripts.main()
             docs()
             push()
         case "gs":
             scripts.main()
         case "bump":
+            docs()
             bump()
         case "set_ver":
             inquirer.text(

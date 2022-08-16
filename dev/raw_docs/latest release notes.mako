@@ -42,6 +42,7 @@
     vb = vbls[0]
     ver, desc, tls = vb
     vls = ver.split(" ")
+    ver_str = rv(vls)
     anchor = ver.replace(" ", "-")
     desc = desc.strip()
 
@@ -53,19 +54,17 @@
 
     if len(vbls) != 1:
         comp = f"{compare(vbls[1][0].split(), vls)}. "
-    ver_str = rv(vls)
 
     if (desc != "") or (comp != ""):
-        md_op += f'{comp}{desc}'
+        md_op += f'## **Description**\n\n{comp}{desc}'
     else:
         md_op += ''
     for t, chls in changes.items():
-        href = t.lower()
-        md_op += f'\n\n## <a href="#{href}" id="{href}">{t}</a>\n'
+        href = f'{anchor}-{t.lower()}'
+        md_op += f'\n\n## **<a href="#{href}" id="{href}">{t}</a>**\n'
         for ch in chls:
             md_op += f'\n- {ch}'
-%>
-<h1 align="center" style="font-weight: bold">
+%><h1 align="center" style="font-weight: bold">
     ${ver_str}
 </h1>
 

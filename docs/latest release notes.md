@@ -1,19 +1,19 @@
 <h1 align="center" style="font-weight: bold">
-    0.0.0.0-beta.0
+    0.0.0.0-beta.1
 </h1>
 
-Pre-release identifier bump.
+## **Description**
 
-## <a href="#added" id="added">Added</a>
+Pre-release version bump.
 
-- Icon for .AppImage distribution of that app
+## **<a href="#0-0-0-0-1-1-added" id="0-0-0-0-1-1-added">Added</a>**
 
-- Logging information to help debug the application
+- Dynamic version and copyright information
 
-- The app now reflects changes made on the configuration file on the app
+## **<a href="#0-0-0-0-1-1-changed" id="0-0-0-0-1-1-changed">Changed</a>**
 
-## <a href="#changed" id="changed">Changed</a>
+- Improved logging
 
-- Improved loading of the app, so that when the loading page is removed, the app is totally usable
+## **<a href="#0-0-0-0-1-1-fixed" id="0-0-0-0-1-1-fixed">Fixed</a>**
 
-- Uses parts of private project (`whinee/snippets.py`) for the configuration of the app, and others
+- Incorrect python library importing that causes the app to crash outright

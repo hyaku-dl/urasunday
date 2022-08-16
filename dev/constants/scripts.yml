@@ -53,6 +53,13 @@ scripts:
           steps:
             - name: Checkout
               uses: actions/checkout@master
+            - name: Python${python_ver}
+              uses: actions/setup-python@v1
+              with:
+                python-version: "${python_ver}"
+            - name: Build markdown
+              run: |-
+                python "dev/scripts/py/rn_md.py"
             - name: Create Release
               id: create_release
               uses: actions/create-release@v1
@@ -61,7 +68,7 @@ scripts:
               with:
                 tag_name: ${ver}
                 release_name: ${project_name} release v${ver}
-                body_path: docs/latest bump.md
+                body_path: .md
                 draft: false
                 prerelease: ${prerel}
         linux:
@@ -77,10 +84,11 @@ scripts:
                 python-version: "${python_ver}"
             - name: Build
               run: |-
+                NODE_ENV=production &&
                 (
                   yarn &
                   python -m pip install -r dev/constants/req.txt &
-                  # rm -rf dist/ tmp/ &
+                  ( [ "$NODE_ENV" = "development" ] && rm -rf dist/ tmp/ ) &
                   wait
                 ) &&
                 mkdir tmp/ &&
@@ -98,8 +106,8 @@ scripts:
                     python -c "import re
                 F='tmp/gui/main.js'
                 with open(F,'r') as f:i=f.read()
-                i=re.sub(r'const scriptPath.+',f'const scriptPath = path.join(__dirname, \'../\')',i)
-                with open(F,'w') as f:f.write(re.sub(r'const pythonPath.+',f'const pythonPath = path.join(__dirname, \'../python/opt/python${python_ver}/bin/python${python_ver}\')',i))" &
+                i=re.sub(r'const scriptPath.+',f'const scriptPath = path.join(__dirname, \\'../\\')',i)
+                with open(F,'w') as f:f.write(re.sub(r'const pythonPath.+',f'const pythonPath = path.join(__dirname, \\'../python/opt/python${python_ver}/bin/python${python_ver}\\')',i))" &
                     ./tmp/python/usr/bin/pip3 install --upgrade pip --no-warn-script-location --no-cache-dir --disable-pip-version-check &
                     ./tmp/python/usr/bin/pip3 uninstall wheel -y --no-cache-dir --disable-pip-version-check &
                     wait

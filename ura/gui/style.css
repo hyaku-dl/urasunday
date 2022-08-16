@@ -192,6 +192,10 @@ html {
     margin: 5px 0;
 }
 
+.mw>h3 {
+    margin-top: 16px;
+}
+
 .is-show {
     visibility: visible;
     display: block;

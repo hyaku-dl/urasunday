@@ -132,9 +132,20 @@ After beta testing, the app will be feature-freezed and will be under maintenanc
 
 ### <a target="_blank" href="https://choosealicense.com/licenses/mit/">MIT</a>
 
-Copyright for portions of project [ura](https://github.com/hyaku-dl/ura) are held by \[whi_ne, Github account [whinee](https://github.com/whinee) owner, 2022\] as part of project [hyaku](https://github.com/hyaku-dl/hyaku), by \[whi_ne, Github account [whinee](https://github.com/whinee) owner, 2021-2022\] as part of project [MangDL](https://github.com/MangDL/MangDL), by \[whi_ne, Github account [whinee](https://github.com/whinee) owner, 2022\] as part of project [YAMHL](https://github.com/Pirate-Kings/YAMHL), and by \[whi_ne, Github account [whinee](https://github.com/whinee) owner, 2022\] as part of project [snippets.py](https://github.com/whinee/snippets.py).
+Copyright for portions of project <a target=_blank
+href="https://github.com/hyaku-dl/ura">ura</a> are held by \[whi_ne, Github account <a target=_blank
+href="https://github.com/whinee">whinee</a> owner, 2022\] as part of project
+<a target=_blank href="https://github.com/hyaku-dl/hyaku">hyaku</a>, by \[whi_ne, Github account <a target=_blank
+href="https://github.com/whinee">whinee</a> owner, 2021-2022\] as part of project
+<a target=_blank href="https://github.com/MangDL/MangDL">MangDL</a>, by \[whi_ne, Github account <a target=_blank
+href="https://github.com/whinee">whinee</a> owner, 2022\] as part of project
+<a target=_blank href="https://github.com/Pirate-Kings/YAMHL">YAMHL</a>, and by \[whi_ne, Github account <a target=_blank
+href="https://github.com/whinee">whinee</a> owner, 2022\] as part of project
+<a target=_blank href="https://github.com/whinee/snippets.py">snippets.py</a>.
 
-All other copyright for project [ura](https://github.com/hyaku-dl/ura) are held by \[Github Account [whinee](https://github.com/whinee) Owner, 2022\].
+All other copyright for project <a target=_blank
+href="https://github.com/hyaku-dl/ura">ura</a> are held by \[Github
+Account <a target=_blank href="https://github.com/whinee">whinee</a> Owner, 2022\].
 
 Check the [license](license) for more details.
 

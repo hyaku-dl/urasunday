@@ -27,7 +27,6 @@ const env = process.env.NODE_ENV || "production";
 const loadingEvents = new EventEmitter()
 const userDataPath = app.getPath('userData')
 const logPath = path.join(userDataPath, 'log.txt');
-const myConsole = new console.Console(fs.createWriteStream(logPath));
 const pyshell = new PythonShell('gui.py', po);
 
 // Variable Init
@@ -36,9 +35,7 @@ var init = false;
 // Functions
 
 function log(...args) {
-    let ts = new Date().timeNow();
     console.log(...args)
-    myConsole.log(`[${ts}]`, ...args)
 }
 
 function quit() {
@@ -121,9 +118,4 @@ app.on("window-all-closed", function () {
 app.on("quit", function () {
     quit();
     app.quit();
-});
-
-/// IPC
-ipcMain.on('log', function (event, ...args) {
-    log(...args)
 });

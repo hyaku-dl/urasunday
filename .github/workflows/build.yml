@@ -15,15 +15,22 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@master
+      - name: Python3.10
+        uses: actions/setup-python@v1
+        with:
+          python-version: "3.10"
+      - name: Build markdown
+        run: |-
+          python "dev/scripts/py/rn_md.py"
       - name: Create Release
         id: create_release
         uses: actions/create-release@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          tag_name: 0.0.0.0-beta.0
-          release_name: ura release v0.0.0.0-beta.0
-          body_path: docs/latest bump.md
+          tag_name: 0.0.0.0-beta.1
+          release_name: ura release v0.0.0.0-beta.1
+          body_path: .md
           draft: false
           prerelease: True
   linux:
@@ -39,10 +46,11 @@ jobs:
           python-version: "3.10"
       - name: Build
         run: |-
+          NODE_ENV=production &&
           (
             yarn &
             python -m pip install -r dev/constants/req.txt &
-            # rm -rf dist/ tmp/ &
+            ( [ "$NODE_ENV" = "development" ] && rm -rf dist/ tmp/ ) &
             wait
           ) &&
           mkdir tmp/ &&
@@ -60,8 +68,8 @@ jobs:
               python -c "import re
           F='tmp/gui/main.js'
           with open(F,'r') as f:i=f.read()
-          i=re.sub(r'const scriptPath.+',f'const scriptPath = path.join(__dirname, \'../\')',i)
-          with open(F,'w') as f:f.write(re.sub(r'const pythonPath.+',f'const pythonPath = path.join(__dirname, \'../python/opt/python3.10/bin/python3.10\')',i))" &
+          i=re.sub(r'const scriptPath.+',f'const scriptPath = path.join(__dirname, \\'../\\')',i)
+          with open(F,'w') as f:f.write(re.sub(r'const pythonPath.+',f'const pythonPath = path.join(__dirname, \\'../python/opt/python3.10/bin/python3.10\\')',i))" &
               ./tmp/python/usr/bin/pip3 install --upgrade pip --no-warn-script-location --no-cache-dir --disable-pip-version-check &
               ./tmp/python/usr/bin/pip3 uninstall wheel -y --no-cache-dir --disable-pip-version-check &
               wait

@@ -58,7 +58,7 @@
         comp = ""
         if (idx + 1) != len(vls_ls):
             comp = f"{compare(vls_ls[idx+1], vls_ls[idx])}. "
-        md_op += f'\n\n## <a href="#{href}" id="{href}">{k}</a>'
+        md_op += f'\n\n## **<a href="#{href}" id="{href}">{k}</a>**'
         desc = v.get("desc", "")
         if (desc != "") or (comp != ""):
             md_op += f'\n\n{comp}{desc}'
@@ -66,7 +66,7 @@
             md_op += ''
         for t, chls in v["changes"].items():
             href = f'{v["anchor"]}-{t.lower()}'
-            md_op += f'\n\n### <a href="#{href}" id="{href}">{t}</a>\n'
+            md_op += f'\n\n### **<a href="#{href}" id="{href}">{t}</a>**\n'
             for ch in chls:
                 md_op += f'\n- {ch}'
 %>

@@ -11,3 +11,5 @@ Codacy
 Wakatime
 shellcheck
 whinee
+MangDL
+YAMHL

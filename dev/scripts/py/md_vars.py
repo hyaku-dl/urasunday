@@ -6,6 +6,20 @@ from .cfg import rcfg
 icons = ["issues", "forks", "stars", "contributors", "license", "code"]
 langs = ["python", "html", "yaml"]
 
+OP_CHOLDER_TPL = """by [{cholder}, Github account <a target=_blank
+href="https://github.com/{user}">{user}</a> owner, {year}] as part of project
+<a target=_blank href="https://github.com/{org}/{project}">{project}</a>"""
+
+M_CHOLDER_TPL = """Copyright for portions of project <a target=_blank
+href="https://github.com/{org}/{project}">{project}</a> are held {mc}.
+
+All other copyright for project <a target=_blank
+href="https://github.com/{org}/{project}">{project}</a> are held by [Github
+Account <a target=_blank href="https://github.com/{user}">{user}</a> Owner, {year}]."""
+
+S_CHOLDER_TPL = """Copyright (c) {year} Github Account <a target=_blank
+href="https://github.com/{user}">{user}<a> Owner"""
+
 
 def b64(name: str):
     with open(f"./docs/assets/images/icons/{name}", "rb") as f:
@@ -24,23 +38,30 @@ PN = GLOBAL["project_name"]
 ORG = GLOBAL["organization"]
 USER = GLOBAL["user"]
 
-if (copyright := []) == []:
+copyright = []
+
+if LICENSE["cholder"]:
     for c, mp in LICENSE["cholder"].items():
         user = mp["user"]
         for org, projects in mp["projects"].items():
             for project, pm in projects.items():
                 copyright.append(
-                    f"by [{c}, Github account [{user}](https://github.com/{user}) owner, {pm['year']}] as part of project [{project}](https://github.com/{org}/{project})"
+                    OP_CHOLDER_TPL.format(
+                        cholder=c,
+                        org=org,
+                        project=project,
+                        user=user,
+                        year=pm["year"],
+                    )
                 )
     if len(copyright) > 1:
         copyright[-2] += f", and {copyright[-1]}"
         del copyright[-1]
-    cholder = f"""Copyright for portions of project [{PN}](https://github.com/{ORG}/{PN}) are held {', '.join(copyright)}.\n
-All other copyright for project [{PN}](https://github.com/{ORG}/{PN}) are held by [Github Account [{USER}](https://github.com/{USER}) Owner, {LICENSE['year']}]."""
-else:
-    cholder = (
-        f"Copyright (c) 2021 Github Account [{PN}](https://github.com/{USER}) Owner"
+    cholder = M_CHOLDER_TPL.format(
+        mc=", ".join(copyright), org=ORG, project=PN, user=USER, year=LICENSE["year"]
     )
+else:
+    cholder = S_CHOLDER_TPL.format(user=USER, year=LICENSE["year"])
 
 MD_VARS["global"] = {
     **GLOBAL,

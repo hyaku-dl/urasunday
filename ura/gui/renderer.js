@@ -8,21 +8,24 @@ const fs = require('fs');
 // Constants
 const modals = ["stg", "info"]
 
-// Modal Functions
+// Derived Constants
 Date.prototype.timeNow = function () {
     return ((this.getHours() < 10) ? "0" : "") + this.getHours() + ":" + ((this.getMinutes() < 10) ? "0" : "") + this.getMinutes() + ":" + ((this.getSeconds() < 10) ? "0" : "") + this.getSeconds() + "." + ((this.getMilliseconds() < 10) ? "00" : ((this.getMilliseconds() < 100) ? "0" : "")) + this.getMilliseconds();
 }
 
 // Document Selectors
-const eraseBtn = document.querySelector('#erase-input');
-const dlBtn = document.querySelector('#dl-btn');
-const input = document.querySelector('#input');
-const ddir = document.querySelector("#ddir");
-const cdir = document.querySelector("#cdir");
-const owTgl = document.querySelector('#ow-tgl');
-const modalArea = document.getElementById('modalArea');
+const cdir = document.getElementById('cdir');
+const cholder = document.getElementById('cholder');
 const closeModal = document.getElementById('closeModal');
+const ddir = document.getElementById('ddir');
+const dlBtn = document.getElementById('dl-btn');
+const eraseBtn = document.getElementById('erase-input');
+const input = document.getElementById('input');
+const logPathElem = document.getElementById('logPath');
+const modalArea = document.getElementById('modalArea');
 const modalBg = document.getElementById('modalBg');
+const owTgl = document.getElementById('ow-tgl');
+const version = document.getElementById('version');
 
 for (let i of modals) {
     const iBtn = document.getElementById(`${i}Btn`);
@@ -47,9 +50,13 @@ for (let i of modals) {
 const socket = io("http://0.0.0.0:9173");
 
 // Functions
-function log(...args) {
-    ipcRenderer.send("log", ...args);
-    console.log(...args);
+function emit(...args) {
+    socket.emit(...args);
+}
+
+function log(name, ...args) {
+    console.log(`${name}:`, ...args);
+    emit("log", name, args);
 }
 
 function errorLog(event) {
@@ -61,29 +68,15 @@ function errorLog(event) {
     error = event.error;
     time = event.time;
 
-    log(`Script Error was Found
+    emit(
+        "log",
+        `Script Error was Found
     Message: ${msg}
     Source Info: ${source}
     Line No: ${lineno}
     Column No: ${colno}
-    Error Info: ${error}`)
-}
-
-function emit(eventName, ...args) {
-    callback = args.pop(-1);
-    function opCallback(err, res) {
-        log(`${eventName} (err): ${err}`);
-        if (res != null && res.constructor == Object) {
-            logRes = JSON.stringify(res);
-        } else {
-            logRes = res;
-        }
-        log(`${eventName} (res): ${logRes}`);
-        log(args)
-        callback(err, res);
-    }
-    socket.emit(eventName, ...args, opCallback);
-}
+    Error Info: ${error}`
+);}
 
 function updateConfig() {
     emit('config', null, (err, res) => {
@@ -275,7 +268,19 @@ cdir.addEventListener('click', function () { ipcRenderer.send("cds") })
 // IPC Listeners
 ipcRenderer.on('logPath', function (event, path) {
     window.logPath = path;
-    log("Log Path:", path);
+    logPathElem.innerText = path;
+    emit("log_path", path);
+    log("logPath", `Log Path: ${path}`);
+
+    emit('info', null, (err, res) => {
+        cholder.innerHTML = res['cholder'];
+        version.innerHTML = res['version'];
+        fs.watchFile(res['cfg_path'], () => {
+            updateConfig();
+        });
+
+        updateConfig();
+    })
 });
 ipcRenderer.on('cdr', function (event, cdr) {
     ddir.textContent = cdr;
@@ -298,14 +303,5 @@ ipcRenderer.on('cdr', function (event, cdr) {
     });
 });
 
-emit('cfg_path', null, (err, res) => {
-    log(res);
-    fs.watchFile(res, () => {
-        updateConfig();
-    });
-})
-
 // Initialize
-
-updateConfig();
 ipcRenderer.send("logPath");
