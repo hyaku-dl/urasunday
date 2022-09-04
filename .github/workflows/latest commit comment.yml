@@ -3,7 +3,7 @@ name: Latest Commit Comment
 on:
   push:
     paths:
-      - dev/raw_docs/latest commit.mmd
+      - dev/raw_docs/latest-commit.mmd
   workflow_dispatch:
 
 jobs:
@@ -15,7 +15,7 @@ jobs:
         uses: actions/checkout@master
       - id: get-comment-body
         run: |
-          body=$(cat "docs/latest commit.md")
+          body=$(cat "docs/latest-commit.md")
           body="${body//'%'/'%25'}"
           body="${body//$'\n'/'%0A'}"
           body="${body//$'\r'/'%0D'}"

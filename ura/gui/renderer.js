@@ -269,9 +269,8 @@ cdir.addEventListener('click', function () { ipcRenderer.send("cds") })
 ipcRenderer.on('logPath', function (event, path) {
     window.logPath = path;
     logPathElem.innerText = path;
+    console.log(`Log Path:`, path);
     emit("log_path", path);
-    log("logPath", `Log Path: ${path}`);
-
     emit('info', null, (err, res) => {
         cholder.innerHTML = res['cholder'];
         version.innerHTML = res['version'];

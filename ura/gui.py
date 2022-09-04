@@ -1,4 +1,3 @@
-import inspect
 import traceback
 from datetime import datetime
 from typing import Any, Callable
@@ -7,13 +6,12 @@ import eventlet
 import socketio
 
 try:
-    from src import init  # type: ignore
     from src import __version__, cholder
     from src.cfg import de_rcfg, de_wcfg
     from src.download import Downloader
     from src.globals import CFG_PATH
 except ImportError:
-    from .src import init  # type: ignore
+    from .src import __version__, cholder
     from .src.cfg import de_rcfg, de_wcfg
     from .src.download import Downloader
     from .src.globals import CFG_PATH
@@ -50,7 +48,7 @@ def log(name: str, *msg) -> None:
     """Log message to console.
 
     Args:
-        msg (str): Message to be logged.
+    - msg (`str`): Message to be logged.
     """
     if len(msg) == 1:
         msg = msg[0]
@@ -77,17 +75,17 @@ def tex(func: Callable[[Any], Any]) -> Callable[[Any], tuple[bool, Any]]:
     """Try except wrapper
 
     Args:
-        func (Callable[[Any], Any]): Function to be wrapped.
+    - func (Callable[[Any], Any]): Function to be wrapped.
 
     Returns:
-        Callable[[Any], Any]: Wrapped function.
+    Callable[[Any], Any]: Wrapped function.
     """
 
     def inner(*args, **kwargs) -> tuple[bool, Any]:
         """If function raises an exception, return a tuple consisting of False and the exception message.
 
         Returns:
-            tuple[bool, Any]: err, res.
+        `tuple[bool, Any]`: err, res.
         """
         try:
             op = func(*args, **kwargs)
@@ -104,10 +102,10 @@ def rta(func: Callable[[Any], Any]) -> Callable[[Any], tuple[True, Any]]:
     """Return True, Any
 
     Args:
-        func (Callable[[Any], Any]): Function to be wrapped.
+    - func (Callable[[Any], Any]): Function to be wrapped.
 
     Returns:
-        Callable[[Any], tuple[True, Any]]: Wrapped function.
+    Callable[[Any], tuple[True, Any]]: Wrapped function.
     """
 
     def inner(*args, **kwargs):
@@ -121,10 +119,10 @@ def rbn(func: Callable[[Any], bool]) -> Callable[[Any], tuple[bool, None]]:
     """Return bool, None
 
     Args:
-        func (Callable[[Any], bool]): Function to be wrapped.
+    - func (`Callable[[Any], bool]`): Function to be wrapped.
 
     Returns:
-        Callable[[Any], tuple[bool, None]]: Wrapped function.
+    `Callable[[Any], tuple[bool, None]]`: Wrapped function.
     """
 
     def inner(*args, **kwargs):
@@ -138,10 +136,10 @@ def rtn(func: Callable[[Any], None]) -> Callable[[Any], tuple[True, None]]:
     """Return True, None
 
     Args:
-        func (Callable[[Any], None]): Function to be wrapped.
+    - func (`Callable[[Any], None]`): Function to be wrapped.
 
     Returns:
-        Callable[[Any], tuple[True, None]]: Wrapped function.
+    `Callable[[Any], tuple[True, None]]`: Wrapped function.
     """
 
     def inner(*args, **kwargs):

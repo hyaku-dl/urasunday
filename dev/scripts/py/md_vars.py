@@ -3,8 +3,10 @@ from datetime import date
 
 from .cfg import rcfg
 
-icons = ["issues", "forks", "stars", "contributors", "license", "code"]
-langs = ["python", "html", "yaml"]
+# Constants
+ICONS = ["issues", "forks", "stars", "contributors", "license", "code"]
+LANGS = ["python", "html", "yaml"]
+OS = ["linux", "win"]
 
 OP_CHOLDER_TPL = """by [{cholder}, Github account <a target=_blank
 href="https://github.com/{user}">{user}</a> owner, {year}] as part of project
@@ -20,15 +22,13 @@ Account <a target=_blank href="https://github.com/{user}">{user}</a> Owner, {yea
 S_CHOLDER_TPL = """Copyright (c) {year} Github Account <a target=_blank
 href="https://github.com/{user}">{user}<a> Owner"""
 
-
-def b64(name: str):
-    with open(f"./docs/assets/images/icons/{name}", "rb") as f:
-        return base64.b64encode(f.read()).decode("utf-8")
-
-
-YML = rcfg("dev/vars.yml")
+# Derived Constants
+BYML = rcfg(".github/workflows/build.yml")
 VYML = rcfg("version.yml")
+YML = rcfg("dev/vars.yml")
 
+JOBS = BYML["jobs"]
+VLS = VYML["ls"]
 LICENSE = YML["license"]
 MD_VARS = YML["md_vars"]
 
@@ -38,7 +38,14 @@ PN = GLOBAL["project_name"]
 ORG = GLOBAL["organization"]
 USER = GLOBAL["user"]
 
+# Initialize
 copyright = []
+
+# Functions
+def b64(name: str):
+    with open(f"./docs/assets/images/icons/{name}", "rb") as f:
+        return base64.b64encode(f.read()).decode("utf-8")
+
 
 if LICENSE["cholder"]:
     for c, mp in LICENSE["cholder"].items():
@@ -63,11 +70,28 @@ if LICENSE["cholder"]:
 else:
     cholder = S_CHOLDER_TPL.format(user=USER, year=LICENSE["year"])
 
-MD_VARS["global"] = {
-    **GLOBAL,
+
+global_append = {
     "year": str(date.today().year),
     "cholder": cholder,
-    **{f"{i}_b64": b64(f"{i}.png") for i in icons},
+}
+
+for i in OS:
+    for j in JOBS[i]["steps"]:
+        if j["name"] == "Build":
+            global_append[f"build_{i}"] = j["run"]
+            pass
+
+for idx, i in enumerate(["user", "dev", "minor", "patch", "pri", "prv"]):
+    global_append[f"ver_{i}"] = str(VLS[idx])
+
+for i in ICONS:
+    global_append[f"{i}_b64"] = b64(f"{i}.png")
+
+
+MD_VARS["global"] = {
+    **GLOBAL,
+    **global_append,
 }
 
 RMDV = {"rules": YML["rules"], "md_vars": MD_VARS}

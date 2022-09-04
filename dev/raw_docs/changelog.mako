@@ -8,22 +8,6 @@
 
     PR = ["alpha", "beta", "rc"]
 
-    VERSIONS_NAME = [
-        "User",
-        "Dev",
-        "Minor",
-        "Patch",
-        "Pre-release identifier",
-        "Pre-release version",
-    ]
-
-    def compare(x, y):
-        for idx, i in enumerate(VERSIONS_NAME):
-            if int(y[idx]) == (int(x[idx]) + 1):
-                return i + " bump"
-
-        return None
-
     def rv(vls: list[str | int]):
         pr = ""
         vls = [int(i) for i in vls]
@@ -35,11 +19,9 @@
         CL = f.read()
 
     d_op = {}
-    vls_ls = []
     for vb in re.findall(RE_H1, CL, re.DOTALL):
         ver, desc, tls = vb
         vls = ver.split(" ")
-        vls_ls.append(vls)
         d_op[rv(vls)] = ov = {
             "vls": vls,
             "anchor": ver.replace(" ", "-"),
@@ -53,20 +35,14 @@
                 ovt.append(ch)
 
     md_op = ""
-    for idx, (k, v) in enumerate(d_op.items()):
-        href = v["anchor"]
-        comp = ""
-        if (idx + 1) != len(vls_ls):
-            comp = f"{compare(vls_ls[idx+1], vls_ls[idx])}. "
-        md_op += f'\n\n## **<a href="#{href}" id="{href}">{k}</a>**'
-        desc = v.get("desc", "")
-        if (desc != "") or (comp != ""):
-            md_op += f'\n\n{comp}{desc}'
+    for k, v in d_op.items():
+        md_op += f'\n\n<h2 id="{v["anchor"]}">{k}</h2>'
+        if desc:=v["desc"]:
+            md_op += f'\n\n{desc}\n\n'
         else:
             md_op += ''
         for t, chls in v["changes"].items():
-            href = f'{v["anchor"]}-{t.lower()}'
-            md_op += f'\n\n### **<a href="#{href}" id="{href}">{t}</a>**\n'
+            md_op += f'\n\n<h3 id="{v["anchor"]}-{t.lower()}">{t}</h3>\n'
             for ch in chls:
                 md_op += f'\n- {ch}'
 %>

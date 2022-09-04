@@ -5,16 +5,17 @@ docs:
 pdoc:
   project: ura
   op: docs
-  tpl: dev/constants/tpl
+  tpl: dev/constants/tpl/pdoc
 
 mako:
   gen:
     path:
       - changelog.mako
-      - latest bump.mako
-      - latest commit.mako
-      - latest release notes.mako
+      - latest-bump.mako
+      - latest-commit.mako
+      - latest-release-notes.mako
     glob:
+      - docs/**/**/config.mako
       - docs/**/**/index.mako
 
 md_vars:
@@ -23,9 +24,11 @@ md_vars:
     repo_name: urasunday
     site: ura.hyaku.download
     organization: hyaku-dl
+    author: whi~nyaan!
     user: whinee
     year: 2022
     codacy_id: 385ceb2d55424256a93f9ad6f8007f91
+    wakatime: urasunday
     dc_acc: whi_ne | whinyaan.xyz#5135
     dc_link: https://discord.com/users/867696753434951732
     dc_inv: JbAtUxGcJZ

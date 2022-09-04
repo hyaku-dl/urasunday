@@ -1,18 +1,22 @@
 import asyncio
 import json
 import os
-import os.path
 import re
 import shutil
 import time
-from typing import Any, Callable, Dict, List
+from typing import Any, Dict, List
 
 import aiofiles
 from tqdm.asyncio import tqdm_asyncio
 
-from .base import class_usi, req, soup
-from .cfg import de_rcfg
-from .utils import sanitize_text
+try:
+    from .base import class_usi, req, soup
+    from .cfg import de_rcfg
+    from .utils import sanitize_text
+except ImportError:
+    from base import class_usi, req, soup
+    from cfg import de_rcfg
+    from utils import sanitize_text
 
 # Constants
 USI = class_usi(
@@ -21,26 +25,19 @@ USI = class_usi(
     }
 )
 
-CFG = de_rcfg()
 
-
-def get_stg(path: str, de: Any):
+def get_stg(path: str, de: Any = None):
     return de_rcfg().dir(path, de)
 
 
-class DownloadFailed(Exception):
-    pass
-
-
 def sanitize_filename(filename: str) -> str:
-    """
-    Sanitize the given filename.
+    """Sanitize the given filename.
 
     Args:
-        filename (str): The filename to be sanitized.
+    - filename (`str`): The filename to be sanitized.
 
     Returns:
-        str: Sanitized filename.
+    `str`: Sanitized filename.
     """
     return re.sub(re.compile(r"[<>:\"/\\|?*]", re.DOTALL), "", str(filename))
 
@@ -50,71 +47,12 @@ def get_extension(filename: str) -> str:
     Get the file extension of a file from the given filename.
 
     Args:
-        filename (str): The filename to get the file extension from.
+    - filename (`str`): The filename to get the file extension from.
 
     Returns:
-        str: The file extension from the given filename.
+    `str`: The file extension from the given filename.
     """
     return filename.strip("/").split("/")[-1].split("?")[0].split(".")[-1]
-
-
-def ordinal(n: int) -> str:
-    """
-    Convert the given number to ordinal number.
-
-    Args:
-        n (int): The number to convert into ordinal number.
-
-    Returns:
-        str: The said ordinal number.
-    """
-    return "%d%s" % (n, "tsnrhtdd"[(n // 10 % 10 != 1) * (n % 10 < 4) * n % 10 :: 4])
-
-
-def _cr(rs: str):
-    """
-    The function that calculates the range.
-
-    Args:
-        rs (str): The range string where the range is calculated from.
-
-    Yields:
-        Callable[[Any], bool]: The function that checks if the given int is within the range or not.
-    """
-
-    for matches in re.finditer(r"(?:(-?[0-9.]*)[:](-?[0-9.]*)|(-?[0-9.]+))", rs):
-        start, end, singular = matches.groups()
-        if (start and end) and float(start) > float(end):
-            start, end = end, start
-        yield (lambda x, s=singular: float(s) == x) if singular else (
-            lambda x: True
-        ) if not (start or end) else (
-            lambda x, s=start: x >= float(s)
-        ) if start and not end else (
-            lambda x, e=end: x <= float(e)
-        ) if not start and end else (
-            lambda x, s=start, e=end: float(s) <= x <= float(e)
-        )
-    if not rs:
-        return lambda *args, **kwargs: True
-
-
-def cr(rs: str) -> Callable[[int], bool]:
-    """
-    Returns a function that checks if the given int is within the range or not.
-    The range is calculated from the given string.
-
-    Args:
-        rs (str): The range string where the range is calculated from.
-
-    Returns:
-        Callable[[int], bool]: The function that checks if the given int is within the range or not.
-    """
-
-    if rs:
-        return lambda x: any(condition(x) for condition in _cr(rs))
-    else:
-        return lambda x: True
 
 
 class Downloader:
@@ -122,26 +60,23 @@ class Downloader:
         self, directory: str = None, overwrite: bool = None, **kwargs: Dict[str, Any]
     ):
         local = locals()
-        for i in [
-            "overwrite",
-        ]:
-            setattr(self, i, local[i])
-        if overwrite:
-            self.overwrite = overwrite
-        else:
-            self.overwrite = get_stg("overwrite", True)
-
-        if directory:
-            self.ddir = directory
-        else:
-            self.ddir = get_stg("download_dir")
+        for k, v in {
+            "directory": ["ddir", "download_dir"],
+            "overwrite": ["overwrite", "overwrite"],
+        }.items():
+            gs_var = get_stg(v[1])
+            if gs_var is None:
+                op = local[k]
+            else:
+                op = gs_var
+            setattr(self, v[0], op)
 
     async def _dlf(self, file: list[str], n: int = 0):
-        """
-        The core individual image downloader.
+        """The core individual image downloader.
+
         Args:
-            file (str): List containing the filename and the url of the file.
-            n (int, optional): Times the download for this certain file is retried. Defaults to 0.
+        - file (`str`): List containing the filename and the url of the file.
+        - n (`int`, optional): Times the download for this certain file is retried. Defaults to 0.
         """
         async with aiofiles.open(file[0] + ".tmp", "wb") as f:
             r = req.get(file[1])
@@ -152,11 +87,11 @@ class Downloader:
                 time.sleep(5)
                 await self._dlf(file, n)
 
-    async def dlf(self, file: List[str]) -> None:
+    async def dlf(self, file: List[str]):
         """
         Individual image downloader.
         Args:
-            file (str): List containing the filename and the url of the file.
+        - file (`str`): List containing the filename and the url of the file.
         """
         try:
             os.makedirs(os.path.split(file[0])[0])
@@ -168,12 +103,6 @@ class Downloader:
         os.replace(f"{file[0]}.tmp", file[0])
 
     async def _dlch(self, manga: str, chapter: str, urls: List[str], n: int = 0):
-        # """
-        # Individual chapter downloader.
-        # Args:
-        #     k (Union[int, float]): Chapter number.
-        #     v (List[str]): List of image urls.
-        # """
         dl = True
         self.jdir = jdir = os.path.join(self.ddir, manga, sanitize_filename(chapter))
         if os.path.isdir(jdir):
@@ -199,19 +128,16 @@ class Downloader:
                     + "{bar}"
                     + " [{n:03d}/{total:03d}, {percentage:03.0f}%]"
                 )
-                try:
-                    await tqdm_asyncio.gather(
-                        *[self.dlf(file) for file in files],
-                        total=len(files),
-                        leave=True,
-                        unit=" img",
-                        disable=False,
-                        dynamic_ncols=True,
-                        smoothing=1,
-                        bar_format=fmt,
-                    )
-                except DownloadFailed as e:
-                    raise e
+                await tqdm_asyncio.gather(
+                    *[self.dlf(file) for file in files],
+                    total=len(files),
+                    leave=True,
+                    unit=" img",
+                    disable=False,
+                    dynamic_ncols=True,
+                    smoothing=1,
+                    bar_format=fmt,
+                )
 
     def dlch(self, url: str):
         RP = r"const pages = \[(\s.+?)+?\s+\];"

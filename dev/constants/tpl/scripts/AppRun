@@ -1,0 +1,67 @@
+#!/bin/bash
+# shellcheck disable=SC1087,SC1091,SC2001,SC2025,SC2045,SC2059,SC2119,SC2120,SC2162,SC2148,SC2154,SC2155,SC2195,SC2210
+
+set -e
+
+if [ -n "$DEBUG" ]; then
+    env
+    set -x
+fi
+
+THIS="$0"
+
+if [ -z "$APPDIR" ]; then
+    path="$(dirname "$(readlink -f "${THIS}")")"
+    while [[ "$path" != "" && ! -e "$path" ]]; do
+        path=${path%/*}
+    done
+    APPDIR="$path"
+fi
+
+if [ -z "$APPIMAGE" ]; then
+    APPIMAGE="$APPDIR/AppRun"
+fi
+
+arg0=$(basename "$0" .sh)
+blnk=$(echo "$arg0" | sed "s/./ /g")
+
+usage_info() {
+    echo "Usage: $arg0 [-g|--gui] \\"
+    echo "       $blnk [-h|--help] \\"
+}
+
+help() {
+    usage_info
+    echo
+    echo "  [-g|--gui]  -- Run GUI"
+    echo "  [-h|--help] -- Print this help message and exit"
+}
+
+gui() {
+    exec "$APPDIR/ura"
+    exit 0
+}
+
+cli() {
+    "$APPDIR/resources/app/tmp/python/opt/python3.10/bin/python3.10" "$APPDIR/resources/app/tmp/src" $@
+}
+
+if [ $# -eq 0 ]; then
+    gui
+else
+    case "$1" in
+    gui) gui ;;
+    cli)
+        shift
+        cli $@
+        ;;
+    help)
+        help
+        exit 0
+        ;;
+    *)
+        cli $@
+        exit 1
+        ;;
+    esac
+fi

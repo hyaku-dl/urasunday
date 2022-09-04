@@ -1,6 +1,6 @@
-__version__ = "0.0.0.0-beta.1"
-hver = "0.0.1-beta.1"
-vls = [0, 0, 0, 0, 1, 1]
+__version__ = "0.0.0.0-rc.0"
+hver = "0.0.1-rc.0"
+vls = [0, 0, 0, 0, 2, 0]
 appimage = False
 cholder = """Copyright for portions of project <a target=_blank
 href="https://github.com/hyaku-dl/ura">ura</a> are held by [whi_ne, Github account <a target=_blank

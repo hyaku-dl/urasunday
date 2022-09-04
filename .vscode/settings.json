@@ -1,7 +1,11 @@
 {
     "python.defaultInterpreterPath": "./pyenv/bin/python",
     "python.languageServer": "Pylance",
+    "autoDocstring.customTemplatePath": "dev/constants/tpl/autodoc.mustache",
     "vscode-yaml-sort.useCustomSortRecursively": true,
+    "yaml.schemas": {
+        "https://json.schemastore.org/yamllint.json": "file:///home/whine/whi_ne/3/projects/personal/tools/urasunday/.markdownlint.yml"
+    },
     // "vscode-yaml-sort.customSortKeywords_1": [
     //     "phrase",
     //     "description",

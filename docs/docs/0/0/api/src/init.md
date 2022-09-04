@@ -1,6 +1,1 @@
-# Module ura.src.init
-
-## Functions
-
-`init(idx: int) ‑> None`
-:
+# **[ura](../index.md).[src](../src.md).[init](init.md)**

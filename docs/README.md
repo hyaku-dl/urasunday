@@ -25,7 +25,9 @@
     <a href="https://app.codacy.com/gh/hyaku-dl/urasunday/dashboard">
         <img alt="Codacy Badge" src="https://img.shields.io/codacy/grade/385ceb2d55424256a93f9ad6f8007f91?style=flat-square">
     </a>
-    <img alt="Wakatime Badge" src="https://wakatime.com/badge/github/hyaku-dl/urasunday.svg?style=flat-square">
+    <a href="https://wakatime.com/projects/urasunday/urasunday">
+        <img alt="Wakatime Badge" src="https://wakatime.com/badge/github/hyaku-dl/urasunday.svg?style=flat-square">
+    </a>
     <a href="https://github.com/hyaku-dl/urasunday/releases">
         <img alt="GitHub release (latest by date including pre-releases)" src="https://img.shields.io/github/v/release/hyaku-dl/urasunday?include_prereleases&style=flat-square">
     </a>
@@ -55,6 +57,8 @@ Website: [ura.hyaku.download](https://ura.hyaku.download)
 
 ______________________________________________________________________
 
+## **<a href="#uwu" id="uwu">What's this?</a>**
+
 Commissioned by <a target="_blank" href="https://discord.com/users/250456851890569217">@HappyPurple(Discord, Mistilteinn#4793)</a>, owner of <a target="_blank" href="https://blog.ultralight.group">Ultralight Manga Translation Group</a>.
 
 Interested in commissioning projects? Inquire through Discord(<a target="_blank" href="https://discord.com/users/867696753434951732">whi_ne | whinyaan.xyz#5135</a>) or through e-mail(<a target="_blank" href="mailto:whinyaan@pm.me">whinyaan@pm.me</a>). Price starts at 15 USD.
@@ -65,7 +69,9 @@ For the terms of usage and legals, visit [LICENSE](license) and [terms of usage 
 
 ## **Important**
 
-This app is currently in beta! If you can spare some time and effort, please consider testing the app and reporting the bugs you find either through [raising a new Github issue](https://github.com/hyaku-dl/urasunday/issues/new) or through [the Discord Support Server](https://discord.com/invite/JbAtUxGcJZ). Any suggestions are also welcome! Thank you to everyone who supported this app from the very beginning.
+This app is currently has reached the rc phase! If you can spare some time and effort, please consider testing the app and reporting the bugs you find either through [raising a new Github issue](https://github.com/hyaku-dl/urasunday/issues/new) or through [the Discord Support Server](https://discord.com/invite/JbAtUxGcJZ). Any suggestions are also welcome! Thank you to everyone who supported this app from the very beginning.
+
+I, the developer of this app, will now go back to the real world, to go schooling. So yeah... no more time for this pointless stuff. sed :/
 
 ## **Downloads**
 
@@ -88,9 +94,9 @@ Follow [this link](https://github.com/hyaku-dl/urasunday/releases), and download
 
 ## **Usage**
 
-<i>
-    This section is not yet complete.
-</i>
+<i><font color="#ED5E5E">
+This section is not yet complete.
+</font></i>
 
 ## **Getting Started**
 
@@ -98,21 +104,33 @@ These instructions will get you a copy of the project up and running on your loc
 
 ### **Prerequisites**
 
-<i>
-    This section is not yet complete.
-</i>
+<details>
+<summary><i><font color="#ED5E5E">
+    This section is not yet complete. Click downwards arrow for more details.
+</font></i></summary>
+In the future, I plan to add specific instructions on how to install dependencies and check if it is installed in your machine.
+</details>
 
-### **Setup**
+<!-- - git
+- Python 3.10
 
-<i>
-    This section is not yet complete.
-</i>
+### **<a href="#build" id="build">Building from Source</a>**
+
+#### **<a href="#build-linux" id="build-linux">Linux</a>**
+
+Run the following command in Powershell:
+
+```ps1
+git clone https://github.com/hyaku-dl/urasunday . &&
+python -c "from dev.scripts.py.main import main;main('gs')" &&
+python -c "import re;print(re.sub('NODE_ENV=production','NODE_ENV=development','''$(niet "jobs.linux.steps[2].run" .github/workflows/build.yml)''',0,re.MULTILINE))" | bash
+``` -->
 
 ## **Contributions**
 
-<i>
-    This section is not yet complete.
-</i>
+<i><font color="#ED5E5E">
+This section is not yet complete.
+</font></i>
 
 <!-- Mention the issus and limitations of this repository. Preferably 1-5 sentences long. -->
 
@@ -168,3 +186,13 @@ Check the [license](license) for more details.
         <b>NOTE:</b> If a reference or source material is not attributed properly or not at all, create a pull request so I can properly give credit to their respective authors.
     </i>
 </sub>
+
+## **Further Reading**
+
+- [Frequently Asked Questions](faq.md)
+- [License Agreement](license.md)
+- [Latest Documentation (0.0.x.x)](docs/0/0/index.md)
+- [Changelog](changelog.md)
+- [Latest Bump](latest-bump.md)
+- [Latest Commit](latest-commit.md)
+- [Notes for whi~nyaan!](notes-to-self.md)

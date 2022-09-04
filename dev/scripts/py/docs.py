@@ -16,7 +16,7 @@ from .md_vars import VYML, YML
 from .utils import inmd, repl, run
 
 # Constants
-RE_MDND = r"(?<=# nav docs start\n).+(?=\n\s+# nav docs end)"
+RE_MDSE = r"(?<=# {key} start\n).+(?=\n\s*# {key} end)"
 
 # Derived Constants
 VLS = VYML["ls"]
@@ -32,6 +32,14 @@ PROJECT = pdoc.Module(PDOC["project"], context=CONTEXT)
 pdoc.link_inheritance(CONTEXT)
 pdoc.tpl_lookup = pdoc.TemplateLookup(directories=[PDOC["tpl"]])
 
+
+def str_presenter(dumper, data):
+    if len(data.splitlines()) > 1:  # check for multiline string
+        return dumper.represent_scalar("tag:yaml.org,2002:str", data, style="|")
+    return dumper.represent_scalar("tag:yaml.org,2002:str", data)
+
+
+yaml.add_representer(str, str_presenter)
 
 # Initialization
 GEN = {
@@ -86,10 +94,17 @@ def yield_text(mod):
         yield from yield_text(submod)
 
     if sm:
+        header = []
+        m, *ls = mod.name.split(".")
+        for idx, i in enumerate(ls[::-1]):
+            header.append(f'[{i}]({"../" * idx}{i}.md)')
+        header = ".".join(
+            [f"[{m}](" + "../" * (len(ls) - 1) + "index.md)"] + header[::-1]
+        )
+
         if sum := mod.supermodule:
-            sum = (
-                f"\n\n## Super-module\n- [{sum.name}]({docs_dir(sum.name, api=True)})\n"
-            )
+            docs_dir(sum.name, api=True)
+            sum = f'\n\n## **<a href="#super" id="super">Super-module</a>**\n- [{sum.name}](index.md)\n'
         else:
             sum = ""
 
@@ -97,10 +112,12 @@ def yield_text(mod):
         for k, v in sm.items():
             v = "/".join(v.split("/")[5:])
             smls.append(f"- [{k}]({v})")
-        sm = "\n\n## Sub-modules\n\n{}\n".format("\n".join(smls))
+        sm = '\n\n## **<a href="#sub" id="sub">Sub-modules</a>**\n\n{}\n'.format(
+            "\n".join(smls)
+        )
 
-        idx = """# {}{}{}""".format(
-            mod.name,
+        idx = """# **{}**{}{}""".format(
+            header,
             sum,
             sm,
         )
@@ -220,8 +237,32 @@ def main(rmv: Dict[Any, Any] = {}, hr=False):
 
         with open("mkdocs.yml", "r") as f:
             mkdocs = f.read()
+
+        info_yml = {}
+        for k, (f, kls) in {
+            "site_name": [None, ["project_name"]],
+            "site_url": ["https://{}", ["site"]],
+            "repo_url": ["https://github.com/{}/{}", ["organization", "repo_name"]],
+            "site_description": [None, ["long_desc"]],
+            "site_author": [None, ["author"]],
+            "copyright": ["Copyright &copy; {} {}", ["year", "author"]],
+        }.items():
+            vd = {i: rmv_mv_g.get(i, None) for i in kls}
+            if f is None:
+                op = " ".join(vd.values())
+            else:
+                op = f.format(*vd.values(), **vd)
+            info_yml[k] = op
+        mkdocs = re.sub(
+            RE_MDSE.format(key="info"),
+            yaml.dump(info_yml, indent=2, sort_keys=False),
+            mkdocs,
+            0,
+            re.S,
+        )
+
         with open("mkdocs.yml", "w") as f:
-            f.write(re.sub(RE_MDND, nd, mkdocs, re.S))
+            f.write(re.sub(RE_MDSE.format(key="nav docs"), nd, mkdocs, 0, re.S))
         shutil.copy("mkdocs.yml", "mkdocs.bak.yml")
 
     run("mkdocs build --site-dir dev/site")

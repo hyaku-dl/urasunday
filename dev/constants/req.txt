@@ -5,7 +5,7 @@ mdformat
 mdformat-frontmatter
 mdformat-footnote
 mdformat-gfm
-# mdformat-shfmt
+mdformat-shfmt
 mkdocs
 mkdocs-material
 mkdocs-minify-plugin

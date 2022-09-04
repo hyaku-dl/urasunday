@@ -1,8 +1,12 @@
 from functools import partial
 from typing import Any
 
-from .exceptions import c_exc, c_exc_str
-from .utils import ivnd
+try:
+    from .exceptions import c_exc, c_exc_str
+    from .utils import ivnd
+except ImportError:
+    from exceptions import c_exc, c_exc_str
+    from utils import ivnd
 
 
 @c_exc_str
@@ -32,6 +36,8 @@ class CDTypeError(TypeError):
 
 
 class CustomDict(dict):
+    """Custom dictionary."""
+
     def __getitem__(self, key) -> Any:
         op = super().__getitem__(key)
         if op.__class__.__mro__[-2] is dict:
@@ -89,17 +95,17 @@ class CustomDict(dict):
         """Internal function to insert a value into a dictionary or list.
 
         Args:
-            path (str): The path to the value.
-            value (Any): The value to insert.
-            cdict (dict[Any, Any] | list[Any]): The dictionary to insert into.
-            idx (int, optional): Depth of the current recursion. Defaults to None.
-            og_path (str, optional): Original path. Used for information when raising exceptions. Defaults to None.
+        - path (`str`): The path to the value.
+        - value (`Any`): The value to insert.
+        - cdict (`dict[Any, Any] | list[Any]`): The dictionary to insert into.
+        - idx (`int`, optional): Depth of the current recursion. Defaults to None.
+        - og_path (`str`, optional): Original path. Used for information when raising exceptions. Defaults to None.
 
         Raises:
-            CDInsTypeError: If the path is not fully traversed and the value is not a dictionary.
+        - `CDInsTypeError`: If the path is not fully traversed and the value is not a dictionary.
 
         Returns:
-            dict[Any, Any] | list[Any]: The dictionary or list with the value inserted.
+        `dict[Any, Any] | list[Any]`: The dictionary or list with the value inserted.
         """
 
         idx = ivnd(idx, 0)
@@ -141,8 +147,8 @@ class CustomDict(dict):
         """Insert a value into a dictionary or list.
 
         Args:
-            path (str): The path to the value.
-            value (Any): The value to insert.
+        - path (`str`): The path to the value.
+        - value (`Any`): The value to insert.
         """
         self._insert(path, value, self)
 
@@ -157,17 +163,17 @@ class CustomDict(dict):
         """Internal function to modify a value.
 
         Args:
-            path (str): The path to the value.
-            value (Any): The value to insert.
-            cdict (dict[Any, Any] | list[Any]): The dictionary to insert into.
-            idx (int, optional): Depth of the current recursion. Defaults to None.
-            og_path (str, optional): Original path. Used for information when raising exceptions. Defaults to None.
+        - path (`str`): The path to the value.
+        - value (`Any`): The value to insert.
+        - cdict (`dict[Any, Any] | list[Any]`): The dictionary to insert into.
+        - idx (`int`, optional): Depth of the current recursion. Defaults to None.
+        - og_path (`str`, optional): Original path. Used for information when raising exceptions. Defaults to None.
 
         Raises:
-            CDInsTypeError: If the path is not fully traversed and the value is not a dictionary.
+        - `CDInsTypeError`: If the path is not fully traversed and the value is not a dictionary.
 
         Returns:
-            dict[Any, Any] | list[Any]: The dictionary or list with the value inserted.
+        `dict[Any, Any] | list[Any]`: The dictionary or list with the value inserted.
         """
 
         idx = ivnd(idx, 0)
@@ -206,7 +212,7 @@ class CustomDict(dict):
         """Insert a value into a dictionary or list.
 
         Args:
-            path (str): The path to the value.
-            value (Any): The value to insert.
+        - path (`str`): The path to the value.
+        - value (`Any`): The value to insert.
         """
         self._modify(path, value, self)

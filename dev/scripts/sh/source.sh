@@ -13,7 +13,7 @@ fmt() { (
 ); }
 
 req() {
-    pip install --upgrade pip
+    pip install --upgrade pip niet
     for i in $(
         for j in $(niet development.venv.requirements dev/vars.yml); do
             niet requirements."$j" dev/vars.yml
@@ -31,6 +31,13 @@ req() {
     done
 }
 
+tb() {
+    local tmp
+    t "Generate Scripts" "Failed generating scripts." menu gs &&
+        tmp="$(niet "jobs.linux.steps[?name=='Build'].run" .github/workflows/build.yml)" &&
+        python -c "import re;print(re.sub('NODE_ENV=production','NODE_ENV=development','''$tmp''', 0, re.MULTILINE))" | sh
+}
+
 test() {
     python <"dev/scripts/py/test/$1.py"
 }
@@ -42,5 +49,5 @@ if type "$1" >/dev/null 2>&1; then
     shift
     "$cmd" "$@"
 else
-    echo "dev: $1 is not a valid command."
+    echo "menu: $1 is not in the menu."
 fi

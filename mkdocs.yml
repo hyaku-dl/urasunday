@@ -1,10 +1,13 @@
+# Do Not Modify!
+# info start
 site_name: ura
 site_url: https://ura.hyaku.download
 repo_url: https://github.com/hyaku-dl/urasunday
-site_description: |-
-  Your basic urasunday scraper
+site_description: A no-nonsense, simple and easy to use scraper for urasunday.com
 site_author: whi~nyaan!
-copyright: Copyright &copy; 2022 whitespace_negative
+copyright: Copyright &copy; 2022 whi~nyaan!
+
+# info end
 
 theme:
   name: material
@@ -74,11 +77,12 @@ plugins:
 
 nav:
   - Home: /
-  - License agreement: /license
+  - Frequently Asked Questions: /faq
+  - License Agreement: /license
   - Changelog: /changelog
-  - Notes:
-    - Notes: /notes
-    - Notes to self: /notes to self
+  - Latest Bump: /latest-bump
+  - Latest Commit: /latest-commit
+  - Notes to self: /notes-to-self
 
   # Do Not Modify!
   - Documentation:

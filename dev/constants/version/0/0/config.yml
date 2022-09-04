@@ -1,0 +1,20 @@
+version: 1.0.0
+config:
+  download_dir:
+    req: false
+    type: str
+    abbr: Download Directory
+    desc: |-
+      Directory to download the chapter at.
+  overwrite:
+    req: false
+    type: bool
+    default: true
+    desc: |-
+      Determines if the program overwrites the chapter if it is already downloaded.
+  overwrite_prompt:
+    req: false
+    type: bool
+    default: false
+    desc: |-
+      Determines if the program prompts the user to overwrite the chapter if it is already downloaded.

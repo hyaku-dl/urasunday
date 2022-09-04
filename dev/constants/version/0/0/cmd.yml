@@ -1,0 +1,108 @@
+main:
+  args:
+  kwargs:
+  arguments:
+  options:
+cmd:
+  dl:
+    args:
+    kwargs:
+    help:
+      - download manga
+      - |-
+        Download chapter from https://urasunday.com
+    arguments:
+      url:
+        args:
+        kwargs:
+        help:
+          - str
+          - |-
+            URL of the chapter to download.
+    options:
+      d:
+        args:
+          - directory
+        kwargs:
+          metavar: ''
+        help:
+          - str
+          - |-
+            Directory to download the chapter at. Defaults to ~/Manga for Linux-based operating systems and Desktop/Manga for Windows.
+      o:
+        args:
+          - overwrite
+          - overwrite
+        kwargs:
+          default: true
+          flag_value: true
+          metavar: ''
+        help:
+          - N/A (flag)
+          - |-
+            Overwrite the chapter if it is already downloaded.
+      'on':
+        args:
+          - overwrite_not
+          - overwrite
+        kwargs:
+          flag_value: false
+          metavar: ''
+        help:
+          - N/A (flag)
+          - |-
+            Do not overwrite the chapter if it is already downloaded.
+            shit me naught
+      op:
+        args:
+          - overwrite_prompt
+          - overwrite_prompt
+        kwargs:
+          default: false
+          flag_value: true
+          metavar: ''
+        help:
+          - N/A (flag)
+          - |-
+            Prompt user to overwrite the chapter if it is already downloaded.
+      opn:
+        args:
+          - overwrite_prompt_not
+          - overwrite_prompt
+        kwargs:
+          flag_value: false
+          metavar: ''
+        help:
+          - N/A (flag)
+          - |-
+            Do not prompt user to overwrite the chapter if it is already downloaded.
+      # op:
+      #   args:
+      #     - overwrite
+      #   kwargs:
+      #     default: true
+      #     is_flag: true
+      #     metavar: ''
+      #   help:
+      #     - N/A (flag)
+      #     - |-
+      #       Determines if the app prompts you to overwrite if the chapter is already downloaded. Only applicable if Defaults to False.
+      #       (True | False).
+  credits:
+    args:
+    kwargs:
+    help:
+      - credits
+      - |-
+        It's the credits, whaddya expect?
+    arguments:
+    options:
+  version:
+    args:
+    kwargs:
+    help:
+      - Print version.
+      - |-
+        Print version of the program.
+    arguments:
+    options:

@@ -1,6 +1,7 @@
 # User-defined Ignored Folders
 .history/
 node_modules/
+squashfs-root/
 **/tmp/
 
 # User-defined Ignored Files

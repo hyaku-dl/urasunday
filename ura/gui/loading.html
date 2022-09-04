@@ -26,9 +26,6 @@
 
     <link rel="stylesheet" href="style.css" type="text/css">
 
-    <meta http-equiv="Content-Security-Policy"
-        content="script-src 'self' 'sha256-xM7c+eo3QQX+JbvXtKCbPl9xaG9s5WKxTHIH6V0+fgI='">
-
     <style>
         .spinner {
             --spinner-size: 11;
@@ -83,9 +80,16 @@
         }
     </style>
 
+    <meta http-equiv="Content-Security-Policy"
+        content="script-src 'self' 'sha256-bELQ8A6eRDkdoEdERBYPFlN2PcwwyVC5NWRKmOWfFMY='">
+
     <script>
-        const { io } = require("socket.io-client");
-        io("http://0.0.0.0:9173");
+        const { ipcRenderer } = require('electron')
+        require("socket.io-client").io("http://0.0.0.0:9173");
+        ipcRenderer.on('logPath', function (event, path) {
+            console.log(`Log Path:`, path);
+        });
+        ipcRenderer.send("logPath");
     </script>
 
 </head>

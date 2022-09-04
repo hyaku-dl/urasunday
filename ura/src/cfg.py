@@ -1,14 +1,17 @@
 import json
-from functools import partial
-from os import path
 from typing import Any
 
 import msgpack
 import yaml
 
-from .cd import CustomDict
-from .exceptions import c_exc_str
-from .globals import CFG_PATH
+try:
+    from .cd import CustomDict
+    from .exceptions import c_exc_str
+    from .globals import CFG_PATH
+except ImportError:
+    from cd import CustomDict
+    from exceptions import c_exc_str
+    from globals import CFG_PATH
 
 TYPES = {
     "r": [
@@ -35,11 +38,11 @@ def pcfg(d: str, type: str) -> CustomDict:
     """Parse the given string as the given type.
 
     Args:
-        d (str): String to parse.
-        type (str): Type to parse the string as.
+    - d (`str`): String to parse.
+    - type (`str`): Type to parse the string as.
 
     Returns:
-        CustomDict: The parsed string.
+    `CustomDict`: The parsed string.
     """
 
     for k, v in TYPES["r"]:
@@ -52,11 +55,11 @@ def dcfg(value: dict, ext: str) -> str:
     """Dump the given value to a string with the given extension.
 
     Args:
-        value (dict): Value to dump to a string.
-        ext (str): Extension to dump the value to.
+    - value (`dict`): Value to dump to a string.
+    - ext (`str`): Extension to dump the value to.
 
     Returns:
-        str: The dumped value.
+    `str`: The dumped value.
     """
 
     for k, v in TYPES["w"]:
@@ -69,10 +72,10 @@ def rcfg(file: str) -> CustomDict:
     """Read the contents of a file with the given file name.
 
     Args:
-        file (str): File name of the file to read the contents of.
+    - file (`str`): File name of the file to read the contents of.
 
     Returns:
-        CustomDict: The contents of the file.
+    `CustomDict`: The contents of the file.
     """
 
     ext = file.split(".")[-1]
@@ -87,8 +90,8 @@ def wcfg(file: str, value: dict[Any, Any] | list[Any]) -> None:
     """Write the given value to a file with the given file name.
 
     Args:
-        file (str): File name of the file to write the value to.
-        value (dict[Any, Any] | list[Any]): Value to write to the file.
+    - file (`str`): File name of the file to write the value to.
+    - value (`dict[Any, Any] | list[Any])`: Value to write to the file.
     """
     ext = file.split(".")[-1]
     for k, v in TYPES["w"]:

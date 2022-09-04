@@ -2,8 +2,6 @@ from markdown_it import MarkdownIt
 from mdformat.renderer import RenderContext, RenderTreeNode
 from mdformat.renderer._util import get_list_marker_type, is_tight_list
 
-print("fuck")
-
 
 def update_mdit(mdit: MarkdownIt) -> None:
     pass

@@ -1,78 +1,69 @@
-# Module ura.src.download
+# **[ura](../index.md).[src](../src.md).[download](download.md)**
 
-## Functions
+## **Functions**
 
-`cr(rs: str) ‑> Callable[[int], bool]`
-:   Returns a function that checks if the given int is within the range or not.
-The range is calculated from the given string.
+<h3><b><a href="#func-get_extension" id="func-get_extension">get_extension</a></b></h3>
 
-```
-Args:
-    rs (str): The range string where the range is calculated from.
-
-Returns:
-    Callable[[int], bool]: The function that checks if the given int is within the range or not.
+```python
+(filename: str) ‑> str
 ```
 
-`get_extension(filename: str) ‑> str`
-:   Get the file extension of a file from the given filename.
+Get the file extension of a file from the given filename.
 
-```
-Args:
-    filename (str): The filename to get the file extension from.
+<h3><b><i><a href="#func-get_extension-args" id="func-get_extension-args">Args:</a></i></b></h3>
 
-Returns:
-    str: The file extension from the given filename.
-```
+- filename (`str`): The filename to get the file extension from.
 
-`get_stg(path: str, de: Any)`
-:
+<h3><b><i><a href="#func-get_extension-returns" id="func-get_extension-returns">Returns:</a></i></b></h3>
 
-`ordinal(n: int) ‑> str`
-:   Convert the given number to ordinal number.
+`str`: The file extension from the given filename.
 
-```
-Args:
-    n (int): The number to convert into ordinal number.
+<h3><b><a href="#func-get_stg" id="func-get_stg">get_stg</a></b></h3>
 
-Returns:
-    str: The said ordinal number.
+```python
+(path: str, de: Any = None)
 ```
 
-`sanitize_filename(filename: str) ‑> str`
-:   Sanitize the given filename.
+<h3><b><a href="#func-sanitize_filename" id="func-sanitize_filename">sanitize_filename</a></b></h3>
 
-```
-Args:
-    filename (str): The filename to be sanitized.
-
-Returns:
-    str: Sanitized filename.
+```python
+(filename: str) ‑> str
 ```
 
-## Classes
+Sanitize the given filename.
 
-`DownloadFailed(*args, **kwargs)`
-:   Common base class for all non-exit exceptions.
+<h3><b><i><a href="#func-sanitize_filename-args" id="func-sanitize_filename-args">Args:</a></i></b></h3>
 
+- filename (`str`): The filename to be sanitized.
+
+<h3><b><i><a href="#func-sanitize_filename-returns" id="func-sanitize_filename-returns">Returns:</a></i></b></h3>
+
+`str`: Sanitized filename.
+
+## **Classes**
+
+<h3><b><a href="#class-Downloader" id="class-Downloader">Downloader</a></b></h3>
+
+```python
+(directory: str = None, overwrite: bool = None, **kwargs: Dict[str, Any])
 ```
-### Ancestors (in MRO)
 
-* builtins.Exception
-* builtins.BaseException
+<h3><b><i><a href="#class-Downloader-func" id="class-Downloader-func">Methods</a></i></b></h3>
+
+<h3><i><a href="#class-Downloader-func-dlch" id="class-Downloader-func-dlch">dlch</a></i></h3>
+
+```python
+(self, url: str)
 ```
 
-`Downloader(directory: str = None, overwrite: bool = None, **kwargs: Dict[str, Any])`
-:
+<h3><i><a href="#class-Downloader-func-dlf" id="class-Downloader-func-dlf">dlf</a></i></h3>
 
+```python
+(self, file: List[str])
 ```
-### Methods
-```
 
-`dlch(self, url: str)`
-:
+Individual image downloader.
 
-`dlf(self, file: List[str]) ‑> None`
-:   Individual image downloader.
-Args:
-file (str): List containing the filename and the url of the file.
+<h3><a href="#class-Downloader-func-dlf-args" id="class-Downloader-func-dlf-args">Args:</a></h3>
+
+- file (`str`): List containing the filename and the url of the file.

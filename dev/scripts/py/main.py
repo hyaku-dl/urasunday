@@ -27,17 +27,25 @@ PUSH_CMD = 'git commit -am "{}"'
 GLOBAL = RMDV["md_vars"]["global"]
 VLS_STR_RE = re.compile(r"^(((0|[1-9][0-9]*) ){4}([0-2] (0|[1-9][0-9]*)|3 0))$")
 VLS = VYML["ls"]
-META_YML = rcfg(path.join("dev/constants", *[str(_) for _ in VLS[0:2]], "_meta.yml"))
+META_YML = rcfg(
+    path.join("dev/constants/version", *[str(_) for _ in VLS[0:2]], "_meta.yml")
+)
 
 
 def cc():
     for k, v in META_YML["cp"].items():
         wcfg(
             f'{v["dir"]}.{v.get("ext", "mp")}',
-            rcfg(path.join("dev/constants", *[str(_) for _ in VLS[0:2]], f"{k}.yml")),
+            rcfg(
+                path.join(
+                    "dev/constants/version", *[str(_) for _ in VLS[0:2]], f"{k}.yml"
+                )
+            ),
         )
 
-    cf_tpl = rcfg(path.join("dev/constants", *[str(_) for _ in VLS[0:2]], "config.yml"))
+    cf_tpl = rcfg(
+        path.join("dev/constants/version", *[str(_) for _ in VLS[0:2]], "config.yml")
+    )
     Config(cf_tpl["version"])(cf_tpl["config"])
 
     init_file = "ura/src/__init__.py"
@@ -51,6 +59,7 @@ def docs():
     from .docs import main
     from .md_vars import RMDV
 
+    cc()
     scripts.main()
 
     main(RMDV)
@@ -257,4 +266,4 @@ def main(choice: str = None):
                 message="Enter version digits seperated by spaces", validate=vfn
             )
         case _:
-            pass
+            run(f"bash dev/scripts/sh/source.sh {choice}")

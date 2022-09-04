@@ -2,27 +2,51 @@
     Changelog
 </h1>
 
-## **<a href="#0-0-0-0-1-1" id="0-0-0-0-1-1">0.0.0.0-beta.1</a>**
+<h2 id="0-0-0-0-3-0">0.0.0.0</h2>
 
-Pre-release version bump.
+<h3 id="0-0-0-0-3-0-added">Added</h3>
 
-### **<a href="#0-0-0-0-1-1-added" id="0-0-0-0-1-1-added">Added</a>**
+- `-on`/`--overwrite_not`, `-op`/`--overwrite_prompt`, and `-opn`/`--overwrite_prompt_not` flags for the `dl` subcommand.
+
+<h3 id="0-0-0-0-3-0-changed">Changed</h3>
+
+- Made the app log the `log path` even when loading, so that the user will know where to find the said file when it gets stuck while loading.
+
+- .AppImage so that you can run the cli by appending the `cli` subcommand to the command for running the said AppImage. For example, `./ura.AppImage cli [flags]`.
+
+<h3 id="0-0-0-0-3-0-fixed">Fixed</h3>
+
+- `overwrite` settings not being followed (i.e. `overwrite` set to False, yet the chapter that is already downloaded is being overwritten).
+
+- Once and for all, the fucking python imports, for fuck's sake.
+
+- Improved documentation!
+
+<h2 id="0-0-0-0-2-0">0.0.0.0-rc.0</h2>
+
+<h3 id="0-0-0-0-2-0-added">Added</h3>
+
+- Log log path to console while the app is still loading
+
+<h2 id="0-0-0-0-1-1">0.0.0.0-beta.1</h2>
+
+<h3 id="0-0-0-0-1-1-added">Added</h3>
 
 - Dynamic version and copyright information
 
-### **<a href="#0-0-0-0-1-1-changed" id="0-0-0-0-1-1-changed">Changed</a>**
+<h3 id="0-0-0-0-1-1-changed">Changed</h3>
 
 - Improved logging
 
-### **<a href="#0-0-0-0-1-1-fixed" id="0-0-0-0-1-1-fixed">Fixed</a>**
+<h3 id="0-0-0-0-1-1-fixed">Fixed</h3>
 
 - Incorrect python library importing that causes the app to crash outright
 
-## **<a href="#0-0-0-0-1-0" id="0-0-0-0-1-0">0.0.0.0-beta.0</a>**
+<h2 id="0-0-0-0-1-0">0.0.0.0-beta.0</h2>
 
-Pre-release identifier bump.
+\*\*\<font color="
 
-### **<a href="#0-0-0-0-1-0-added" id="0-0-0-0-1-0-added">Added</a>**
+<h3 id="0-0-0-0-1-0-added">Added</h3>
 
 - Icon for .AppImage distribution of that app
 
@@ -30,56 +54,52 @@ Pre-release identifier bump.
 
 - The app now reflects changes made on the configuration file on the app
 
-### **<a href="#0-0-0-0-1-0-changed" id="0-0-0-0-1-0-changed">Changed</a>**
+<h3 id="0-0-0-0-1-0-changed">Changed</h3>
 
 - Improved loading of the app, so that when the loading page is removed, the app is totally usable
 
 - Uses parts of private project (`whinee/snippets.py`) for the configuration of the app, and others
 
-## **<a href="#0-0-0-0-0-5" id="0-0-0-0-0-5">0.0.0.0-alpha.5</a>**
+<h2 id="0-0-0-0-0-5">0.0.0.0-alpha.5</h2>
 
-Pre-release version bump.
-
-### **<a href="#0-0-0-0-0-5-added" id="0-0-0-0-0-5-added">Added</a>**
+<h3 id="0-0-0-0-0-5-added">Added</h3>
 
 - Loading screen for app initialization
 
-### **<a href="#0-0-0-0-0-5-fixed" id="0-0-0-0-0-5-fixed">Fixed</a>**
+<h3 id="0-0-0-0-0-5-fixed">Fixed</h3>
 
 - AppImages to be marked as AppImages (means that the config now goes on the config folder instead of the same directory as the AppImage)
 
-## **<a href="#0-0-0-0-0-4" id="0-0-0-0-0-4">0.0.0.0-alpha.4</a>**
+<h2 id="0-0-0-0-0-4">0.0.0.0-alpha.4</h2>
 
-Pre-release version bump.
+\*\*\<font color="
 
-### **<a href="#0-0-0-0-0-4-added" id="0-0-0-0-0-4-added">Added</a>**
+<h3 id="0-0-0-0-0-4-added">Added</h3>
 
 - Initialization of configuration file
 
-## **<a href="#0-0-0-0-0-3" id="0-0-0-0-0-3">0.0.0.0-alpha.3</a>**
+<h2 id="0-0-0-0-0-3">0.0.0.0-alpha.3</h2>
 
-Pre-release version bump.
+\*\*\<font color="
 
-### **<a href="#0-0-0-0-0-3-fixed" id="0-0-0-0-0-3-fixed">Fixed</a>**
+<h3 id="0-0-0-0-0-3-fixed">Fixed</h3>
 
 - `vls` string on `ura/__init__.py` to `[0, 0, 0, 0, 0, 3]`
 
-## **<a href="#0-0-0-0-0-2" id="0-0-0-0-0-2">0.0.0.0-alpha.2</a>**
+<h2 id="0-0-0-0-0-2">0.0.0.0-alpha.2</h2>
 
-Pre-release version bump.
+\*\*\<font color="
 
-### **<a href="#0-0-0-0-0-2-fixed" id="0-0-0-0-0-2-fixed">Fixed</a>**
+<h3 id="0-0-0-0-0-2-fixed">Fixed</h3>
 
 - Unquoted `__version__` string on `ura/__init__.py`
 
-## **<a href="#0-0-0-0-0-1" id="0-0-0-0-0-1">0.0.0.0-alpha.1</a>**
+<h2 id="0-0-0-0-0-1">0.0.0.0-alpha.1</h2>
 
-Pre-release version bump.
-
-### **<a href="#0-0-0-0-0-1-removed" id="0-0-0-0-0-1-removed">Removed</a>**
+<h3 id="0-0-0-0-0-1-removed">Removed</h3>
 
 - Useless imports
 
-## **<a href="#0-0-0-0-0-0" id="0-0-0-0-0-0">0.0.0.0-alpha.0</a>**
+<h2 id="0-0-0-0-0-0">0.0.0.0-alpha.0</h2>
 
-Initial release of the application
+\*\*\<font color="

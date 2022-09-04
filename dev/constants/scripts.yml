@@ -1,7 +1,7 @@
 variables:
   global:
-    python_ver: "3.10"
-    python_ver_nd: "310"
+    python_ver: '3.10'
+    python_ver_nd: '310'
   local: {}
 
 matrix:
@@ -32,6 +32,77 @@ scripts:
       dependencies:
         python-shell: "^3.0.0"
         socket.io-client: "^4.5.0"
+
+  apprun:
+    path: dev/constants/tpl/scripts/AppRun
+    contents: |-
+      #!/bin/bash
+      # shellcheck disable=SC1087,SC1091,SC2001,SC2025,SC2045,SC2059,SC2119,SC2120,SC2162,SC2148,SC2154,SC2155,SC2195,SC2210
+
+      set -e
+
+      if [ -n "$DEBUG" ]; then
+          env
+          set -x
+      fi
+
+      THIS="$0"
+
+      if [ -z "$APPDIR" ]; then
+          path="$(dirname "$(readlink -f "${THIS}")")"
+          while [[ "$path" != "" && ! -e "$path" ]]; do
+              path=${path%/*}
+          done
+          APPDIR="$path"
+      fi
+
+      if [ -z "$APPIMAGE" ]; then
+          APPIMAGE="$APPDIR/AppRun"
+      fi
+
+      arg0=$(basename "$0" .sh)
+      blnk=$(echo "$arg0" | sed "s/./ /g")
+
+      usage_info() {
+          echo "Usage: $arg0 [-g|--gui] \\"
+          echo "       $blnk [-h|--help] \\"
+      }
+
+      help() {
+          usage_info
+          echo
+          echo "  [-g|--gui]  -- Run GUI"
+          echo "  [-h|--help] -- Print this help message and exit"
+      }
+
+      gui() {
+          exec "$APPDIR/${project_name}"
+          exit 0
+      }
+
+      cli() {
+          "$APPDIR/resources/app/tmp/python/opt/python3.10/bin/python3.10" "$APPDIR/resources/app/tmp/src" $@
+      }
+
+      if [ $# -eq 0 ]; then
+          gui
+      else
+          case "$1" in
+          gui) gui ;;
+          cli)
+              shift
+              cli $@
+              ;;
+          help)
+              help
+              exit 0
+              ;;
+          *)
+              cli $@
+              exit 1
+              ;;
+          esac
+      fi
 
   build_yml:
     path: .github/workflows/build.yml
@@ -88,16 +159,18 @@ scripts:
                 (
                   yarn &
                   python -m pip install -r dev/constants/req.txt &
-                  ( [ "$NODE_ENV" = "development" ] && rm -rf dist/ tmp/ ) &
+                  ( [ "$NODE_ENV" = "development" ] && rm -rf dist/ squashfs-root/ tmp/ ) &
                   wait
                 ) &&
                 mkdir tmp/ &&
                 (
                     cp -r ${project_name}/** tmp/ &
-                    wget -O tmp/python.AppImage "$(wget -qSO - "https://api.github.com/repos/niess/python-appimage/releases/tags/python${python_ver}" 2>/dev/null | grep -E "browser_download_url.*x86_64" | cut -d '"' -f4 | tail -1)" >/dev/null &
+                    wget -O ./tmp/python.AppImage "$(wget -qSO - "https://api.github.com/repos/niess/python-appimage/releases/tags/python${python_ver}" 2>/dev/null | grep -E "browser_download_url.*x86_64" | cut -d '"' -f4 | tail -1)" >/dev/null &
+                    wget -O ./tmp/tool.AppImage https://github.com/AppImage/AppImageKit/releases/download/continuous/appimagetool-x86_64.AppImage >/dev/null &
                     python -c "from dev.scripts.py.eb import main;main('linux','tmp/cfg.yml')" &
                     wait
                 ) &&
+                chmod +x ./tmp/tool.AppImage &&
                 chmod +x ./tmp/python.AppImage &&
                 ./tmp/python.AppImage --appimage-extract >/dev/null &&
                 mv squashfs-root tmp/python/ &&
@@ -113,8 +186,12 @@ scripts:
                     wait
                 ) &&
                 ./tmp/python/usr/bin/pip3 install --no-warn-script-location --no-cache-dir --disable-pip-version-check -I -r requirements.txt &&
-                yarn electron-builder --config "tmp/cfg.yml" --publish never
-            - name: Upload .AppImage
+                yarn electron-builder --config "tmp/cfg.yml" --publish never &&
+                ./dist/${project_name}.AppImage --appimage-extract >/dev/null &&
+                cp dev/constants/tpl/scripts/AppRun squashfs-root/AppRun &&
+                ./tmp/tool.AppImage squashfs-root ./dist/${project_name}.AppImage &&
+                ( [ "$NODE_ENV" = "development" ] && cp ./dist/${project_name}.AppImage ./${project_name}.AppImage && rm -rf dist/ squashfs-root/ tmp/ )
+            - name: Upload ${project_name}.AppImage
               uses: actions/upload-release-asset@v1
               env:
                 GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -123,14 +200,14 @@ scripts:
                 asset_path: ./dist/${project_name}.AppImage
                 asset_name: ${project_name}.AppImage
                 asset_content_type: application/octet
-            - name: Upload latest-linux.yml
+            - name: Upload ${project_name}-compressed.AppImage
               uses: actions/upload-release-asset@v1
               env:
                 GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
               with:
                 upload_url: ${{needs.release.outputs.upload_url}}
-                asset_path: ./dist/latest-linux.yml
-                asset_name: latest-linux.yml
+                asset_path: ./dist/${project_name}-compressed.AppImage
+                asset_name: ${project_name}-compressed.AppImage
                 asset_content_type: application/octet
         win:
           name: Windows
@@ -174,7 +251,7 @@ scripts:
                 i=re.sub(r'const scriptPath.+',f'const scriptPath = path.join(__dirname, \'..\\\\\\\\\')',i,count=1)
                 with open(F,'w') as f:f.write(re.sub(r'const pythonPath.+',f'const pythonPath = path.join(__dirname, \'..\\\\\\\\python\\\\\\\\python\')',i))"
                 yarn electron-builder --config "tmp\cfg.yml" --publish never
-            - name: Upload .exe
+            - name: Upload ${project_name}.exe
               uses: actions/upload-release-asset@v1
               env:
                 GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -182,22 +259,4 @@ scripts:
                 upload_url: ${{needs.release.outputs.upload_url}}
                 asset_path: ./dist/${project_name}.exe
                 asset_name: ${project_name}.exe
-                asset_content_type: application/octet
-            - name: Upload .exe.blockmap
-              uses: actions/upload-release-asset@v1
-              env:
-                GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-              with:
-                upload_url: ${{needs.release.outputs.upload_url}}
-                asset_path: ./dist/${project_name}.exe.blockmap
-                asset_name: ${project_name}.exe.blockmap
-                asset_content_type: application/octet
-            - name: Upload latest-win.yml
-              uses: actions/upload-release-asset@v1
-              env:
-                GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-              with:
-                upload_url: ${{needs.release.outputs.upload_url}}
-                asset_path: ./dist/latest.yml
-                asset_name: latest-win.yml
                 asset_content_type: application/octet

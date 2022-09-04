@@ -25,12 +25,14 @@ CCHARS = "".join(map(chr, itertools.chain(range(0x00, 0x20), range(0x7F, 0xA0)))
 CCHARS_RE = re.compile("[%s]" % re.escape(CCHARS))
 
 # Functions
-def inmd(p: str, ls: list[str] = None):
-    """
-    "If Not `path.isdir`, Make Directories"
+def inmd(p: str, ls: list[str] = None) -> str:
+    """ "If Not `path.isdir`, Make Directories"
 
     Args:
-        p (str): [description]
+    - p (`str`): The path to be created, if it does not exist.
+
+    Returns:
+    `str`: The path given.
     """
 
     pd = path.dirname(p)
@@ -45,11 +47,11 @@ def ivnd(var: Any, de: Any) -> Any:
     """If Var is None, return Default else var.
 
     Args:
-        var (Any): Variable to check if it is None.
-        de (Any): Default value to return if var is None.
+    - var (`Any`): Variable to check if it is None.
+    - de (`Any`): Default value to return if var is None.
 
     Returns:
-        Any: var if var is not None else de.
+    `Any`: var if var is not None else de.
     """
     if var is None:
         return de
@@ -61,11 +63,11 @@ def dnrp(file: str, n: int = 1) -> str:
     Get the directory component of a pathname by n times recursively then return it.
 
     Args:
-        file (str): File to get the directory of.
-        n (int, optional): Number of times to get up the directory???? Defaults to 1.
+    - file (`str`): File to get the directory of.
+    - n (`int`, optional): Number of times to get up the directory???? Defaults to 1.
 
     Returns:
-        op (str): The directory component got recursively by n times from the given pathname
+    `str`: The directory component got recursively by n times from the given pathname
     """
     op = rp(file)
     for _ in range(n):
@@ -76,19 +78,15 @@ def dnrp(file: str, n: int = 1) -> str:
 def dpop(
     d: dict[Any, Any], pop: list[int | tuple[str | int | tuple] | str], de: Any = None
 ) -> Any:
-    """
-    Iterate through the preferred order of precedence (`pop`) and see if
-    the value exists in the dictionary. If it does, return it. If not, return
-    `de`.
+    """Iterate through the preferred order of precedence (`pop`) and see if the value exists in the dictionary. If it does, return it. If not, return `de`.
 
     Args:
-        d (Dict[Any, Any]): Dictionary to retrieve the value from.
-        pop (list[int | tuple[str | int | tuple] | str]): List of keys to
-            iterate through.
-        de (Any, optional): Default object to be returned. Defaults to None.
+    - d (`Dict[Any, Any]`): Dictionary to retrieve the value from.
+    - pop (`list[int | tuple[str | int | tuple] | str]`): List of keys to iterate through.
+    - de (`Any`, optional): Default object to be returned. Defaults to None.
 
     Returns:
-        Any: Retrieved value.
+    `Any`: Retrieved value.
     """
 
     for i in pop:
@@ -99,15 +97,14 @@ def dpop(
 
 @lru_cache
 def dt(dt: str, format: str) -> str:
-    """
-    Remove timezone from datetime and format it to ISO 8601 format.
+    """Remove timezone from datetime and format it to ISO 8601 format.
 
     Args:
-        dt (str): Unformatted datetime string to be formatted to ISO 8601 format
-        format (str): The initial format of the datetime string
+    - dt (`str`): Unformatted datetime string to be formatted to ISO 8601 format
+    - format (`str`): The initial format of the datetime string
 
     Returns:
-        str: Formatted datetime string
+    `str`: Formatted datetime string
     """
 
     op = dt
@@ -129,8 +126,7 @@ def dt(dt: str, format: str) -> str:
 
 @lru_cache
 def dt_ts(ts: str) -> str:
-    """
-    Convert the given unix timestamp to ISO 8601 format.
+    """Convert the given unix timestamp to ISO 8601 format.
 
     Args:
         ts (str): unix timestamp to be converted to ISO 8601 format

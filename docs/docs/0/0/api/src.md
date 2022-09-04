@@ -1,10 +1,10 @@
-# ura.src
+# **[ura](index.md).[src](src.md)**
 
-## Super-module
+## **<a href="#super" id="super">Super-module</a>**
 
-- [ura](docs/docs/0/0/api/index.md)
+- [ura](index.md)
 
-## Sub-modules
+## **<a href="#sub" id="sub">Sub-modules</a>**
 
 - [ura.src.base](src/base.md)
 - [ura.src.cd](src/cd.md)

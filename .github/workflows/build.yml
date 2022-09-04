@@ -28,8 +28,8 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          tag_name: 0.0.0.0-beta.1
-          release_name: ura release v0.0.0.0-beta.1
+          tag_name: 0.0.0.0-rc.0
+          release_name: ura release v0.0.0.0-rc.0
           body_path: .md
           draft: false
           prerelease: True
@@ -50,16 +50,18 @@ jobs:
           (
             yarn &
             python -m pip install -r dev/constants/req.txt &
-            ( [ "$NODE_ENV" = "development" ] && rm -rf dist/ tmp/ ) &
+            ( [ "$NODE_ENV" = "development" ] && rm -rf dist/ squashfs-root/ tmp/ ) &
             wait
           ) &&
           mkdir tmp/ &&
           (
               cp -r ura/** tmp/ &
-              wget -O tmp/python.AppImage "$(wget -qSO - "https://api.github.com/repos/niess/python-appimage/releases/tags/python3.10" 2>/dev/null | grep -E "browser_download_url.*x86_64" | cut -d '"' -f4 | tail -1)" >/dev/null &
+              wget -O ./tmp/python.AppImage "$(wget -qSO - "https://api.github.com/repos/niess/python-appimage/releases/tags/python3.10" 2>/dev/null | grep -E "browser_download_url.*x86_64" | cut -d '"' -f4 | tail -1)" >/dev/null &
+              wget -O ./tmp/tool.AppImage https://github.com/AppImage/AppImageKit/releases/download/continuous/appimagetool-x86_64.AppImage >/dev/null &
               python -c "from dev.scripts.py.eb import main;main('linux','tmp/cfg.yml')" &
               wait
           ) &&
+          chmod +x ./tmp/tool.AppImage &&
           chmod +x ./tmp/python.AppImage &&
           ./tmp/python.AppImage --appimage-extract >/dev/null &&
           mv squashfs-root tmp/python/ &&
@@ -75,8 +77,12 @@ jobs:
               wait
           ) &&
           ./tmp/python/usr/bin/pip3 install --no-warn-script-location --no-cache-dir --disable-pip-version-check -I -r requirements.txt &&
-          yarn electron-builder --config "tmp/cfg.yml" --publish never
-      - name: Upload .AppImage
+          yarn electron-builder --config "tmp/cfg.yml" --publish never &&
+          ./dist/ura.AppImage --appimage-extract >/dev/null &&
+          cp dev/constants/tpl/scripts/AppRun squashfs-root/AppRun &&
+          ./tmp/tool.AppImage squashfs-root ./dist/ura.AppImage &&
+          ( [ "$NODE_ENV" = "development" ] && cp ./dist/ura.AppImage ./ura.AppImage && rm -rf dist/ squashfs-root/ tmp/ )
+      - name: Upload ura.AppImage
         uses: actions/upload-release-asset@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -85,14 +91,14 @@ jobs:
           asset_path: ./dist/ura.AppImage
           asset_name: ura.AppImage
           asset_content_type: application/octet
-      - name: Upload latest-linux.yml
+      - name: Upload ura-compressed.AppImage
         uses: actions/upload-release-asset@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{needs.release.outputs.upload_url}}
-          asset_path: ./dist/latest-linux.yml
-          asset_name: latest-linux.yml
+          asset_path: ./dist/ura-compressed.AppImage
+          asset_name: ura-compressed.AppImage
           asset_content_type: application/octet
   win:
     name: Windows
@@ -136,7 +142,7 @@ jobs:
           i=re.sub(r'const scriptPath.+',f'const scriptPath = path.join(__dirname, \'..\\\\\\\\\')',i,count=1)
           with open(F,'w') as f:f.write(re.sub(r'const pythonPath.+',f'const pythonPath = path.join(__dirname, \'..\\\\\\\\python\\\\\\\\python\')',i))"
           yarn electron-builder --config "tmp\cfg.yml" --publish never
-      - name: Upload .exe
+      - name: Upload ura.exe
         uses: actions/upload-release-asset@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -144,22 +150,4 @@ jobs:
           upload_url: ${{needs.release.outputs.upload_url}}
           asset_path: ./dist/ura.exe
           asset_name: ura.exe
-          asset_content_type: application/octet
-      - name: Upload .exe.blockmap
-        uses: actions/upload-release-asset@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          upload_url: ${{needs.release.outputs.upload_url}}
-          asset_path: ./dist/ura.exe.blockmap
-          asset_name: ura.exe.blockmap
-          asset_content_type: application/octet
-      - name: Upload latest-win.yml
-        uses: actions/upload-release-asset@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          upload_url: ${{needs.release.outputs.upload_url}}
-          asset_path: ./dist/latest.yml
-          asset_name: latest-win.yml
           asset_content_type: application/octet

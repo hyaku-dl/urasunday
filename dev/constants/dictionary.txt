@@ -13,3 +13,16 @@ shellcheck
 whinee
 MangDL
 YAMHL
+NEET
+animanga
+niet
+CFLOP
+kwargs
+builtins
+dnrp
+bruv
+mkdocs
+mdformat
+shfmt
+str_representer
+squashfs
