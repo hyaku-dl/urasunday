@@ -4,10 +4,12 @@
 
 ## **Summary**
 
-Oopsies... <!-- cspell: disable-line -->
+<!-- cspell: disable-next-line -->
+
+Yet 'nother fucking oopsies...
 
 ## **Changes**
 
-### **Removed**
+### **Fixed**
 
-- `.github/workflows/build.yml`'s `jobs.linux.steps[?name=='Upload ${project_name}-compressed.AppImage']`
+- `dev/scripts/py/main.py`'s `push` function to call `docs` function. GAAAAAAAAAAAAHH! <!-- cspell: disable-line -->
