@@ -2,19 +2,23 @@
     Changelog
 </h1>
 
-<h2 id="0-0-0-0-3-0">0.0.0.0</h2>
+<h2 id="0-0-0-0-2-0">0.0.0.0-rc.0</h2>
 
-<h3 id="0-0-0-0-3-0-added">Added</h3>
+## Added
 
 - `-on`/`--overwrite_not`, `-op`/`--overwrite_prompt`, and `-opn`/`--overwrite_prompt_not` flags for the `dl` subcommand.
 
-<h3 id="0-0-0-0-3-0-changed">Changed</h3>
+<h3 id="0-0-0-0-2-0-added">Added</h3>
+
+- `-on`/`--overwrite_not`, `-op`/`--overwrite_prompt`, and `-opn`/`--overwrite_prompt_not` flags for the `dl` subcommand.
+
+<h3 id="0-0-0-0-2-0-changed">Changed</h3>
 
 - Made the app log the `log path` even when loading, so that the user will know where to find the said file when it gets stuck while loading.
 
 - .AppImage so that you can run the cli by appending the `cli` subcommand to the command for running the said AppImage. For example, `./ura.AppImage cli [flags]`.
 
-<h3 id="0-0-0-0-3-0-fixed">Fixed</h3>
+<h3 id="0-0-0-0-2-0-fixed">Fixed</h3>
 
 - `overwrite` settings not being followed (i.e. `overwrite` set to False, yet the chapter that is already downloaded is being overwritten).
 
@@ -22,13 +26,11 @@
 
 - Improved documentation!
 
-<h2 id="0-0-0-0-2-0">0.0.0.0-rc.0</h2>
-
-<h3 id="0-0-0-0-2-0-added">Added</h3>
-
-- Log log path to console while the app is still loading
-
 <h2 id="0-0-0-0-1-1">0.0.0.0-beta.1</h2>
+
+## Added
+
+- Dynamic version and copyright information
 
 <h3 id="0-0-0-0-1-1-added">Added</h3>
 
@@ -44,7 +46,7 @@
 
 <h2 id="0-0-0-0-1-0">0.0.0.0-beta.0</h2>
 
-\*\*\<font color="
+<b><font color="#ED5E5E">YANKED!</font></b>
 
 <h3 id="0-0-0-0-1-0-added">Added</h3>
 
@@ -62,6 +64,10 @@
 
 <h2 id="0-0-0-0-0-5">0.0.0.0-alpha.5</h2>
 
+## Added
+
+- Loading screen for app initialization
+
 <h3 id="0-0-0-0-0-5-added">Added</h3>
 
 - Loading screen for app initialization
@@ -72,7 +78,7 @@
 
 <h2 id="0-0-0-0-0-4">0.0.0.0-alpha.4</h2>
 
-\*\*\<font color="
+<b><font color="#ED5E5E">YANKED!</font></b>
 
 <h3 id="0-0-0-0-0-4-added">Added</h3>
 
@@ -80,7 +86,7 @@
 
 <h2 id="0-0-0-0-0-3">0.0.0.0-alpha.3</h2>
 
-\*\*\<font color="
+<b><font color="#ED5E5E">YANKED!</font></b>
 
 <h3 id="0-0-0-0-0-3-fixed">Fixed</h3>
 
@@ -88,7 +94,7 @@
 
 <h2 id="0-0-0-0-0-2">0.0.0.0-alpha.2</h2>
 
-\*\*\<font color="
+<b><font color="#ED5E5E">YANKED!</font></b>
 
 <h3 id="0-0-0-0-0-2-fixed">Fixed</h3>
 
@@ -101,5 +107,3 @@
 - Useless imports
 
 <h2 id="0-0-0-0-0-0">0.0.0.0-alpha.0</h2>
-
-\*\*\<font color="

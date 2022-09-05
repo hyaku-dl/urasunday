@@ -2,9 +2,10 @@
     import re
     from os import path
 
-    RE_H1 = r"# ([^\n]*)(\n[^#]+)(.*?)(?=\n#\s|$)"
-    RE_H2 = r"## ([^\n]*)\s*(.*?)(?=\n##\s|$)"
-    RE_LC = r"- (.*?)(?=- |$)"
+    RE_H1 = re.compile(r"# ([^\n]*)(.*?)(?=\n#\s|$)", re.DOTALL)
+    RE_DESC = re.compile(r'^(?!## )(.+?)\n\n## ', re.DOTALL)
+    RE_H2 = re.compile(r"## ([^\n]*)\s*(.*?)(?=\n##\s|$)", re.DOTALL)
+    RE_LC = re.compile(r"- (.*?)(?=- |$)", re.DOTALL)
 
     PR = ["alpha", "beta", "rc"]
 
@@ -19,19 +20,23 @@
         CL = f.read()
 
     d_op = {}
-    for vb in re.findall(RE_H1, CL, re.DOTALL):
-        ver, desc, tls = vb
+    for vb in RE_H1.findall(CL):
+        ver, dtls = vb
         vls = ver.split(" ")
+        if desc := RE_DESC.match(dtls):
+            desc = desc.group(1)
+        else:
+            desc = ''
         d_op[rv(vls)] = ov = {
             "vls": vls,
             "anchor": ver.replace(" ", "-"),
             "desc": desc.strip(),
             "changes": {}
         }
-        for tch in re.findall(RE_H2, tls, re.DOTALL):
+        for tch in RE_H2.findall(dtls):
             t, chls = tch
             ov["changes"][t] = ovt = []
-            for ch in re.findall(RE_LC, chls, re.DOTALL):
+            for ch in RE_LC.findall(chls):
                 ovt.append(ch)
 
     md_op = ""

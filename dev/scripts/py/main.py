@@ -71,6 +71,7 @@ def fmt():
 
 def push(v: list[int] = None):
     cc()
+    scripts.main()
     msg = inquirer.text(message="Enter commit message", default="")
     run("git add .")
     if msg == "":

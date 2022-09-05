@@ -2,7 +2,7 @@
     Latest Version Bump
 </h1>
 
-## 0.0.0.0
+## 0.0.0.0-rc.0
 
 Pre-release identifier bump.
 
