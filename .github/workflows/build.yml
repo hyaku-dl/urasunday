@@ -50,7 +50,7 @@ jobs:
           (
             yarn &
             python -m pip install -r dev/constants/req.txt &
-            ( [ "$NODE_ENV" = "development" ] && rm -rf dist/ squashfs-root/ tmp/ ) &
+            ( [ "$NODE_ENV" = "development" ] && rm -rf dist/ squashfs-root/ tmp/ ura.AppImage ) &
             wait
           ) &&
           mkdir tmp/ &&
@@ -80,8 +80,12 @@ jobs:
           yarn electron-builder --config "tmp/cfg.yml" --publish never &&
           ./dist/ura.AppImage --appimage-extract >/dev/null &&
           cp dev/constants/tpl/scripts/AppRun squashfs-root/AppRun &&
-          ./tmp/tool.AppImage squashfs-root ./dist/ura.AppImage &&
-          ( [ "$NODE_ENV" = "development" ] && cp ./dist/ura.AppImage ./ura.AppImage && rm -rf dist/ squashfs-root/ tmp/ )
+          (
+            ./tmp/tool.AppImage squashfs-root ./dist/ura.AppImage
+            exit 0
+          ) &&
+          ( [ "$NODE_ENV" = "development" ] && cp ./dist/ura.AppImage ./ura.AppImage && rm -rf dist/ squashfs-root/ tmp/ || exit 0 ) &&
+          exit 0
       - name: Upload ura.AppImage
         uses: actions/upload-release-asset@v1
         env:

@@ -10,10 +10,8 @@ Massive documentation overhaul!
 
 ### **Changed**
 
-- `dev/scripts/py/main.py`'s `main` function to also generate scripts.
+- `dev/scripts/sh/source.sh`'s `fmt` function to only format the markdowns located under `docs/`.
 
 ### **Fixed**
 
-- `dev/raw_docs/changelog.mako` as it cannot parse the version bump's description if it contained a hash (`#`) character.
-- `dev/raw_docs/changelog.mako`'s incorrect latest version bump.
-- `dev/scripts/py/rn_md.py` to read the correct markdown file for the latest release's notes.
+- `.github/workflows/build.yml`'s `jobs.linux.steps[?name=='Build'].run` script, as the shitty appimagetool.AppImage is exiting with code `1` even though there IS NO FUCKING ERROR! GAAAAAAAHH! <!-- cspell: disable-line -->

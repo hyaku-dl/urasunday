@@ -7,7 +7,7 @@
 
 fmt() { (
     t " Python Imports Sorted" "Sorting Python Imports Failed." isort -q --gitignore . &
-    t "    Markdown Formatted" "Formatting Markdown Failed." mdformat . &
+    t "    Markdown Formatted" "Formatting Markdown Failed." mdformat docs &
     t "Python Files Formatted" "Formatting Python Files Failed." black -q . &
     wait
 ); }
