@@ -243,7 +243,7 @@ def main(choice: str = None):
         choices=[
             ["Copy constants", "cc"],
             ["Generate documentation", "docs"],
-            ["Push to github", "gh"],
+            ["Push to github", "push"],
             ["Bump a version", "bump"],
             ["Generate scripts", "gs"],
             ["Set the version manually", "set_ver"],
@@ -256,7 +256,7 @@ def main(choice: str = None):
                 push()
             else:
                 docs()
-        case "gh":
+        case "push":
             push()
         case "gs":
             scripts.main()
