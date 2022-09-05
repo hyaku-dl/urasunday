@@ -70,10 +70,13 @@ def fmt():
 
 
 def push(v: list[int] = None):
+    msg = inquirer.text(message="Enter commit message", default="")
+
     cc()
     scripts.main()
-    msg = inquirer.text(message="Enter commit message", default="")
+    fmt()
     run("git add .")
+
     if msg == "":
         msg = DE_PUSH_MSG
     if v:
@@ -83,7 +86,7 @@ def push(v: list[int] = None):
                 f"Release notes: https://{GLOBAL['site']}/changelog#{'-'.join([str(i) for i in v])} or `docs/latest release notes.md`",
             ]
         )
-    fmt()
+
     run(PUSH_CMD.format(msg))
     run("git push")
 
@@ -224,7 +227,6 @@ def bump():
         ):
             case "y":
                 _set_ver(_vls)
-                scripts.main()
                 push(_vls)
                 return
             case "n":
@@ -250,17 +252,15 @@ def main(choice: str = None):
         case "cc":
             cc()
         case "docs":
-            pp = inquirer.confirm("Do you want to push this to github?", default=False)
-            docs()
-            if pp:
+            if inquirer.confirm("Do you want to push this to github?", default=False):
                 push()
+            else:
+                docs()
         case "gh":
-            docs()
             push()
         case "gs":
             scripts.main()
         case "bump":
-            docs()
             bump()
         case "set_ver":
             inquirer.text(
