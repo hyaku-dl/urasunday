@@ -4,7 +4,7 @@ title: Latest Commit
 
 ## **Summary**
 
-Massive documentation overhaul!
+Oopsies... <!-- cspell: disable-line -->
 
 ## **Changes**
 
@@ -12,20 +12,12 @@ Massive documentation overhaul!
 
 Added
     For adding new features.
-    - user
-    - dev
-    - minor
 Changed
     For changes in existing functionality.
-    - user
-    - dev
 Deprecated
     For marking features as `deprecated`.
-    - patch
 Removed
     For removing features.
-    - user
-    - dev
 Fixed
     For any kind of fixes, formatting not included.
 Security
@@ -37,43 +29,33 @@ Security
 
 <!--
 For adding new features.
-    - user
-    - dev
-    - minor
 -->
 
 ### **Changed**
 
 <!--
 For changes in existing functionality.
-    - user
-    - dev
 -->
-
-- `dev/scripts/sh/source.sh`'s `fmt` function to only format the markdowns located under `docs/`.
 
 ### **Deprecated**
 
 <!--
 For marking features as `deprecated`.
-    - patch
 -->
 
 ### **Removed**
 
 <!--
 For removing features.
-    - user
-    - dev
 -->
+
+- `.github/workflows/build.yml`'s `jobs.linux.steps[?name=='Upload ${project_name}-compressed.AppImage']`
 
 ### **Fixed**
 
 <!--
 For any kind of fixes, formatting not included.
 -->
-
-- `.github/workflows/build.yml`'s `jobs.linux.steps[?name=='Build'].run` script, as the shitty appimagetool.AppImage is exiting with code `1` even though there IS NO FUCKING ERROR! GAAAAAAAHH! <!-- cspell: disable-line -->
 
 ### **Security**
 

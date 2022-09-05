@@ -4,14 +4,10 @@
 
 ## **Summary**
 
-Massive documentation overhaul!
+Oopsies... <!-- cspell: disable-line -->
 
 ## **Changes**
 
-### **Changed**
+### **Removed**
 
-- `dev/scripts/sh/source.sh`'s `fmt` function to only format the markdowns located under `docs/`.
-
-### **Fixed**
-
-- `.github/workflows/build.yml`'s `jobs.linux.steps[?name=='Build'].run` script, as the shitty appimagetool.AppImage is exiting with code `1` even though there IS NO FUCKING ERROR! GAAAAAAAHH! <!-- cspell: disable-line -->
+- `.github/workflows/build.yml`'s `jobs.linux.steps[?name=='Upload ${project_name}-compressed.AppImage']`
